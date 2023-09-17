@@ -27,7 +27,7 @@
 		<PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
 		<PackageReference Include="NetCore.AutoRegisterDi" Version="2.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.5" />
-		<PackageReference Include="ATA.Bit.Shared" Version="6.3.6" />
+		<PackageReference Include="ATA.Bit.Shared" Version="6.3.8" />
 	</ItemGroup>
 
 
