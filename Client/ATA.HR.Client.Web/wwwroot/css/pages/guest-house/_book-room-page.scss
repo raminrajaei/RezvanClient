@@ -1,0 +1,29 @@
+﻿@import '../../utils/_base.scss';
+
+.book-page {
+    .room-box-wrapper {
+        border: solid 1px $pinkish-grey;
+        padding: rem(25px);
+        background: $white;
+        margin: rem(25px) 0 rem(25px) rem(25px);
+
+        button {
+            height: rem(48px);
+        }
+    }
+
+    .room-header-wrapper {
+        display: flex;
+        flex-flow: wrap;
+        line-height: 30px;
+        border: 1px solid #cacaca;
+        padding: rem(15px);
+        margin: rem(20px) 0;
+    }
+
+    .book-button-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

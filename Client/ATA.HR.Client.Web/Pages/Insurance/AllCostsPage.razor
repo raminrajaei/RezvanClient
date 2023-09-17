@@ -1,0 +1,500 @@
+﻿@page "/insurance/all-costs"
+
+@using ATA.HR.Client.Web.APIs.Insurance.Models.Responses
+@using ATA.HR.Shared.Enums.Document
+@using ATABit.Helper.Utils
+@using DNTPersianUtils.Core
+@using Microsoft.AspNetCore.Components
+@using Calendar = Blazor.PersianDatePicker.Calendar
+@using ATABit.Helper.Utils;
+@using GridSelectionMode = ATA.HR.Client.Web.Enums.GridSelectionMode
+@using ATA.HR.Client.Web.APIs.Enums
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.AllCostsPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<article>
+
+    <div class="personnel-page">
+
+        <!-- AddOrEdit Header -->
+        <section>
+            @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
+            {
+                <HeaderAddOrEdit>
+                    <button class="default-button" @onclick="ChangeToFilterMode">انصراف</button>
+                    <button type="submit" form="costForm" class="primary-button">ذخیره</button>
+                </HeaderAddOrEdit>
+            }
+        </section>
+
+        <!-- Page Heading Title -->
+        <section class="page-header-section">
+            <div class="page-header-wrapper">
+                <div class="flex align-items-center">
+                    <TopBar PageName="@($"لیست اسناد هزینه")" PageDescription="لیست همه هزینه‌های ثبت شده‌ی شرکت" />
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter -->
+        <section class="filter-section">
+            <div class="page-box-wrapper">
+                <div class="row insureds-filters">
+                    <div class="col-12 col-md-6 col-xl-6 col-xxl-3">
+                        <label class="input-label">
+                            بیمه شده
+                        </label>
+                        <div class="searchbar-custom-wrapper">
+                            <img src="@IconUrls.Search" />
+                            <TelerikTextBox class="full-width"
+                                            Value="@SearchTermText"
+                                            PlaceHolder="جستجو با نام بیمه شده یا شماره‌ی پرسنلی اصلی"
+                                            ValueChanged="SearchTermChanged">
+                            </TelerikTextBox>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>نوع عنوان مرتبط</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="int?"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="ActivePolicyObligationsSource"
+                                            @bind-Value="@AllCostsQuery.PolicyObligationId"
+                                            Change="ApplyFilters"
+                                            TextProperty="Text"
+                                            ValueProperty="ValueInt" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>از تاریخ هزینه</label>
+                        <div>
+                            <InputPersianDatePicker Id="clAt"
+                            @bind-Value="AllCostsQuery.FromCostJalaliDate"
+                                                    Name="clRegisteredAt"
+                                                    CssClass="cost-date-picker"
+                                                    Visible="true"
+                                                    ReadOnly="true"
+                                                    Disabled="false"
+                                                    PickerAlign="Align.Right"
+                                                    InitialValue="false"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    DigitType="DigitType.BasedOnCalendar"
+                                                    DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                    MinDateSetOnToday="false"
+                                                    Placeholder="از تاریخ"
+                                                    OnChange="ApplyFilters"
+                                                    OnClear="ApplyFilters"
+                                                    Theme="PickerTheme.RedBlack" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>تا تاریخ هزینه</label>
+                        <div>
+                            <InputPersianDatePicker Id="clAt2"
+                            @bind-Value="AllCostsQuery.ToCostJalaliDate"
+                                                    Name="clRegisteredAt2"
+                                                    CssClass="cost-date-picker"
+                                                    Visible="true"
+                                                    ReadOnly="true"
+                                                    Disabled="false"
+                                                    PickerAlign="Align.Right"
+                                                    InitialValue="false"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    DigitType="DigitType.BasedOnCalendar"
+                                                    DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                    MinDateSetOnToday="false"
+                                                    Placeholder="تا تاریخ"
+                                                    OnChange="ApplyFilters"
+                                                    OnClear="ApplyFilters"
+                                                    Theme="PickerTheme.RedBlack" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>محل کار پرسنل اصلی</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="string?"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="WorkLocationsSource"
+                                            @bind-Value="@AllCostsQuery.WorkLocation"
+                                            Change="ApplyFilters"
+                                            TextProperty="Text"
+                                            ValueProperty="Value" />
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>وضعیت گردش هزینه</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@CostCurrentStatusFilterSource"
+                                            @bind-Value="@AllCostsQuery.CostCurrentStatusSelectedValue"
+                                            TextProperty="Text"
+                                            Change="ApplyFilters"
+                                            ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>از تاریخ تایید</label>
+                        <div>
+                            <InputPersianDatePicker Id="cclAt"
+                            @bind-Value="AllCostsQuery.FromConfirmJalaliDate"
+                                                    Name="cclRegisteredAt"
+                                                    CssClass="cost-date-picker"
+                                                    Visible="true"
+                                                    ReadOnly="true"
+                                                    Disabled="false"
+                                                    PickerAlign="Align.Right"
+                                                    InitialValue="false"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    DigitType="DigitType.BasedOnCalendar"
+                                                    DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                    MinDateSetOnToday="false"
+                                                    Placeholder="از تاریخ"
+                                                    OnChange="ApplyFilters"
+                                                    OnClear="ApplyFilters"
+                                                    Theme="PickerTheme.RedBlack" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>تا تاریخ تایید</label>
+                        <div>
+                            <InputPersianDatePicker Id="cclAt2"
+                            @bind-Value="AllCostsQuery.ToConfirmJalaliDate"
+                                                    Name="cclRegisteredAt2"
+                                                    CssClass="cost-date-picker"
+                                                    Visible="true"
+                                                    ReadOnly="true"
+                                                    Disabled="false"
+                                                    PickerAlign="Align.Right"
+                                                    InitialValue="false"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    DigitType="DigitType.BasedOnCalendar"
+                                                    DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                    MinDateSetOnToday="false"
+                                                    Placeholder="تا تاریخ"
+                                                    OnChange="ApplyFilters"
+                                                    OnClear="ApplyFilters"
+                                                    Theme="PickerTheme.RedBlack" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid -->
+        <section class="grid-section">
+            <div class="page-grid-wrapper mt-4">
+
+                <div class="page-grid-operation-wrapper align-items-center" style="flex-direction: row;
+                                                                                       justify-content: space-between;">
+
+                    <section style="display: flex;
+                                        margin-top: -20px;">
+                        @{
+                            @if (IsVisibleMultipleActionButton)
+                            {
+                                <div class="multiple-action-box" style="margin-right: 20px">
+                                    <label class="select-status-label">حالت انتخابی پرینت</label>
+                                    <div>
+                                        <RadzenDropDown AllowClear="false"
+                                                        TValue="string"
+                                                        Style="width: 150px"
+                                                        AllowFiltering="false"
+                                                        Data="@(EnumMapping.ToSelectListItems<GridSelectionMode>())"
+                                        @bind-Value="@MultiActionModeSelectedValue"
+                                                        TextProperty="Text"
+                                                        ValueProperty="Value" />
+                                    </div>
+                                </div>
+                            }
+
+                            var additionalClass = IsVisibleMultipleActionButton ? "" : "visibility-hidden";
+                            @if (IsMultiActionOnCustomSelection)
+                            {
+                                <TelerikButton Class="primary-button send-all-contracts-button costs-print-button"
+                                               OnClick="PrintFilteredCosts">
+                                    @if (SelectedItems.Count() != 0)
+                                    {
+                                        <span>
+                                            @($"پرینت {SelectedItems.Count().ToPersianNumbers()} هزینه‌ انتخاب شده‌")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            انتخاب کنید
+                                        </span>
+                                    }
+
+                                </TelerikButton>
+                            }
+                            else
+                            {
+                                <TelerikButton Class="primary-button send-all-contracts-button costs-print-button"
+                                               OnClick="PrintFilteredCosts">
+                                    @($"پرینت {TotalCostsCounts.ToPersianNumbers()} هزینه فیلتر شده‌")
+                                </TelerikButton>
+                            }
+
+                        }
+                    </section>
+
+                    <div class="flex justify-content-end align-items-center" style="margin-top: -20px">
+
+
+
+                        <div style="color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; position: relative; padding: 4px 14px 6px 14px; margin-bottom: 2px; margin-top: 0; border: 1px solid transparent; border-radius: .25rem; margin-left: 10px; font-family: 'bhoma'; letter-spacing: -0.5px; font-size: 15px;">
+                            مجموع هزینه‌های ثبت شده:
+                            <strong>
+                                @TotalCostsAmount.ToCurrencyStringFormat().ToPersianNumbers()
+                                <span style="font-size: 11px; letter-spacing: 0.5px;font-family: 'bhoma';">
+                                    ریال
+                                </span>
+                            </strong>
+                        </div>
+
+                        <TelerikButton Class="secondary-button excel-button contracts-excel-button" ImageUrl="@IconUrls.Export" OnClick="ExportCostsDataToExcel"> خروجی Excel </TelerikButton>
+
+
+
+                    </div>
+                </div>
+
+                @*<div class="orders-archive-status-container">
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+                @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+                ثبت شده
+                </div>
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+                @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+                حذف شده
+                </div>
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+                @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+                همه
+                </div>
+                </div>*@
+
+
+                <TelerikGrid TItem="@CostDto"
+                @ref="@CostsGridRef"
+                             Height="100%"
+                             Pageable="true"
+                             PageSize="PageSize"
+                             Sortable="true"
+                Groupable="false"
+                SelectionMode="Telerik.Blazor.GridSelectionMode.Multiple"
+                @bind-SelectedItems="SelectedItems"
+                             Resizable="true"
+                             Reorderable="true"
+                             OnStateInit="@OnStateInitHandler"
+                             OnRowRender="OnGridRowRender"
+                             OnRead=@OnReadHandler>
+                    <GridColumns>
+                        <GridCheckboxColumn Visible="@(IsVisibleMultipleActionButton && IsMultiActionOnCustomSelection)" CheckBoxOnlySelection="true" SelectAllMode="GridSelectAllMode.Current"></GridCheckboxColumn>
+                        <GridColumn Field="@(nameof(CostDto.InsuredFullName))" Title="نام بیمار" Width="100px" Locked="false" Sortable="false"/>
+                        <GridColumn Field="@(nameof(CostDto.UserRegistrarPersonnelCode))" Title="پرسنلی اصلی" Width="100px" Locked="false" Sortable="false"/>
+                        <GridColumn Field="@(nameof(CostDto.Title))" Title="موضوع هزینه" Width="100px" Locked="false" Sortable="false"/>
+                        <GridColumn Field="@(nameof(CostDto.CreatedAtJalali))" Visible="false" Title="تاریخ ثبت" Width="100px" Locked="false" Sortable="false"/>
+                        <GridColumn Field="@(nameof(CostDto.PolicyObligationObligationCode))" Title="کد عنوان" Width="70px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(CostDto.PolicyObligationObligationTitle))" Title="نوع عنوان" Width="100px" Locked="false" Sortable="true"/>
+                        <GridColumn Field="@(nameof(CostDto.CostDateJalali))" Title="تاریخ هزینه" Width="100px" Locked="false" Sortable="false"/>
+                        <GridColumn Field="@(nameof(CostDto.PaidAmount))" Title="مبلغ هزینه" Width="100px" Locked="false" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var cost = (CostDto)gridContext;
+
+                                    <span> @cost.PaidAmount.ToCurrencyStringFormat().ToPersianNumbers()</span>
+                                    <span style="font-size: 11px;">ریال</span>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@(nameof(CostDto.ConfirmedAmount))" Title="مبلغ تایید شده" Width="100px" Locked="false" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var cost = (CostDto)gridContext;
+
+                                    @if (cost.ConfirmedAmount.HasValue)
+                                    {
+                                        <span> @cost.ConfirmedAmount.Value.ToCurrencyStringFormat().ToPersianNumbers()</span>
+                                        <span style="font-size: 11px;">ریال</span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            <em style="color: darkgray; letter-spacing: 0.5px;">در حال بررسی</em>
+                                        </span>
+                                    }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@(nameof(CostDto.ConfirmedAtJalali))" Title="تاریخ تایید" Width="100px" Locked="false" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var cost = (CostDto)gridContext;
+
+                                    @if (cost.ConfirmedAt.HasValue)
+                                    {
+                                        <span> @cost.ConfirmedAtJalali</span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            <em style="color: darkgray; letter-spacing: 0.5px;">در حال بررسی</em>
+                                        </span>
+                                    }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@(nameof(CostDto.FranchisePercent))" Title="فرانشیز" Width="100px" Locked="false" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var cost = (CostDto)gridContext;
+
+                                    @if (cost.FranchisePercent.HasValue)
+                                    {
+                                        <div> @($"{cost.FranchisePercent.Value.ToPersianNumbers()}%")</div>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            <em style="color: darkgray; letter-spacing: 0.5px;">در حال بررسی</em>
+                                        </span>
+                                    }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@(nameof(CostDto.FinalPayableAmount))" Title="قابل پرداخت" Width="100px" Locked="false" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var cost = (CostDto)gridContext;
+
+                                    @if (cost.FinalPayableAmount.HasValue)
+                                    {
+                                        <div> @cost.FinalPayableAmount.Value.ToCurrencyStringFormat().ToPersianNumbers() ریال</div>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            <em style="color: darkgray;
+                                                       letter-spacing: 0.5px;">در حال بررسی</em>
+                                        </span>
+                                    }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@(nameof(CostDto.Description))" Title="توضیحات" Width="100px" Locked="false" Sortable="false">
+                            <Template Context="gridContext">
+                            @{
+                                var cost = (CostDto)gridContext;
+
+                                @if (string.IsNullOrWhiteSpace(cost.Description))
+                                {
+                                    <span></span>                                    
+                                }
+                                else if (cost.Description.Length < 40)
+                                {
+                                    <div> @cost.Description</div>
+                                }
+                                else
+                                {
+                                    <div> @cost.Description.Substring(0, 40) ...</div>
+                                }
+                            }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@(nameof(CostDto.Id))" Title="پیوست‌" Width="130px" Locked="false" Sortable="true">
+                            <Template Context="gridContext">
+                                @{
+                                    var cost = (CostDto)gridContext;
+
+                                    foreach (var attachment in cost.CostAttachments)
+                                    {
+                                        <div class="chip-badge">
+                                            <a target="_blank" href="@ToDocFullURL(attachment.Url)"> @attachment.Title </a>
+                                        </div>
+                                    }
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn Field="@(nameof(CostDto.Id))" Title="" Width="100px" Locked="true" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var cost = (CostDto)gridContext;
+
+                                    <div class="grid-action-buttons-wrapper justify-content-center">
+                                    
+                                        <button style="margin-left: 3px;margin-right: 3px;" class="grid-action-button view"
+                                                title="مشاهده" @onclick="@(() => OpenCostFlowFormsPage(cost.Id))">
+                                            <img class="btn-img" src="@IconUrls.EyeGreen" />
+                                            <img class="btn-img-hovered" src="@IconUrls.EyeWhite" />
+                                        </button>
+                                        
+                                        @if (cost.FlowCurrentStateTag == InsuranceStateTag.ClaimsAdjusterAppraisal.ToString())
+                                        {
+                                            <div class="flex cursor-pointer">
+                                                <img class="btn-img" title="تاییدیه منابع انسانی" style="margin-right: 9px;width: 30px;" src="@IconUrls.CheckIcon" />
+                                            </div>
+                                        }
+                                        else if (cost.FlowCurrentStateTag == InsuranceStateTag.KosarInsurancePayment.ToString())
+                                        {
+                                            <div class="flex cursor-pointer">
+                                                <img class="btn-img" title="تایید کارشناس" style="margin-right: 9px;width: 30px;" src="@IconUrls.DoubleCheckIcon" />
+                                            </div>
+                                        }
+                                        else if (cost.FlowCurrentStateTag == InsuranceStateTag.Finish.ToString() && 
+                                                 (cost.BankPaymentId.HasValue is false || (cost.BankPaymentId.HasValue && AllBankPayments.Any(p => p.Id == cost.BankPaymentId.Value && p.PayedAt.HasValue) is false)))
+                                        {
+                                            <div class="flex cursor-pointer">
+                                                <img class="btn-img" title="تایید کارشناس" style="margin-right: 9px;width: 30px;" src="@IconUrls.DoubleCheckIcon" />
+                                            </div>
+                                        }
+                                        else if (cost.FlowCurrentStateTag == InsuranceStateTag.Finish.ToString() && cost.BankPaymentId.HasValue 
+                                                 && AllBankPayments.Any(p => p.Id == cost.BankPaymentId.Value && p.PayedAt.HasValue))
+                                        {
+                                            <div class="flex cursor-pointer">
+                                                <img class="btn-img" title="تسویه شده" style="margin-right: 9px;width: 30px;" src="@IconUrls.CheckSignIcon" />
+                                            </div>
+                                        }
+
+                                        @*<TelerikButton Class="default-button view-work-button view-cost-button"
+                                                       Enabled="!IsLoading"
+                                                       OnClick="@(() => OpenCostFlowFormsPage(cost.Id))">
+                                            مشاهده
+                                        </TelerikButton>*@
+                                    </div>
+                                }
+                            </Template>
+                        </GridColumn>
+                    </GridColumns>
+                </TelerikGrid>
+            </div>
+        </section>
+
+        @*<!-- Popup Windows => Confirm Document Deletion -->
+        <section>
+        <ConfirmDialog @bind-IsVisible="IsVisibleDeleteCostConfirmDialog"
+        Title="تایید حذف سند"
+        Text="این سند به طور کامل حذف خواهد شد. آیا از حذف آن اطمینان دارید؟"
+        OnConfirm="() => DeleteDocument(DeletingCostId)" />
+        </section>*@
+    </div>
+</article>

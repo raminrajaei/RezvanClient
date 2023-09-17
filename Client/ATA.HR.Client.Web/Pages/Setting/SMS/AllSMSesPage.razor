@@ -1,0 +1,115 @@
+﻿@page "/settings/all-app-smses"
+@using ATA.HR.Shared.Dtos.AppGeneric
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.AllAppSMSesPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="@LoadingText" Visible="@IsLoading" />
+
+<div class="dashboard-page">
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="@PageTitles.AllAppSMSesPage.Title" PageDescription="مشاهده‌ی تمامی پیامک‌های ارسالی در سامانه‌ی جامع منابع انسانی" />
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-6 col-xxl-3">
+                        <label class="input-label">
+                            کاربر
+                        </label>
+                        <div class="searchbar-custom-wrapper">
+                            <img src="@IconUrls.Search" />
+                            <TelerikTextBox class="full-width"
+                                            PlaceHolder="جستجو با نام یا شماره پرسنلی دریافت کننده"
+                                            ValueChanged="SearchTermChanged">
+                            </TelerikTextBox>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-xxl-4 filter-box">
+                        <label>نوع پیامک</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@AppSMSTypesSource"
+                                            @bind-Value="@AllAppSMSesFilter.AppSMSTypeSelectedValue"
+                                            TextProperty="Text"
+                                            Change="@(() => ApplyFilters)"
+                                            ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper">
+
+            <div class="page-grid-operation-wrapper align-items-center">
+
+                
+
+            </div>
+            
+            @*<div class="orders-archive-status-container">
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+                     @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+                    ثبت شده
+                </div>
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+                     @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+                    حذف شده
+                </div>
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+                     @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+                    همه
+                </div>
+            </div>*@
+
+            <TelerikGrid TItem="@AppSMSReadDto"
+                         @ref="@AppSMSesGridRef"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         Resizable="true"
+                         Reorderable="true"
+                         OnStateInit="@OnStateInitHandler"
+                         OnRowRender="OnGridRowRender"
+                         OnRead=@OnReadHandler>
+                <GridColumns>
+                    <GridColumn Field="@(nameof(AppSMSReadDto.Id))" Title="شناسه" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.CreatedAtJalali))" Title="زمان ارسال" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.UserReceiverFullName))" Title="دریافت کننده" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.MobileReceiver))" Title="موبایل" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.ByBackgroundJobDisplay))" Title="خودکار" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.AppSMSTypeDisplay))" Title="نوع پیامک" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.MessageContent))" Title="متن" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.SmsProviderResponse))" Title="نتیجه ارسال" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.BatchIdentifier))" Title="Batch Identifier" Visible="IsAdmin" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(AppSMSReadDto.RefIdentifier))" Title="Ref Identifier" Visible="IsAdmin" Width="100px" Locked="false" Sortable="false" />
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+
+</div>
+

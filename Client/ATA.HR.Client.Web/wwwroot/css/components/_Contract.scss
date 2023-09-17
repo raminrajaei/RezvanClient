@@ -1,0 +1,424 @@
+﻿@import '../utils/_base.scss';
+
+.contract-component {
+    background: white;
+    padding: rem(30px) 0 rem(30px) rem(50px);
+    border: 1px solid $border-color-darker;
+
+    .loading-contract-wrapper {
+        text-align: center;
+        font-size: rem(16px);
+    }
+
+    .container-fluid {
+        width: 100%;
+        max-width: 1800PX;
+        direction: rtl;
+        margin: 32PX;
+        justify-content: center;
+        line-height: 1.7rem;
+        margin: 0;
+        font-family: Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 400;
+        font-size: 13px;
+    }
+    /*#region Normal Contract */
+    .normal-contract {
+        .header {
+            display: flex;
+            justify-content: space-between;
+            //  padding: 20px;
+            box-shadow: 5px 5px rgb(209, 207, 207);
+            margin-bottom: 20px;
+            width: 100%;
+            margin-right: -11px;
+        }
+
+        .logo {
+            width: 50%;
+            height: auto;
+            padding-top: 12px;
+        }
+
+        .header-style {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+
+            @include lt-sm {
+                font-size: 8px;
+            }
+
+            .header-left-sec {
+                margin-right: rem(10px);
+            }
+        }
+
+        .article-1 {
+            margin-right: rem(-12px);
+
+            .employer {
+                margin-left: rem(30px);
+                margin-right: rem(15px);
+            }
+        }
+
+        .title {
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+
+
+
+            @include lt-sm {
+                font-size: 9px;
+            }
+        }
+
+        .title-bold {
+            font-weight: bold;
+
+            @include lt-sm {
+                font-size: 8px;
+            }
+        }
+
+        .cell-border {
+            border: 1px solid rgb(209, 207, 207);
+        }
+
+
+        .column-holder {
+            display: flex;
+            padding: 8px;
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .column-border {
+            border: .5px solid rgb(209, 207, 207);
+        }
+
+        .column-style {
+            /*width: 16.6%;*/
+            height: auto;
+        }
+
+        .col-merge {
+            flex-direction: column;
+        }
+
+        .col2-merge {
+            border-bottom: none;
+        }
+
+        .col3-merge {
+            border-top: none;
+        }
+
+        .tbl-header {
+            text-align: center;
+            padding: 8px;
+            background-color: rgb(209, 207, 207);
+            border: .5px solid rgb(77, 77, 77);
+        }
+
+        .tbl-item {
+            flex-direction: column;
+        }
+
+        .column-style-item {
+            /*width: 20%;*/
+            height: auto;
+            padding: 8px;
+        }
+
+        .cell-style {
+            margin: -9px;
+            padding: 8px;
+            /*padding-right: 15px;*/
+            border-bottom: .5px solid rgb(209, 207, 207);
+            align-items: center;
+        }
+
+        .total-cell {
+            justify-content: center;
+            margin-top: -17px;
+        }
+
+        .sign {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .sign-cell {
+            width: 50% !important;
+            padding: 15px;
+            line-height: 35px;
+            min-height: 125px;
+        }
+
+        .cell-width {
+            width: 50%;
+        }
+
+        .cell-aligh-txt {
+            text-align: left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .signature-img {
+            max-width: 330px;
+            margin-right: auto;
+            margin-left: auto;
+
+            @include lt-xl {
+                max-width: fit-content;
+                width: 100%;
+            }
+        }
+
+        .sm-font-size {
+            @include lt-sm {
+                font-size: 10px;
+            }
+        }
+
+        .holder-padding {
+            padding-right: 15px;
+        }
+
+        .dsp-dis {
+            @include lt-sm {
+                display: none;
+            }
+        }
+
+        .bio-size {
+            margin-right: 0px;
+        }
+
+        .tbl-header-align {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sm-font-size2 {
+            @include lt-sm {
+                font-size: 8px;
+            }
+        }
+
+
+        .tbl-header-align-1 {
+            text-align: right;
+            border-right: none;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+        }
+    }
+    /*#endregion */
+    /*#region Hourly Contract*/
+    .hourly-contract {
+        background: white;
+        /*padding: rem(30px) 0 rem(30px) rem(50px);
+        border: 1px solid $border-color-darker;*/
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            //  padding: 20px;
+            box-shadow: 5px 5px rgb(209, 207, 207);
+            margin-bottom: 20px;
+            width: 100%;
+            margin-right: -11px;
+        }
+
+        .logo {
+            width: 50%;
+            height: auto;
+            padding-top: 12px;
+        }
+
+        .header-style {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+
+            @include lt-sm {
+                font-size: 8px;
+            }
+        }
+
+        .title {
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+
+
+
+            @include lt-sm {
+                font-size: 9px;
+            }
+        }
+
+        .title-bold {
+            font-weight: bold;
+
+            @include lt-sm {
+                font-size: 8px;
+            }
+        }
+
+        .cell-border {
+            border: 1px solid rgb(209, 207, 207);
+        }
+
+
+        .column-holder {
+            display: flex;
+            padding: 8px;
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .column-border {
+            border: .5px solid rgb(209, 207, 207);
+        }
+
+        .column-style {
+            /*width: 16.6%;*/
+            height: auto;
+        }
+
+        .col-merge {
+            flex-direction: column;
+        }
+
+        .col2-merge {
+            border-bottom: none;
+        }
+
+        .col3-merge {
+            border-top: none;
+        }
+
+        .tbl-header {
+            text-align: center;
+            padding: 8px;
+            background-color: rgb(209, 207, 207);
+            border: .5px solid rgb(77, 77, 77);
+        }
+
+        .tbl-item {
+            flex-direction: column;
+        }
+
+        .column-style-item {
+            /*width: 20%;*/
+            height: auto;
+            padding: 8px;
+        }
+
+        .cell-style {
+            margin: -9px;
+            padding: 8px;
+            /*padding-right: 15px;*/
+            border-bottom: .5px solid rgb(209, 207, 207);
+            align-items: center;
+        }
+
+        .total-cell {
+            justify-content: center;
+            margin-top: -17px;
+        }
+
+        .sign {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .sign-cell {
+            width: 50% !important;
+            padding: 15px;
+            line-height: 35px;
+            min-height: 125px;
+        }
+
+        .cell-width {
+            width: 50%;
+        }
+
+        .cell-aligh-txt {
+            text-align: left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .signature-img {
+            max-width: 330px;
+            margin-right: auto;
+            margin-left: auto;
+
+            @include lt-xl {
+                max-width: fit-content;
+                width: 100%;
+            }
+        }
+
+        .sm-font-size {
+            @include lt-sm {
+                font-size: 10px;
+            }
+        }
+
+        .holder-padding {
+            padding-right: 15px;
+        }
+
+        .dsp-dis {
+            @include lt-sm {
+                display: none;
+            }
+        }
+
+        .bio-size {
+            margin-right: 0px;
+        }
+
+        .tbl-header-align {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sm-font-size2 {
+            @include lt-sm {
+                font-size: 8px;
+            }
+        }
+
+
+        .tbl-header-align-1 {
+            text-align: right;
+            border-right: none;
+            display: flex;
+            justify-content: start;
+            align-items: center;
+        }
+    }
+    /*#endregion */
+}
+
+

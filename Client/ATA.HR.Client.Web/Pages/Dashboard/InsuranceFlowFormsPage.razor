@@ -1,0 +1,612 @@
+﻿@page "/flow-forms/insurance/{CostId:int}"
+@page "/flow-forms/insurance/{CostId:int}/{FromAllCostsPage:int}"
+@using ButtonType = Radzen.ButtonType
+@using ButtonStyle = Radzen.ButtonStyle
+@using DNTPersianUtils.Core
+@using ATA.HR.Client.Web.APIs.Enums
+@inherits BitPageBase
+
+<PageTitle> @PageTitles.InsuranceFlowFormsPage.TitleMain </PageTitle>
+
+<!-- Page Heading Title -->
+<section>
+    <div class="page-header-wrapper">
+        <div class="page-add-edit-header">
+            <div class="page-back-title">
+                <img src="@IconUrls.Back" @onclick="NavigateBackToIncomingPage" />
+                <div class="back-title-text">
+                    @(PageTitles.InsuranceFlowFormsPage.TitleMain)
+                </div>
+            </div>
+            <div class="page-back-links">
+                <div> داشبورد </div>
+                <img src="@IconUrls.PaleArrowRight" />
+                <div> هزینه بیمه تکمیلی</div>
+                <img src="@IconUrls.DarkArrowRight" />
+                <div class="active-link">
+                    گردش کار
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<TelerikLoaderContainer Visible="@IsLoading" Text="" />
+
+
+@if (InsuranceFlowForms is not null)
+{
+    <div class="row flowForm-page ">
+
+        <div class="col-xs-12 col-lg-9">
+            <div class="tab-section-wrapper">
+
+                <div class="hokm">
+
+                    <article class="insurance-cost-flow-component">
+
+                        <div class="contract-component" style="padding-left: 26px;">
+
+                            @if (InsuranceFlowForms.Cost is null)
+                            {
+                                <div class="loading-contract-wrapper"> در حال بارگزاری هزینه ... </div>
+                            }
+                            else
+                            {
+                                <div class="container-fluid">
+
+                                    <div class="normal-contract">
+
+                                        <div class="row header cell-border">
+                                            <div class="col-2">
+                                                <img class="logo" src="@ImageUrls.Pages.ATAContractLogo" />
+                                            </div>
+                                            <div class="title col-8">
+                                                <div>هواپیمایی آتا</div>
+                                                <div>
+                                                    هزینه بیمه تکمیلی ثبت شده برای بیمه شده
+                                                    <b>@InsuranceFlowForms.Cost.InsuredFullName</b>
+                                                </div>
+                                                <div style="margin-bottom: 6px; font-size: 13px">
+                                                    هزینه‌ی
+                                                    @InsuranceFlowForms.Cost.Title
+                                                </div>
+                                            </div>
+                                            <div class="header-style col-2">
+                                                <div class="flex flex-column">
+                                                    <div class="flex" style="margin-right: 10px">
+                                                        شناسه هزینه:
+                                                        <div class="header-left-sec"> @InsuranceFlowForms.Cost.Id.ToPersianNumbers() </div>
+                                                    </div>
+                                                    <div class="flex" style="margin-right: 10px">
+                                                        تاریخ ثبت:
+                                                        <div class="header-left-sec"> @(InsuranceFlowForms.Cost.CreatedAtJalali) </div>
+                                                    </div>
+                                                    <div class="flex" style="margin-right: 10px">
+                                                        شماره پرسنلی:
+                                                        <div class="header-left-sec">@InsuranceFlowForms.Cost.UserRegistrarPersonnelCode?.ToPersianNumbers() </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="column-holder row column-border section-header">
+                                            <div class="column-style title-bold col sm-font-size section-title" style="width:50% ;">
+                                                اطلاعات هزینه
+                                            </div>
+                                        </div>
+                                        <div class="column-holder row col-merge column-border ">
+                                            <div class="column-holder row bio-size align-items-center " style="background: rgb(250, 243, 243)">
+                                                <div class="col-3 row-title-wrapper">
+                                                    <div>
+                                                        <label>مشخصات بیمار و بیمه شده اصلی</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="row flex align-items-center">
+                                                        <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام بیمار</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size">@InsuranceFlowForms.Cost.InsuredFullName </div>
+                                                        <div class="col-2 column-style holder-padding title-bold sm-font-size"> نام بیمه شده اصلی</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size">@InsuranceFlowForms.Cost.UserRegistrarFullName</div>
+                                                        <div class="col-2 column-style holder-padding title-bold sm-font-size">شماره پرسنلی اصلی</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@InsuranceFlowForms.Cost.UserRegistrarPersonnelCode?.ToPersianNumbers()</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            @*<div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                                    <div class="col-2 column-style holder-padding sm-font-size title-bold">کسر کار ماهانه:</div>
+                                    <div class="col-2 column-style holder-padding sm-font-size"> @UserWorkHour.MonthlyWorkDeductionsTimeDisplay.En2FaDigits() </div>
+                                    <div class="col-2 column-style holder-padding sm-font-size title-bold">کارکرد نوبت کاری:</div>
+                                    <div class="col-2 column-style holder-padding sm-font-size ">@UserWorkHour.WorkShiftGridDisplay.En2FaDigits()</div>
+                                    <div class="col-2 column-style holder-padding sm-font-size title-bold">کارکرد ساعتی:</div>
+                                    <div class="col-2 column-style holder-padding sm-font-size" style="padding-right:0px;">@UserWorkHour.HourlyWorkTimeDisplay.En2FaDigits()</div>
+                                    </div>*@
+                                            @*<div class="column-holder row bio-size">
+                                    <div class="col-4 sm-font-size  holder-padding  title-bold ">آدرس:</div>
+                                    <div class="col-8 sm-font-size  holder-padding ">@UserContract.ContractDetails.UserAddress</div>
+                                    </div>*@
+                                        </div>
+
+                                        @*<div class="column-holder row column-border">
+                                <div class="column-style title-bold col sm-font-size section-title" style="width:50% ;">
+                                موضوع هزینه
+                                </div>
+                                </div>*@
+                                        <div class="column-holder row col-merge column-border ">
+
+                                            <div class="column-holder row bio-size  align-items-center" style="background: rgb(250, 243, 243)">
+                                                <div class="col-3 row-title-wrapper">
+                                                    <div>
+                                                        <label>موضوع هزینه</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="row flex align-items-center">
+                                                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">موضوع هزینه:</div>
+                                                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@InsuranceFlowForms.Cost.Title</div>
+                                                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">کد عنوان:</div>
+                                                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size">
+                                                            <div class="flex">
+                                                                <div style="display: flex; align-items: center;">
+                                                                    @InsuranceFlowForms.Cost.PolicyObligationObligationCode
+                                                                </div>
+                                                                @if (IsCostEditable)
+                                                                {
+                                                                    <div @onclick=OpenUpdateCostModal style="cursor: pointer;
+                                                                                                             margin-right: 15px;
+                                                                                                             margin-top: 2px;">
+                                                                        @*<img src="@IconUrls.PenGray" />*@
+
+                                                                        <button class="btn btn-sm btn-primary warning-button" style="width: 65px">
+                                                                            ویرایش
+                                                                        </button>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-1 sm-font-size holder-padding column-style sm-font-size title-bold"> عنوان:</div>
+                                                        <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@InsuranceFlowForms.Cost.PolicyObligationObligationTitle</div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        @*<div class="column-holder row column-border">
+                                <div class="column-style title-bold col sm-font-size section-title" style="width:50% ;">
+                                تاریخ هزینه، ثبت و مبلغ
+                                </div>
+                                </div>*@
+                                        <div class="column-holder row col-merge column-border ">
+
+                                            <div class="column-holder row bio-size align-items-center" style="background: rgb(250, 243, 243)">
+                                                <div class="col-3 row-title-wrapper">
+                                                    <div>
+                                                        <label>تاریخ هزینه، ثبت و مبلغ</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="row flex align-items-center">
+                                                        <div class="col-2 column-style holder-padding sm-font-size title-bold">تاریخ هزینه:</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size">@InsuranceFlowForms.Cost.CostDateJalali</div>
+                                                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">مبلغ هزینه:</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size ">
+                                                            <span style="font-size: 17px; font-weight: bold;">
+                                                                @InsuranceFlowForms.Cost.PaidAmount.ToCurrencyStringFormat().En2FaDigits()
+                                                            </span>
+                                                            <span>ریال</span>
+                                                        </div>
+                                                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">تاریخ ثبت:</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size">@InsuranceFlowForms.Cost.CreatedAtJalali</div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        @*<div class="column-holder row column-border">
+                                <div class="column-style title-bold col sm-font-size section-title" style="width:50% ;">
+                                توضیحات و پیوست‌
+                                </div>
+                                </div>*@
+                                        <div class="column-holder row col-merge column-border ">
+
+                                            <div class="column-holder row bio-size align-items-center" style="background: rgb(250, 243, 243)">
+                                                <div class="col-3 row-title-wrapper">
+                                                    <div>
+                                                        <label>توضیحات و پیوست‌</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="row flex align-items-center">
+                                                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">توضیحات:</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size">@InsuranceFlowForms.Cost.Description</div>
+                                                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">پیوست ۱:</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size">
+                                                            <a style="text-decoration: none; font-size: 13px;"
+                                                               target="_blank"
+                                                               href="@($"{AppConstants.AppCDNBaseURL}{InsuranceFlowForms.Cost.CostAttachments[0].Url}")">
+                                                                @InsuranceFlowForms.Cost.CostAttachments[0].Title
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">پیوست ۲:</div>
+                                                        <div class="col-2 column-style holder-padding sm-font-size">
+                                                            @if (@InsuranceFlowForms.Cost.CostAttachments.Count > 1)
+                                                            {
+                                                                <a style="text-decoration: none; font-size: 13px;"
+                                                                   target="_blank"
+                                                                   href="@($"{AppConstants.AppCDNBaseURL}{InsuranceFlowForms.Cost.CostAttachments[1].Url}")">
+                                                                    @InsuranceFlowForms.Cost.CostAttachments[1].Title
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>ندارد</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div style="display: flex; height: 30px">&nbsp;</div>
+
+                                        @if ((ViewFormByBozorgi || InsuranceFlowForms.IsCurrentUserActor)
+                                       && InsuranceFlowForms.Cost.FlowCurrentStateTag == InsuranceStateTag.ClaimsAdjusterAppraisal.ToString())
+                                        {
+                                            <!-- Cost Confirm EditForm -->
+                                            <section class="documentEditFormSection" style="    margin-right: -10px;
+                                                                                            margin-left: 10px;">
+                                                <div class="form-custom-wrapper" style="background-color: #fffff9">
+
+                                                    <EditForm id="costForm" class="row" Model="@ConfirmCostCommand" OnValidSubmit="OnConfirmCost">
+
+                                                        <DataAnnotationsValidator />
+
+                                                        <!-- Form Section: Cost Spec -->
+                                                        <div class="row form-section" style="margin:0">
+                                                            <div class="col-3 form-section-title justify-content-center">تایید هزینه</div>
+                                                            <div class="col-9">
+                                                                <div class="row">
+                                                                    
+                                                                    <p class="cost-form-note">
+                                                                        مانده اعتبار بیمه شده
+                                                                        <strong>
+                                                                            @InsuranceFlowForms.Cost.InsuredFullName
+                                                                        </strong>
+                                                                        از عنوان هزینه
+                                                                        <strong>
+                                                                            @InsuranceFlowForms.Cost.PolicyObligationObligationTitle
+                                                                        </strong>
+                                                                        با کد
+                                                                        <strong>
+                                                                            @InsuranceFlowForms.Cost.PolicyObligationObligationCode
+                                                                        </strong>
+                                                                        قابل تخصیص برای این هزینه
+                                                                        مبلغ
+                                                                        <strong style="font-size: 18px">
+                                                                            @RemainedBalance.ToCurrencyStringFormat().ToPersianNumbers()
+                                                                        </strong>
+                                                                        ریال می‌باشد.
+                                                                    </p>
+
+                                                                    <div class="col-3 form-item-wrapper">
+                                                                        <label for="documentDesc4">
+                                                                            مبلغ تایید شده
+                                                                            <span style="font-size: 12px; font-weight: bold; margin-right: 4px; margin-left: 7px; margin-top: 1px; letter-spacing: 0.5px; text-shadow: 0 0 black;">[ریال] </span>
+                                                                            *
+                                                                        </label>
+                                                                        <div class="form-input-wrapper insurance-confirm-cost-amount">
+                                                                            <RadzenNumeric id="documentDesc4"
+                                                                                           Style="width: 100%"
+                                                                                           Format="N0"
+                                                                                           @bind-Value="ConfirmCostCommand.ConfirmedAmount"
+                                                                                           Placeholder="" />
+                                                                        </div>
+                                                                        <ValidationMessage For="() => ConfirmCostCommand.ConfirmedAmount" />
+                                                                    </div>
+
+                                                                    <div class="col-3 form-item-wrapper">
+                                                                        <label for="documentDesc4">
+                                                                            درصد فرانشیز
+                                                                            *
+                                                                        </label>
+                                                                        <div class="form-input-wrapper insurance-confirm-cost-amount">
+                                                                            <RadzenNumeric id="documentDesc4"
+                                                                                           Style="width: 100%"
+                                                                                           @bind-Value="ConfirmCostCommand.FranchisePercent"
+                                                                                           Placeholder="" />
+                                                                        </div>
+                                                                        <ValidationMessage For="() => ConfirmCostCommand.FranchisePercent" />
+                                                                    </div>
+                                                                    
+                                                                    <div class="col-3 form-item-wrapper" style="display: flex;
+                                                                                                                align-items: end;
+                                                                                                                justify-content: center;">
+                                                                        <button type="submit" form="costForm" class="primary-button">ذخیره</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </EditForm>
+
+                                                </div>
+                                            </section>
+                                        }
+
+                                        @if ((InsuranceFlowForms.IsFlowFinished || InsuranceFlowForms.Cost.FlowCurrentStateTag == InsuranceStateTag.KosarInsurancePayment.ToString())
+                                       && InsuranceFlowForms.Cost.ConfirmedAmount.HasValue
+                                       && InsuranceFlowForms.Cost.FinalPayableAmount.HasValue)
+                                        {
+                                            <div class="column-holder row column-border section-header">
+                                                <div class="column-style title-bold col sm-font-size section-title" style="width:50% ;">
+                                                    محاسبات مالی
+                                                </div>
+                                            </div>
+                                            <div class="column-holder row col-merge column-border ">
+                                                <div class="column-holder row bio-size align-items-center " style="background: rgb(250, 243, 243)">
+                                                    <div class="col-3 row-title-wrapper">
+                                                        <div>
+                                                            <label>مبالغ نهایی</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <div class="row flex align-items-center">
+                                                            <div class="col-2 column-style holder-padding title-bold sm-font-size ">مبلغ تایید شده</div>
+                                                            <div class="col-2 column-style holder-padding sm-font-size">@InsuranceFlowForms.Cost.ConfirmedAmount.Value.ToCurrencyStringFormat().En2FaDigits() ریال </div>
+                                                            <div class="col-2 column-style holder-padding title-bold sm-font-size"> فرانشیز</div>
+                                                            <div class="col-2 column-style holder-padding sm-font-size">
+                                                                @InsuranceFlowForms.Cost.FranchisePercent.ToPersianNumbers() %
+                                                            </div>
+                                                            <div class="col-2 column-style holder-padding title-bold sm-font-size">مبلغ قابل پرداخت</div>
+                                                            <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">
+                                                                <span style="font-size: 17px; font-weight: bold;">
+                                                                    @InsuranceFlowForms.Cost.FinalPayableAmount.Value.ToCurrencyStringFormat().En2FaDigits()
+                                                                </span>
+                                                                ریال
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    
+                                    @if (BankPayment != null && string.IsNullOrWhiteSpace(BankPayment.PayedAtJalali) is false)
+                                    {
+                                            <div style="display: flex; height: 30px">&nbsp;</div>
+
+                                            <div class="column-holder row column-border section-header">
+                                                <div class="column-style title-bold col sm-font-size section-title" style="width:50% ;">
+                                                    گزارش تسویه
+                                                </div>
+                                            </div>
+                                            <div class="column-holder row col-merge column-border ">
+                                                <div class="column-holder row bio-size align-items-center " style="background: rgb(250, 243, 243)">
+                                                    <div class="col-3 row-title-wrapper">
+                                                        <div>
+                                                            <label>اطلاعات پرداخت</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <div class="row flex align-items-center">
+                                                            <div class="col-2 column-style holder-padding title-bold sm-font-size ">تاریخ پرداخت</div>
+                                                            <div class="col-2 column-style holder-padding sm-font-size">@BankPayment.PayedAtJalali </div>
+                                                            <div class="col-2 column-style holder-padding title-bold sm-font-size"> شماره پرداخت</div>
+                                                            <div class="col-2 column-style holder-padding sm-font-size">
+                                                                @BankPayment.PaymentNo.ToPersianNumbers()
+                                                            </div>
+                                                            <div class="col-2 column-style holder-padding title-bold sm-font-size">کد رهگیری</div>
+                                                            <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">
+                                                                <span style="font-size: 17px; font-weight: bold;">
+                                                                    @BankPayment.BankTrackingCode
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    }
+                                    </div>
+
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+            <div class="flex">
+
+                @if (InsuranceFlowForms.IsCurrentUserActor)
+                {
+                    <div class="row flow-action-center" style="width: 100%;">
+
+                        <h3 class="section-title">
+                            توضیحات شما
+                        </h3>
+
+                        <div class="col-12 comment-box-wrapper">
+                            <RadzenTextArea @bind-Value="@Action.Comment" Placeholder="توضیحات خود را وارد نمایید" />
+                        </div>
+
+                        <div class="col-12 action-buttons-wrapper">
+                            @if (PossibleActions?.Actions is not null)
+                            {
+                                @foreach (var action in PossibleActions.Actions)
+                                {
+                                    var radzenButtonStyle = action.ActionTag switch
+                                    {
+                                        "Confirm" => ButtonStyle.Success,
+                                        "Reject" => ButtonStyle.Danger,
+                                        _ => ButtonStyle.Info
+                                    };
+
+                                    var buttonText = action.ActionName;
+
+                                    <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="radzenButtonStyle" Text="@buttonText" Click="() => DoAction(action.ActionTag)"></RadzenButton>
+                                }
+                            }
+
+
+                        </div>
+
+                    </div>
+                }
+
+
+
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-lg-3 history-section flow-size">
+
+            <h3 class="section-title">
+                گردش کار
+            </h3>
+
+            <div class="page-box-wrapper">
+
+                @if (History is not null)
+                {
+                    var firstRecord = true;
+
+                    @foreach (var history in History.History)
+                    {
+                        if (!firstRecord)
+                        {
+                            <div class="seperator-line"></div>
+                        }
+
+                        firstRecord = false;
+
+                        <div class="first-row">
+                            <div class="actor-name">
+                                <img src="@IconUrls.User" />
+                                <div>@history.ActorName</div>
+                            </div>
+                            <div class="action-name">@history.ActionName</div>
+                        </div>
+                        <div class="second-row">
+                            <div class="state-name"> @history.StateName</div>
+                            <div class="acted-at">@history.ActionDate?.En2FaDigits()</div>
+                        </div>
+
+                        @if (history.ActorComment.IsNotNullOrEmpty())
+                        {
+                            <div class="third-row">
+                                <img src="@IconUrls.Comment" />
+
+                                <div> @history.ActorComment</div>
+                            </div>
+                        }
+                    }
+
+                    <!--To Does-->
+
+                    <div class="seperator-line"></div>
+
+                    @if (InsuranceFlowForms.IsFlowFinished)
+                    {
+                        <div class="flow-finished-sign">پایان</div>
+                    }
+                    else
+                    {
+                        <div class="todo-section">
+                            <div class="todo-state-name">
+                                <img src="@IconUrls.CurvedRightArrow" />
+                                <div>وضعیت جاری</div>
+                            </div>
+
+                            <div class="todo-next-state"> @History.ToDoes.StateName </div>
+
+                            @foreach (var user in History.ToDoes?.Users)
+                            {
+                                <div class="todo-actor-name">
+                                    <img src="@IconUrls.User" />
+                                    <div class="todo-user">@user.FullName</div>
+                                </div>
+                                <div class="todo-actor-post">@user.PostTitle</div>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Popup Windows => Edit cost -->
+<article>
+    <TelerikWindow Class="popup-window-custom-wrapper" Width="100%" Height="100%" Centered="true" Visible="IsVisibleEditAmountAndObligationTypeModal">
+        <WindowContent>
+
+            <div class="popup-window-content versioning-window">
+
+                <div class="app-versioning-container" style="position: relative">
+
+                    <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsVisibleEditAmountAndObligationTypeModal = false"
+                         style="width: 30px;left: 7px;float: left;position: absolute;top: 7px;cursor: pointer;" />
+
+                    <div class="col-4 popup-window-content-card">
+                        @{
+
+                            <div>
+                                <h4 class="version-no-title" style="font-weight: bold;
+                                                            margin-top: 6px;
+                                                            margin-bottom: 10px;
+                                                            color: darkgreen;
+                                                            font-size: 17px;">
+                                    @($"ویرایش مبلغ و عنوان هزینه")
+                                </h4>
+
+                                <div class="personnelCode-to-register-workhours-box">
+                                    <label>هزینه پرداختی</label>
+                                    <RadzenNumeric id="documentDesc4"
+                                                   Style="width: 100%"
+                                                   Format="N0"
+                                                   @bind-Value="UpdateCostAmountAndObligationTypeCommand.PaidAmount"
+                                                   Placeholder=""/>
+                                </div>
+                                <div class="personnelCode-to-register-workhours-box">
+                                    <label>کد عنوان هزینه</label>
+                                    <div>
+                                        <TelerikComboBox Data="@ObligationTypesSource"
+                                                         TextField="Text"
+                                                         ValueField="ValueInt"
+                                                         TValue="int?"
+                                                         TItem="SelectListItem"
+                                                         @bind-Value="UpdateCostAmountAndObligationTypeCommand.PolicyObligationId"
+                                                         Placeholder="انتخاب کنید"
+                                                         ClearButton="true"
+                                                         Filterable="true">
+                                        </TelerikComboBox>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex;
+                                                                                                justify-content: space-evenly;
+                                                                                                margin-top: 40px;
+                                                                                                margin-bottom: 20px;">
+                                    <TelerikButton Class="primary-button" OnClick="EditCost"> تایید </TelerikButton>
+
+                                    <TelerikButton Class="default-button" OnClick="() => IsVisibleEditAmountAndObligationTypeModal = false"> انصراف </TelerikButton>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+        </WindowContent>
+    </TelerikWindow>
+</article>

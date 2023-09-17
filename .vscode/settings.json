@@ -1,0 +1,4 @@
+{
+    "dotnet.defaultSolution": "ATA.HR.sln",
+    "csharp.debug.console": "externalTerminal"
+}

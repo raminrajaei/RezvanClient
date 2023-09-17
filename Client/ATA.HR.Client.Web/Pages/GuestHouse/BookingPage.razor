@@ -1,0 +1,108 @@
+﻿@page "/guest-houses/booking/{City}"
+@using ATA.HR.Shared.Enums.GuestHouse
+@using ATABit.Helper.Utils
+
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.BookingPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<div class="book-page">
+
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            <TopBar PageName="@PageTitles.BookingPage.Title" PageDescription=@($"مشاهده و رزرو اتاق های {CityDisplay}") />
+        </div>
+    </section>
+
+    <!-- Page Content -->
+
+    <div class="col-md-12 col-xl-12 col-xxl-12">
+
+        @foreach (var item in RoomBookingInfos)
+        {
+            <div class="margin-top-25">
+                <span class="font-weight-600">
+                    <span>ساختمان :</span> @item.BuildingName.En2FaDigits()
+                    @(string.IsNullOrWhiteSpace(item.UnitName) is false ? $"| واحد : {item.UnitName.En2FaDigits()}" : string.Empty)
+                </span>
+            </div>
+
+            <div class="flex-wrap">
+                @foreach (var room in item.Bookings)
+                {
+                    <div class="col-md-6 col-xl-4 col-xxl-3">
+                        <div class="room-box-wrapper">
+                            <div class="space-between">
+                                <span class="font-weight-600"> اتاق : @room.RoomName.En2FaDigits()</span>
+
+                                <div class="flex">
+
+                                    @if (room.AreAllBedsBooked)
+                                    {
+                                        <div style="margin-left: 5px;" class="red-tag">دربست</div>
+                                    }
+
+                                    @switch ((RoomBookingStatus)room.RoomBookingStatus)
+                                    {
+                                        case RoomBookingStatus.FullCapacity:
+                                            <div class="pink-tag">@room.RoomBookingStatusName</div>
+                                            break;
+                                        case RoomBookingStatus.HasCapacity:
+                                            <div class="blue-tag">@room.RoomBookingStatusName</div>
+                                            break;
+                                        case RoomBookingStatus.Empty:
+                                            <div class="green-tag">@room.RoomBookingStatusName</div>
+                                            break;
+                                    }
+
+                                </div>
+
+                            </div>
+                            <div class="room-header-wrapper space-between">
+                                <div>
+                                    <span>ظرفیت اتاق : </span><span class="bold-text">@(room.BedCounts.ToString().En2FaDigits())</span>
+                                </div>
+                                <div>
+                                    <span>ظرفیت باقی مانده : </span><span class="bold-red-text">@((room.BedCounts - room.GuestCounts).ToString().En2FaDigits())</span>
+                                </div>
+                            </div>
+                            <div class="space-around">
+
+                                <button class="success-button full-width" @onclick="()=> NavigateToBookingForm(room.Id)">
+                                    <div class="book-button-box">
+                                        <span>رزرو</span>
+                                    </div>
+                                </button>
+
+                                @if ((RoomBookingStatus)room.RoomBookingStatus != RoomBookingStatus.Empty)
+                                {
+                                    <button style="margin-right:5px;" class="warning-button full-width" @onclick="()=> VacateRoom(room)">
+                                        <div class="book-button-box">
+                                            <span>تخلیه کامل اتاق</span>
+                                        </div>
+                                    </button>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+</div>
+
+<!-- Popup Windows => Vacate Room -->
+<section>
+    <ConfirmDialog @bind-IsVisible="IsVacateRoomWindowVisible"
+                   Title="تخلیه کامل اتاق"
+                   Text=@($"این اتاق {CurrentRoomOccupiedBedCounts} عدد از تخت های این اتاق اشغال شده اند، آیا مطمئن هستید که میخواهید، همه‌ی تخت ها را تخلیه کنید؟")
+                   OkButtonText="تخلیه"
+                   OnConfirm="() => ConfirmVacateRoom()" />
+</section>

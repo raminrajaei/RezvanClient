@@ -1,0 +1,71 @@
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
+
+<AuthorizeView>
+    <Authorized>
+        
+        <BlazoredToasts ShowProgressBar="true" Timeout="@AppConstants.AlertDefaultTimeout" Position="ToastPosition.TopCenter" />
+
+        <TelerikRootComponent>
+            
+            <TelerikTooltip TargetSelector=".tooltip-target" />
+
+            <div class="printbase">
+                
+                <div class="col-12">
+                    <div class="main-header-box">
+                        <Header></Header>
+                    </div>
+                </div>
+    
+                @if (_showMenu)
+                {
+                    <div class="main-custom-menu">
+                        <SideBar/>
+                    </div>
+                }
+
+                <div class="main-content-box printbase @(_showMenu ? "" : "no-sidebar")">
+                    @Body
+                </div>
+
+            </div>
+  
+        </TelerikRootComponent>
+
+    </Authorized>
+    
+    <Authorizing>
+        <Loading />
+    </Authorizing>
+
+    <NotAuthorized>
+        <Loading />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    bool _showMenu;
+
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+
+        if (authState.User.Identity is null)
+            return;
+
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            var userRoles = await AuthenticationStateTask.GetUserRoles();
+
+            // _showMenu = userRoles.Count > 0;
+            _showMenu = true;
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+}

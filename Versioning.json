@@ -1,0 +1,49 @@
+﻿[
+  // Copy from here
+  //,
+
+  {
+    "Version": "5.0.0",
+    "Date": "1400/12/22", //Jalali
+    "Changes": [
+      {
+        "Title": "Remove extras based on new business analysis.", //Required
+        "Description": [
+          "Delete unused properties of Samples",
+          "Add Sample Categories based on new format"
+        ]
+      },
+      {
+        "Title": "Add Initial/Updating Loading feature", //Required
+        "Description": [
+          "You can see Initial loading the first time loading the app",
+          "Also Updating application loading on new publishes"
+        ]
+      },
+      {
+        "Title": "Make the app PWA (Progress-Web-Application)", //Required
+        "Description": [
+          
+        ]
+      }
+      ,
+      {
+        "Title": "Add Versioning changes notes feature", //Required
+        "Description": [
+          "You can see new changes and features on new publishes to track everything"
+        ]
+      }
+    ]
+  }
+  // End Copy
+
+
+
+
+
+
+
+
+
+
+]

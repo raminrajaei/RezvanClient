@@ -1,0 +1,179 @@
+﻿@page "/settings/signatures"
+@using Blazor.PersianDatePicker.Extensions
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.SignaturesPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<div class="personnel-page">
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="@(PageTitles.SignaturesPage.Title)" PageDescription="مشاهده‌ی همه‌ی پرسنل آتا برای مدیریت امضا" />
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-6 col-xxl-3">
+                        <label class="input-label">
+                            کاربر
+                        </label>
+                        <div class="searchbar-custom-wrapper">
+                            <img src="@IconUrls.Search" />
+                            <TelerikTextBox class="full-width"
+                                        PlaceHolder="جستجو با شماره‌ی پرسنلی، نام پرسنل یا عنوان سازمانی"
+                                        ValueChanged="SearchTermChanged">
+                            </TelerikTextBox>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>واحد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@UnitsSource"
+                                        @bind-Value="@SignatureFilters.Unit"
+                                        TextProperty="Text"
+                                        Change="@(() => ApplyFilters)"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper">
+
+            <div class="page-grid-operation-wrapper">
+                @if (IsLoading is false)
+                {
+                    <div class="grid-count">
+                        @($"{SignedCount.ToString().EnglishToPersianDigits()} امضا شده و {NotSignedCount.ToString().EnglishToPersianDigits()} امضا نشده")
+                    </div>
+                }
+                else
+                {
+                    <div class="contracts-count">
+                        @($"Loading")
+                    </div>
+                }
+            </div>
+
+
+            @*<div class="orders-archive-status-container">
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+            ثبت شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+            حذف شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+            همه
+            </div>
+            </div>*@
+
+            <TelerikGrid TItem="@UserWithSignatureDto"
+                         @ref="@PersonnelGridRef"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         Resizable="true"
+                         Reorderable="true"
+                         OnStateInit="@OnStateInitHandler"
+                         OnRowRender="OnGridRowRender"
+                         OnRead=@OnReadHandler>
+                <GridColumns>
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.UserId))" Title="شناسه کاربر" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.UserId))" Title="امضا" Width="250px" Locked="false" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserWithSignatureDto)gridContext;
+
+                                @if (user.HasUserSignature)
+                                {
+                                    <a href="@user.SignatureUrl" target="_blank">
+                                        <img src="@user.SignatureUrl" width="250" height="100" />
+                                    </a>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.FullName))" Title="نام پرسنل" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.PersonnelCode))" Title="کد پرسنلی" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.NationalCode))" Title="کد ملی" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.EmploymentDateJalali))" Title="تاریخ استخدام" Width="100px" Locked="false" Sortable="false" />
+
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.PostTitle))" Title="عنوان سازمانی" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.UnitName))" Title="واحد" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.UnitDivisionName))" Title="بخش" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserWithSignatureDto.UserId))" Title="عملیات" Width="120px" Sortable="false" Locked="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserWithSignatureDto)gridContext;
+
+                                <div class="grid-action-buttons-wrapper">
+                                    <TelerikButton Class="default-button margin-right-10 send-contract-button"
+                                               Enabled="!IsLoading"
+                                               OnClick="@(() => RegisterSignature(user))">
+                                        @if (user.HasUserSignature)
+                                        {
+                                            <span>تغییر امضا</span>
+                                        }
+                                        else
+                                        {
+                                            <span>ثبت امضا</span>
+                                        }
+                                    </TelerikButton>
+                                </div>
+                            }
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+
+</div>
+
+<TelerikWindow Modal="true" Size="@ThemeConstants.Window.Size.Large"
+               @bind-Visible="@IsVisibleTakeSignatureWindow">
+    <WindowTitle>
+        کاربر گرامی، @UserGettingSignature?.FullName لطفا با دقت امضا کنید
+    </WindowTitle>
+    <WindowContent>
+        <div class="logs-details-wrapper">
+            <SignaturePad OnResult="OnResult"
+                          SignAboveLabel="بالای این متن امضا کنید"
+                          UndoBtnTitle="بازگرداندن"
+                          BtnCssClass="primary-button"
+                          SaveBase64BtnTitle="تایید"
+                          EnableChangeColorBtn="false"
+                          ClearBtnTitle="پاک کردن امضا" />
+        </div>
+    </WindowContent>
+    <WindowActions>
+        <WindowAction Name="Close" />
+    </WindowActions>
+</TelerikWindow>

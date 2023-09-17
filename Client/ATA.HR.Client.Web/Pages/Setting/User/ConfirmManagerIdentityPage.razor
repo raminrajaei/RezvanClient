@@ -1,0 +1,47 @@
+﻿@page "/confirm-manager-identity"
+@using ButtonType = Radzen.ButtonType
+@using ButtonStyle = Radzen.ButtonStyle
+@inherits BitPageBase
+
+<PageTitle> @PageTitles.ConfirmManagerIdentityPage.Title </PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<div class="roles-page">
+
+    <!-- Page Heading Title -->
+    <section>
+        <div class="page-header-wrapper">
+            <TopBar PageName="@PageTitles.ConfirmManagerIdentityPage.Title" PageDescription="ورود دو مرحله‌ای مدیران آتا برای امنیت مشاهده‌ی قراردادها و کارکردهای پرسنل" />
+        </div>
+    </section>
+
+    <!-- RoleClaims EditForm -->
+    <section>
+        
+        <div style="    text-align: center;
+                    min-height: 500px;
+                    margin-top: 35px;">
+            <RadzenButton ButtonType="ButtonType.Button" 
+                          ButtonStyle="ButtonStyle.Primary"
+                          Text="ارسال کد تایید"
+                          Style="width: 300px !important"
+                          Disabled="IsVisibleConfirmSection"
+                          Click="@SendCodeToMe"></RadzenButton>
+            
+            @if (IsVisibleConfirmSection)
+            {
+                <div class="flex sms-code-box" style="width: 330px; margin-top: 100px;
+                                                      margin-right: auto;
+                                                      margin-left: auto;">
+                    <RadzenTextBox @bind-Value="SmsConfirmationCode" Style="margin-left: 10px" Placeholder="کد را وارد نمایید"></RadzenTextBox>
+
+                    <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Success" Text="تایید" Click="@ConfirmMe"></RadzenButton>
+                </div>
+            }
+
+
+        </div>
+
+    </section>
+</div>

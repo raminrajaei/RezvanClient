@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ATA.Bit.Server" Version="6.3.6" />
+		<PackageReference Include="ATA.Broker.CDN" Version="6.3.6" />
+		<PackageReference Include="ATA.Broker.SSOSecurity" Version="6.3.6" />
+		<PackageReference Include="ATA.Broker.Workflow" Version="6.3.6" />
+		<PackageReference Include="ATA.SMS" Version="6.3.1" />
+		<PackageReference Include="Bit.Server.Data.EntityFrameworkCore" Version="11.0.0" />
+		<PackageReference Include="Dapper" Version="2.0.123" />
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.2" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.2" />
+		<PackageReference Include="Hangfire.Core" Version="1.8.2" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.2" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+		<PackageReference Include="Bit.Server.IdentityServer" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Bit.Server.Owin" Version="9.0.0" />
+		<PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ATA.HR.Server.Model\ATA.HR.Server.Model.csproj" />
+  </ItemGroup>
+
+</Project>

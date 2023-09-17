@@ -1,0 +1,267 @@
+﻿@import '../utils/_base.scss';
+
+.rtl {
+    direction: rtl
+}
+
+.main-content-box {
+    background-color: $white-four;
+    padding: rem(110px) rem(40px) rem(80px) rem(150px);
+    min-height: auto;
+    font-family: $fontPrimary;
+    min-height: 100vh;
+
+    .rtl & {
+        padding: rem(100px) rem(140px) rem(80px) rem(30px);
+
+        @include lt-md {
+            padding: rem(42px) 0 0;
+        }
+    }
+
+    .page-header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .page-topbar-wrapper {
+
+        .page-title {
+            font-family: $fontPrimary;
+            font-size: rem(22px);
+            color: $dark;
+        }
+
+        .page-description {
+            color: $bluey-grey-two;
+            font-size: rem(14px);
+            margin-top: rem(13px);
+            margin-bottom: rem(23px);
+
+            @include lt-sm {
+                font-size: rem(12px);
+            }
+        }
+    }
+
+    .page-box-wrapper {
+        background-color: $white;
+        padding: rem(30px);
+        @include border;
+    }
+
+    .page-form-wrapper {
+        button {
+            @include defaultButtonStyle;
+        }
+    }
+
+    .page-grid-wrapper {
+        position: relative;
+
+        .k-grid tbody tr:hover .grid-action-buttons-wrapper {
+            .grid-action-button.view {
+                border-radius: 2px;
+                border: 2px solid $green; // $bluey-grey;
+            }
+
+            .grid-action-button.edit {
+                border-radius: 2px;
+                border: 2px solid $mimolette-orange; // $bluey-grey;
+            }
+
+            .grid-action-button.delete {
+                border-radius: 2px;
+                border: 2px solid $error-red; //$bluey-grey;
+            }
+        }
+
+        .grid-action-buttons-wrapper {
+            display: flex;
+            width: 100%;
+
+            .grid-action-button.view {
+                img {
+                    transform: scale(1.5);
+                }
+            }
+
+            .grid-action-button {
+                background-color: transparent;
+                border: none;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: rem(40px);
+                height: rem(40px);
+                cursor: pointer;
+                margin-right: rem(13px);
+
+                img {
+                    width: rem(20px);
+                    height: rem(20px);
+                }
+
+                img.btn-img-hovered {
+                    display: none;
+                }
+
+                &:hover {
+                    &.view {
+                        background-color: $green;
+                    }
+
+                    &.edit {
+                        background-color: $mimolette-orange;
+                    }
+
+                    &.delete {
+                        background-color: $error-red;
+                    }
+
+                    border: none !important;
+
+                    img.btn-img {
+                        display: none;
+                    }
+
+                    img.btn-img-hovered {
+                        display: flex;
+                    }
+                }
+            }
+        }
+
+        .terminate-insured-button-wrapper {
+            .grid-action-button.delete {
+                margin-top: 6px;
+                margin-right: -5px;
+
+                img.btn-img {
+                    transform: scale(1.5);
+                }
+            }
+        }
+
+        .chip-badge {
+            color: $black;
+            background-color: $dim-white;
+            border: 0.5px solid #AFAFBE;
+            box-sizing: border-box;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 16px;
+            margin-right: 9px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+            display: inline-flex;
+            padding-top: 1px;
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .chip-badge.english-badge {
+            padding: 4px 8px;
+        }
+
+
+        .page-grid-operation-wrapper {
+            display: flex;
+            padding: rem(10px) 0;
+            flex-direction: row-reverse;
+            background: $white-four;
+
+            input {
+                margin-right: auto;
+                width: 30%;
+            }
+
+            button {
+                padding: 0 rem(15px);
+                font-size: rem(16px);
+                font-weight: 500;
+                margin-right: 1px;
+                border: none;
+                border-radius: 2px;
+                width: rem(140px);
+
+                img {
+                    margin-right: 6px;
+                }
+            }
+
+            .excel-button {
+                .k-button-text {
+                    padding-top: 0;
+                    margin-top: -1px;
+                    margin-right: 3px;
+                    font-family: bhoma, 'aeonik-regular';
+                    font-size: 17px;
+                }
+            }
+
+            .workhour-excel-button {
+                width: 17rem !important;
+            }
+
+            .contracts-excel-button {
+                width: 13rem !important;
+            }
+
+            .contracts-sms-button {
+                margin-left: 20px;
+                border: 1px solid lightgray;
+
+                img {
+                    width: 20px;
+                }
+            }
+        }
+
+        .page-grid-operation-wrapper.workhours-grid {
+
+
+            .excel-button {
+                .k-button-text {
+                    font-size: 14px;
+                }
+            }
+
+            .workhour-excel-button {
+                width: 13rem !important;
+                padding-right: 10px;
+                margin-right: 15px;
+            }
+        }
+
+        .grid-statistics-wrapper {
+            display: flex;
+            margin-right: rem(10px);
+            margin-bottom: rem(15px);
+
+            .stat-box {
+                margin-left: rem(20px);
+
+                .stat-label {
+                    font-size: rem(13px);
+                }
+
+                .stat-value {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .blazor-datepicker {
+        padding: 0 30px;
+    }
+}
+
+.main-content-box.no-sidebar {
+    padding: 0 !important;
+}

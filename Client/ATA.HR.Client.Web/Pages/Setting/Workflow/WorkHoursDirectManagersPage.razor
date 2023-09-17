@@ -1,0 +1,41 @@
+﻿@page "/settings/workhours-direct-managers"
+@inherits BitPageBase
+
+<PageTitle> @PageTitles.WorkHoursDirectManagersPage.Title </PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<!-- Page Heading Title -->
+<section>
+    <div class="page-header-wrapper">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <TopBar PageName="@PageTitles.WorkHoursDirectManagersPage.Title" PageDescription="مشاهده‌ی مدیران مستقیمی که در سامانه حق دیدن و تایید کارکردهای پرسنل واحد خود را دارند." />
+        }
+    </div>
+</section>
+
+<!-- User Grid -->
+<section>
+    <div class="page-grid-wrapper mt-4">
+
+        <TelerikGrid TItem="@DirectManagerReadDto"
+                     @ref="@DirectManagersGridRef"
+                     Height="100%"
+                     Pageable="true"
+                     PageSize="20"
+                     Sortable="true"
+                     Groupable="false"
+                     Resizable="true"
+                     Reorderable="true"
+                     OnRead=@OnReadHandler>
+            <GridColumns>
+                <GridColumn Field="@(nameof(DirectManagerReadDto.ConfirmerUserId))" Title="شناسه‌ی کاربر" Width="100px" Sortable="true" />
+                <GridColumn Field="@(nameof(DirectManagerReadDto.ConfirmerPostTitle))" Title="سمت کاربر" Width="100px" Sortable="true" />
+                <GridColumn Field="@(nameof(DirectManagerReadDto.ConfirmerFullName))" Title="نام کاربر" Width="100px" Sortable="true" />
+                <GridColumn Field="@(nameof(DirectManagerReadDto.ConfirmerPersonnelCode))" Title="شماره پرسنلی" Width="100px" Sortable="true" />
+                <GridColumn Field="@(nameof(DirectManagerReadDto.UnitName))" Title="واحد" Width="100px" Sortable="true" />
+            </GridColumns>
+        </TelerikGrid>
+    </div>
+</section>

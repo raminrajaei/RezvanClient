@@ -1,0 +1,282 @@
+﻿@import '../../utils/_base.scss';
+
+.insurance-page {
+    .policy-notes-box {
+        border: 1px solid darkgray;
+        border-radius: 10px;
+        padding: 20px;
+        position: relative;
+        background: white;
+        margin: 20px;
+        margin-left: 40px;
+        line-height: 35px;
+
+        .kosar-insurance-title {
+            position: absolute;
+            top: -20px;
+            right: 30px;
+            background: forestgreen;
+            color: whitesmoke;
+            padding: 0px 20px 6px 20px;
+            border-radius: 7px;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .life-insurance-title {
+            position: absolute;
+            top: -20px;
+            right: 30px;
+            background: lightseagreen;
+            color: whitesmoke;
+            padding: 0px 20px 6px 20px;
+            border-radius: 7px;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+    }
+
+    .policy-prices-box {
+        padding: 30px 0;
+        text-align: center;
+        margin-top: 40px;
+
+        .life-insurance-title {
+            background: #004f83;
+            right: 30%;
+            padding: 0px 50px 5px 50px;
+        }
+
+        .styled-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            text-align: center;
+            border-top: 1px solid #ac152b;
+
+            .toman-tip {
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+
+            .max-amount {
+                font-weight: bold;
+                font-size: 17px;
+            }
+
+            .cov-title {
+                text-shadow: 0 0 dimgray;
+                letter-spacing: 0.5px;
+            }
+        }
+
+        .styled-table thead tr {
+            background-color: #F3A5AA;
+            text-align: center;
+            border-bottom: 1px solid #ac152b;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f2faf1;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 1px solid #ac152b;
+        }
+
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #ac152b;
+        }
+    }
+
+    .insurance-coverage-pdf-container {
+        border: 1px solid dimgray;
+        margin-top: 30px;
+    }
+}
+
+.my-insureds-grid {
+    .k-pager-wrap.k-floatwrap.telerik-blazor.k-grid-pager {
+        display: none;
+    }
+
+    .k-master-row {
+        height: 75px;
+    }
+}
+
+.grid-section {
+    .cancel-insurance-button {
+        padding-bottom: 4px;
+        margin-top: 0;
+        margin-left: 15px;
+        width: 11rem;
+    }
+}
+
+.insurance-cost-amount {
+    .rz-spinner-button.rz-button {
+        display: none !important;
+    }
+}
+
+.insurance-confirm-cost-amount {
+    .rz-spinner-button.rz-button {
+        display: none !important;
+    }
+
+    input {
+        text-align: center !important;
+        padding: 0 !important;
+    }
+}
+
+.stern-warning-in-dialog {
+    font-weight: bold !important;
+    color: tomato !important;
+}
+
+.insured-table {
+    table {
+        border-spacing: 0 2px;
+
+        img.active-tik-status {
+            margin-right: 32%;
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
+        }
+    }
+}
+
+.cost-date-picker {
+    padding-right: 30px !important;
+}
+
+.cost-form-note {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+    padding: 15px;
+    margin-top: 20px !important;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 25px;
+}
+
+.attachment-view-box {
+    cursor: pointer;
+    color: forestgreen;
+    font-weight: bold;
+    font-family: 'bhoma';
+    letter-spacing: 0;
+    border: 1px solid forestgreen;
+    border-radius: 3px;
+    padding: 0px 8px 3px 8px;
+    background-color: #fbfffb;
+    margin-left: 20px;
+    text-decoration: none;
+    width: 100% !important;
+    height: 33px;
+    text-align: center;
+    padding-top: 1px;
+    line-height: 31px;
+    margin-top: 1px;
+
+    a {
+        text-decoration: none;
+        font-family: 'bhoma';
+        color: forestgreen;
+    }
+}
+
+.remove-attachment-button {
+    font-size: 13px;
+    color: tomato;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'bhoma';
+    letter-spacing: 0;
+    border: 1px solid #ffd5ce;
+    border-radius: 3px;
+    padding: 0px 8px 3px 8px;
+    margin-bottom: 7px;
+    margin-top: -10px;
+    background-color: #fff1ef;
+}
+
+.insureds-filters {
+    margin-top: -10px;
+    margin-bottom: 5px;
+
+    div.col-12 {
+        padding-top: 15px;
+    }
+}
+
+.view-cost-button {
+    max-width: 90px;
+}
+
+.insurance-cost-flow-component {
+    .section-header {
+        background-color: #F3A5AA;
+
+        .section-title {
+            font-size: 18px;
+            letter-spacing: 0.5px;
+            text-shadow: 0.2px 1.4px black;
+            color: white;
+            font-family: 'bhoma';
+        }
+    }
+
+    .row-title-wrapper {
+        height: 100%;
+        display: flex;
+        align-items: stretch;
+        height: 55px;
+
+        div {
+            background: #e4d5d5;
+            display: flex;
+            align-items: center;
+            padding-top: 4px;
+            padding-right: 10px;
+            padding-left: 20px;
+            margin-right: -13px;
+
+            label {
+                font-size: 16px;
+                letter-spacing: 0;
+                text-shadow: 0.2px 0.2px black;
+                color: #873d44;
+                font-family: 'bhoma';
+                display: flex;
+            }
+        }
+    }
+}
+
+.costs-print-button {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.personnel-page .grid-section .costs-print-button {
+    width: 225px !important; 
+}

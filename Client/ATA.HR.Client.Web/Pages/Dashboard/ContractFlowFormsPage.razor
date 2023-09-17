@@ -1,0 +1,391 @@
+﻿@page "/flow-forms/contract/{ContractId:int}"
+@page "/flow-forms/contract/{ContractId:int}/{PageType}"
+@using Microsoft.AspNetCore.Components
+@using ButtonType = Radzen.ButtonType
+@using ButtonStyle = Radzen.ButtonStyle
+@inherits BitPageBase
+
+<PageTitle> @PageTitles.ContractFlowFormsPage.TitleMain </PageTitle>
+
+<!-- Page Heading Title -->
+<section>
+    <div class="page-header-wrapper">
+        <div class="page-add-edit-header">
+            <div class="page-back-title">
+                <img src="@IconUrls.Back" @onclick="NavigateBackToDashboardPage" />
+                <div class="back-title-text">
+                    @(IsPreviewPage ? PageTitles.ContractFlowFormsPage.TitlePreview : PageTitles.ContractFlowFormsPage.TitleMain)
+                </div>
+            </div>
+            <div class="page-back-links">
+                <div> داشبورد </div>
+                <img src="@IconUrls.PaleArrowRight" />
+                <div> قرارداد </div>
+                <img src="@IconUrls.DarkArrowRight" />
+                <div class="active-link">
+                    @(IsPreviewPage ? "پیش نمایش" : "گردش کار")
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<TelerikLoaderContainer Visible="@IsLoading" Text="" />
+
+
+@if (IsPreviewPage)
+{
+    <div class="col-xs-12 col-lg-12">
+        <div class="tab-section-wrapper">
+
+            <div class="hokm">
+
+                @if (ContractVersion == 1)
+                {
+                    <ContractV1 ContractId="ContractId"
+                        IsCurrentUserActor="false"
+                        HasCurrentUserActiveSignature="true" />
+                }
+                else if (ContractVersion == 2)
+                {
+                    <ContractV2 ContractId="ContractId"
+                        IsCurrentUserActor="false"
+                        HasCurrentUserActiveSignature="true" />
+                }
+
+            </div>
+
+        </div>
+    </div>
+}
+
+@if (AllContractForms is not null)
+{
+    <div class="row flowForm-page printbase">
+
+        <div class="col-xs-12 col-lg-9 printbase contract-container">
+            <div class="tab-section-wrapper printbase">
+
+                <div class="hokm printbase">
+
+                    <div class="@(HasPrintPermission ? "printable" : "")">
+                        @if (ContractVersion == 1)
+                        {
+                            <ContractV1 ContractId="ContractId"
+                                ToDoPersonnelCode="ToDoPersonnelCode"
+                                IsCurrentUserActor="AllContractForms.IsCurrentUserActor"
+                                HasCurrentUserActiveSignature="HasActiveSignature" />
+                        }
+                        else if (ContractVersion == 2)
+                        {
+                            <ContractV2 ContractId="ContractId"
+                                ToDoPersonnelCode="ToDoPersonnelCode"
+                                IsCurrentUserActor="AllContractForms.IsCurrentUserActor"
+                                HasCurrentUserActiveSignature="HasActiveSignature" />
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="flex">
+
+                @if (IsPreviewPage is false && AllContractForms.IsCurrentUserActor)
+                {
+                    <div class="row flow-action-center">
+
+                        @*<h3 class="section-title">
+                توضیحات شما
+                </h3>
+
+                <div class="col-12 comment-box-wrapper">
+                <RadzenTextArea @bind-Value="@Action.Comment" PlaceHolder="توضیحات خود را وارد نمایید (اختیاری)" />
+                </div>*@
+
+                        <div class="col-12 action-buttons-wrapper">
+                            @if (PossibleActions?.Actions is not null)
+                            {
+                                @foreach (var action in PossibleActions.Actions)
+                                {
+                                    var radzenButtonStyle = action.ActionTag switch
+                                    {
+                                        "Confirm" => ButtonStyle.Success,
+                                        "Reject" => ButtonStyle.Danger,
+                                        _ => ButtonStyle.Info
+                                    };
+
+                                    var buttonText = action.ActionName;
+
+                                    <RadzenButton ButtonType="ButtonType.Button" Disabled="@(HasActiveSignature is false || IsVisibleSMSConfirmationCodeBox)" ButtonStyle="radzenButtonStyle" Text="@buttonText" Click="() => DoAction(action.ActionTag)"></RadzenButton>
+                                }
+                            }
+
+                            @if (IsVisibleSMSConfirmationCodeBox)
+                            {
+                                <div class="send-sms-title">
+                                    کد تایید ارسال شده به شماره‌ی
+                                    <b>@UserMobile</b>
+                                    را وارد نمایید
+
+                                    <div class="invalid-phone-tip">توجه!: اگر شماره‌ی همراه فعال شما با شماره‌ی مشخص شده یکی نیست به واحد منابع انسانی برای تغییر آن مراجعه نمایید</div>
+                                </div>
+
+                                <div class="flex sms-code-box">
+                                    <RadzenTextBox @bind-Value="SmsConfirmationCode" Style="margin-left: 10px" Placeholder="کد تایید"></RadzenTextBox>
+
+                                    <RadzenButton ButtonType="ButtonType.Button" ButtonStyle="ButtonStyle.Primary" Text="ارسال" Click="@(ConfirmActionWithSMSCode)"></RadzenButton>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                }
+
+                @if (IsPreviewPage is false)
+                {
+                    <AuthorizeView Policy="@Claims.Pages_Contracts_StartNewContractFlow">
+
+                        @if (IsVisibleContractDeleteButton && AllContractForms.Contract.Id != 0)
+                        {
+                            <RadzenButton ButtonType="ButtonType.Button"
+                              ButtonStyle="ButtonStyle.Danger"
+                              Text="حذف قرارداد"
+                              Style="margin-top: 20px; margin-right: 15px"
+                              Click="() => DeleteContract(ContractId)"></RadzenButton>
+                        }
+
+                    </AuthorizeView>
+                }
+
+                <AuthorizeView Policy="@Claims.Pages_Contracts_StartNewContractFlow">
+
+                    @if (IsVisibleEditContractDatesButton && AllContractForms.Contract.Id != 0)
+                    {
+                        <RadzenButton ButtonType="ButtonType.Button"
+                              ButtonStyle="ButtonStyle.Warning"
+                              Text="تغییر تاریخ شروع قرارداد"
+                              Style="margin-top: 20px; margin-right: 15px"
+                              Click="() => OpenEditContractStartDateModal(ContractId)"></RadzenButton>
+
+                        <RadzenButton ButtonType="ButtonType.Button"
+                              ButtonStyle="ButtonStyle.Warning"
+                              Text="تغییر تاریخ پایان قرارداد"
+                              Style="margin-top: 20px; margin-right: 15px"
+                              Click="() => OpenEditContractEndDateModal(ContractId)"></RadzenButton>
+                    }
+
+                </AuthorizeView>
+
+            </div>
+        </div>
+
+        @if (IsPreviewPage is false)
+        {
+            <div class="col-xs-12 col-lg-3 history-section flow-size">
+
+                <h3 class="section-title">
+                    گردش کار
+                </h3>
+
+                <div class="page-box-wrapper">
+
+                    @if (History is not null)
+                    {
+                        var firstRecord = true;
+
+                        @foreach (var history in History.History)
+                        {
+                            if (!firstRecord)
+                            {
+                                <div class="seperator-line"></div>
+                            }
+
+                            firstRecord = false;
+
+                            <div class="first-row">
+                                <div class="actor-name">
+                                    <img src="@IconUrls.User" />
+                                    <div>@history.ActorName</div>
+                                </div>
+                                <div class="action-name">@history.ActionName</div>
+                            </div>
+                            <div class="second-row">
+                                <div class="state-name"> @history.StateName</div>
+                                <div class="acted-at">@history.ActionDate?.En2FaDigits()</div>
+                            </div>
+
+                            @if (history.ActorComment.IsNotNullOrEmpty())
+                            {
+                                <div class="third-row">
+                                    <img src="@IconUrls.Comment" />
+
+                                    <div> @history.ActorComment</div>
+                                </div>
+                            }
+                        }
+
+                        <!--To Does-->
+
+                        <div class="seperator-line"></div>
+
+                        @if (AllContractForms.IsFlowFinished)
+                        {
+                            <div class="flow-finished-sign">پایان</div>
+                        }
+                        else
+                        {
+                            <div class="todo-section">
+                                <div class="todo-state-name">
+                                    <img src="@IconUrls.CurvedRightArrow" />
+                                    <div>وضعیت جاری</div>
+                                </div>
+
+                                <div class="todo-next-state"> @History.ToDoes.StateName </div>
+
+                                @foreach (var user in History.ToDoes?.Users)
+                                {
+                                    <div class="todo-actor-name">
+                                        <img src="@IconUrls.User" />
+                                        <div class="todo-user">@user.FullName</div>
+                                    </div>
+                                    <div class="todo-actor-post">@user.PostTitle</div>
+                                }
+
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<!-- Popup Windows => Confirm Contract Deletion -->
+<section>
+    <ConfirmDialog @bind-IsVisible="IsVisibleDeleteContractConfirmDialog"
+                   Title="تایید حذف قرارداد"
+                   Text="@($"قرارداد {DeletingContractPersonnelName} به طور کامل حذف می‌شود. آ‌یا از حذف آن اطمینان دارید؟")"
+                   OnConfirm="() => DeleteContractById(DeletingOrEditingContractId)" />
+</section>
+
+<!-- Popup Windows => Edit Contract Start Date -->
+<article>
+    <TelerikWindow Class="popup-window-custom-wrapper" Width="100%" Height="100%" Centered="true" Visible="IsVisibleEditContractStartDateWindow">
+        <WindowContent>
+
+            <div class="popup-window-content versioning-window">
+
+                <div class="app-versioning-container" style="position: relative">
+
+                    <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsVisibleEditContractStartDateWindow = false"
+                         style="width: 30px;left: 7px;float: left;position: absolute;top: 7px;cursor: pointer;" />
+
+                    <div class="col-4 popup-window-content-card">
+                        @{
+                            <div>
+                                <h4 class="version-no-title" style="font-weight: bold;
+                                                                                margin-top: 6px;
+                                                                                margin-bottom: 10px;
+                                                                                color: darkgreen;
+                                                                                font-size: 17px;">
+                                    @($"ویرایش تاریخ شروع قرارداد {AllContractForms.Contract.ContractDetailsFullName}")
+                                </h4>
+
+                                <div class="col form-item-wrapper" style="margin:50px">
+                                    <label for="documentCategory">تاریخ شروع * </label>
+                                    <div class="form-input-wrapper">
+                                        <InputPersianDatePicker Id="@($"contractStartDate")"
+                                                                @bind-Value="NewStartDateWhileEditing"
+                                                            ReadOnly="true"
+                                                            MinDateSetOnToday="false"
+                                                            PickerAlign="Align.Right"
+                                                            ShowCalendarIcon="true"
+                                                            CalendarIconPosition="IconPosition.Right"
+                                                            DigitType="DigitType.BasedOnCalendar"
+                                                            DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                            CalendarType="Blazor.PersianDatePicker.Calendar.SingleModeJalali"
+                                                            Placeholder="انتخاب تاریخ"
+                                                            CssClass="form-control date-picker" />
+                                    </div>
+                                </div>
+
+                                <div style="display: flex;
+                                                        justify-content: space-evenly;
+                                                        margin-top: 40px;
+                                                        margin-bottom: 20px;">
+                                    <TelerikButton Class="primary-button" OnClick="ChangeContractStartDate"> تایید </TelerikButton>
+
+                                    <TelerikButton Class="default-button" OnClick="() => IsVisibleEditContractStartDateWindow = false"> انصراف </TelerikButton>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+        </WindowContent>
+    </TelerikWindow>
+</article>
+
+<!-- Popup Windows => Edit Contract End Date -->
+<article>
+    <TelerikWindow Class="popup-window-custom-wrapper" Width="100%" Height="100%" Centered="true" Visible="IsVisibleEditContractEndDateWindow">
+        <WindowContent>
+
+            <div class="popup-window-content versioning-window">
+
+                <div class="app-versioning-container" style="position: relative">
+
+                    <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsVisibleEditContractEndDateWindow = false"
+                         style="width: 30px;left: 7px;float: left;position: absolute;top: 7px;cursor: pointer;" />
+
+                    <div class="col-4 popup-window-content-card">
+                        @{
+                            <div>
+                                <h4 class="version-no-title" style="font-weight: bold;
+                                                                    margin-top: 6px;
+                                                                    margin-bottom: 10px;
+                                                                    color: darkgreen;
+                                                                    font-size: 17px;">
+                                    @($"ویرایش تاریخ پایان قرارداد {AllContractForms.Contract.ContractDetailsFullName}")
+                                </h4>
+
+                                <div class="col form-item-wrapper" style="margin:50px">
+                                    <label for="documentCategory">تاریخ پایان قرارداد * </label>
+                                    <div class="form-input-wrapper">
+                                        <InputPersianDatePicker Id="@($"contractEndDate")"
+                                                                @bind-Value="NewEndDateWhileEditing"
+                                                            ReadOnly="true"
+                                                            MinDateSetOnToday="false"
+                                                            PickerAlign="Align.Right"
+                                                            ShowCalendarIcon="true"
+                                                            CalendarIconPosition="IconPosition.Right"
+                                                            DigitType="DigitType.BasedOnCalendar"
+                                                            DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                            CalendarType="Blazor.PersianDatePicker.Calendar.SingleModeJalali"
+                                                            Placeholder="انتخاب تاریخ"
+                                                            CssClass="form-control date-picker" />
+                                    </div>
+                                </div>
+
+                                <div style="display: flex;
+                                                                                                        justify-content: space-evenly;
+                                                                                                        margin-top: 40px;
+                                                                                                        margin-bottom: 20px;">
+                                    <TelerikButton Class="primary-button" OnClick="ChangeContractEndDate"> تایید </TelerikButton>
+
+                                    <TelerikButton Class="default-button" OnClick="() => IsVisibleEditContractEndDateWindow = false"> انصراف </TelerikButton>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+        </WindowContent>
+    </TelerikWindow>
+</article>

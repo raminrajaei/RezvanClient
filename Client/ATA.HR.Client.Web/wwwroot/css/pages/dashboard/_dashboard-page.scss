@@ -1,0 +1,163 @@
+﻿@import '../../utils/_base.scss';
+
+.dashboard-page {
+
+    .dashboard-grid-operation-wrapper {
+        text-align: end;
+        padding: rem(10px);
+        background-color: $white-four;
+    }
+
+    .confirm-all-contracts-btn {
+        width: rem(320px) !important;
+        line-height: rem(18px) !important;
+        padding-bottom: rem(5px) !important;
+    }
+
+    .send-sms-to-direct-managers {
+        width: 23rem !important;
+        margin-left: 25px;
+    }
+
+    .k-tabstrip-content, .k-tabstrip > .k-content {
+        border: none;
+    }
+
+    .grid-section {
+
+        @include lt-lg {
+            padding-top: 30px;
+        }
+
+        .my-contracts {
+            .k-grid {
+                margin-top: 20px !important;
+
+                @include lt-sm {
+                    font-size: 10px;
+                }
+            }
+
+            .orders-archive-status-container {
+                height: 64px;
+            }
+        }
+
+        .orders-archive-status-container {
+            display: flex;
+            position: absolute;
+            top: rem(18px);
+            margin-right: rem(30px);
+            z-index: 1;
+
+            @include md {
+                top: rem(22px);
+            }
+
+            @include lt-md {
+                top: rem(-21px);
+            }
+
+            div {
+                margin-left: rem(40px);
+                padding: rem(10px) rem(5px);
+                cursor: pointer;
+                font-size: rem(14px);
+                font-weight: normal;
+                line-height: rem(20px);
+            }
+
+            .active {
+                font-weight: bold;
+                border-bottom: 4px solid $old-brick;
+                border-radius: 1px;
+                color: $old-brick;
+                font-weight: bold;
+            }
+        }
+
+        .view-work-button {
+            padding-bottom: 0.4875rem;
+
+            &:hover {
+                background-color: $pale-green !important;
+            }
+        }
+
+        .dashboard-view-button {
+            padding-top: 3px;
+            padding-bottom: 0.4875rem;
+
+            &:hover {
+                background-color: $pale-green !important;
+            }
+        }
+
+        .multiple-action-box {
+            display: flex;
+            margin-left: 20px;
+            align-items: center;
+
+            .select-status-label {
+                margin-left: 10px;
+                margin-top: 6px;
+            }
+        }
+
+        .k-grid .k-master-row.k-state-selected {
+            background-color: #cdffce;
+        }
+    }
+
+    .respons {
+        display: flex;
+        align-items: end;
+
+        @include lt-sm {
+            font-size: 12px !important;
+        }
+    }
+}
+
+.multiple-action-box {
+    display: flex;
+    margin-left: 20px;
+    align-items: center;
+
+    .select-status-label {
+        margin-left: 10px;
+        margin-top: 6px;
+    }
+}
+
+.contracts-count, .grid-count {
+    background: #63a0a8;
+    padding: 4px 30px;
+    border-radius: 3px;
+    color: white;
+    /* border: 1px solid #63a0a8; */
+    letter-spacing: 1px;
+}
+
+.contracts-count {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    height: 23px;
+}
+
+.workhours-page, .dashboard-page {
+    .grid-section {
+        .k-grid .k-master-row.k-state-selected, .k-grid td.k-state-selected, .k-grid tr.k-state-selected > td {
+            background-color: #d1eadc;
+        }
+
+        .k-master-row.k-state-selected:hover .k-grid-content-sticky, .k-master-row.k-state-selected:hover .k-grid-row-sticky, .k-master-row.k-state-selected.k-state-hover .k-grid-content-sticky, .k-master-row.k-state-selected.k-state-hover .k-grid-row-sticky, .k-master-row:hover td.k-grid-content-sticky.k-state-selected, .k-master-row.k-state-hover td.k-grid-content-sticky.k-state-selected {
+            background-color: #d1eadc;
+        }
+
+        .k-master-row.k-state-selected.k-alt .k-grid-content-sticky, .k-master-row.k-state-selected.k-alt .k-grid-row-sticky, .k-master-row.k-alt td.k-grid-content-sticky.k-state-selected {
+            background-color: #d1eadc;
+        }
+    }
+}

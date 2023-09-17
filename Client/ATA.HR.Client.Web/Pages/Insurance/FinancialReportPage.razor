@@ -1,0 +1,408 @@
+﻿@page "/insurance/financial-report"
+
+@using DNTPersianUtils.Core
+@using Calendar = Blazor.PersianDatePicker.Calendar
+@using ATABit.Helper.Utils
+@using GridSelectionMode = ATA.HR.Client.Web.Enums.GridSelectionMode
+@using ATA.HR.Client.Web.APIs.Insurance.Models.Responses
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.FinancialReportPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="در حال آماده‌سازی گزارش" Visible="@IsLoading" />
+
+<div class="personnel-page workhours-page printbase">
+
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="لیست پرداخت بیمه تکمیلی" PageDescription="این گزارش نهایی هزینه‌های تایید شده و قابل پرداخت بیمه تکمیلی بر اساس بیمه شده اصلی می‌باشد" />
+            }
+
+            <div class="flex">
+                @*<button class="secondary-button excel-button" style="    margin-left: 20px;
+                                                                     display: flex;
+                                                                     justify-content: center;
+                                                                     letter-spacing: 0.5px;" @onclick="ExcelExport">
+                    خروجی اکسل
+                </button>*@
+
+                @if (BankPayments.FirstOrDefault(x => x.PayedAt == null)?.Id == FinancialReportQuery.BankPaymentId)
+                {
+
+                    @if (IsMultiActionOnCustomSelection)
+                    {
+                        <RadzenButton class="primary-button" Style="width: 300px" Text="@($"ثبت اطلاعات پرداخت {SelectedItems.Count()} آیتم انتخاب شده")" Click="OpenSaveBankPaymentModal" />
+
+                    }
+                    else
+                    {
+                        <RadzenButton class="primary-button" Style="width: 300px" Text="@($"ثبت اطلاعات پرداخت برای تمام {FinancialReportRawList.Count} هزینه")" Click="OpenSaveBankPaymentModal" />
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+                    @*<div class="col-12 col-md-6 col-xl-6 col-xxl-3">
+                <label class="input-label">
+                بیمه شده
+                </label>
+                <div class="searchbar-custom-wrapper">
+                <img src="@IconUrls.Search" />
+                <TelerikTextBox class="full-width"
+                PlaceHolder="جستجو با نام بیمه شده یا شماره‌ی پرسنلی اصلی"
+                ValueChanged="SearchTermChanged">
+                </TelerikTextBox>
+                </div>
+                </div>*@
+                
+                    <div class="col-12 col-md-3 col-xxl-3 filter-box">
+                        <label>وضعیت پرداخت</label>
+                        <div>
+                            <RadzenSelectBar Data="@PaymentStatusSource"
+                                             TValue="string"
+                                             @bind-Value=@PaymentStatusSelectedValue
+                                             Change="@ApplyFilters"
+                                             TextProperty="Text"
+                                             ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    @if (PaymentStatusSelectedValue == "1")
+                    {
+                        <div class="col-12 col-md-3 col-xxl-3 filter-box">
+                            <label>شماره/تاریخ پرداخت</label>
+                            <div>
+                                <RadzenDropDown AllowClear="true"
+                                                TValue="int?"
+                                                AllowFiltering="true"
+                                                Placeholder="انتخاب کنید"
+                                                Data="BankPaymentsSource"
+                                                @bind-Value="@FinancialReportQuery.BankPaymentId"
+                                                Change="ApplyFilters"
+                                                TextProperty="Text"
+                                                ValueProperty="ValueInt" />
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-12 col-md-3 col-xxl-3 filter-box">
+                        <label>از تاریخ تایید</label>
+                        <div>
+                            <InputPersianDatePicker Id="cclAt"
+                            @bind-Value="FinancialReportQuery.FromConfirmJalaliDate"
+                                                    Name="cclRegisteredAt"
+                                                    CssClass="cost-date-picker"
+                                                    Visible="true"
+                                                    ReadOnly="true"
+                                                    Disabled="false"
+                                                    PickerAlign="Align.Right"
+                                                    InitialValue="false"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    DigitType="DigitType.BasedOnCalendar"
+                                                    DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                    MinDateSetOnToday="false"
+                                                    Placeholder="از تاریخ"
+                                                    OnChange="ApplyFilters"
+                                                    OnClear="ApplyFilters"
+                                                    Theme="PickerTheme.RedBlack" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3 col-xxl-3 filter-box">
+                        <label>تا تاریخ تایید</label>
+                        <div>
+                            <InputPersianDatePicker Id="cclAt2"
+                            @bind-Value="FinancialReportQuery.ToConfirmJalaliDate"
+                                                    Name="cclRegisteredAt2"
+                                                    CssClass="cost-date-picker"
+                                                    Visible="true"
+                                                    ReadOnly="true"
+                                                    Disabled="false"
+                                                    PickerAlign="Align.Right"
+                                                    InitialValue="false"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    DigitType="DigitType.BasedOnCalendar"
+                                                    DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                    MinDateSetOnToday="false"
+                                                    Placeholder="تا تاریخ"
+                                                    OnChange="ApplyFilters"
+                                                    OnClear="ApplyFilters"
+                                                    Theme="PickerTheme.RedBlack" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section id="notPrint" class="grid-section">
+        <div class="page-grid-wrapper">
+
+            <div class="page-grid-operation-wrapper workhours-grid">
+                @{
+                    
+
+                    var additionalClass = IsVisibleMultipleActionButton ? "" : "visibility-hidden";
+
+                    //<TelerikButton Class="secondary-button excel-button workhour-excel-button" ImageUrl="@IconUrls.Export" OnClick="ExportWorkHoursDataToRahkaranExcel"> خروجی Excel کارکردها [راهکاران] </TelerikButton>
+                    <TelerikButton Class="secondary-button excel-button workhour-excel-button" ImageUrl="@IconUrls.Export"
+                                   OnClick="ExcelExport"> خروجی Excel  </TelerikButton>
+                    @if (FinancialReportRawList.Count > 1)
+                    {
+                        <div class="multiple-action-box">
+                            <label class="select-status-label">حالت انتخاب</label>
+                            <div>
+                                <RadzenDropDown AllowClear="false"
+                                                TValue="string"
+                                                AllowFiltering="false"
+                                                Data="@(EnumMapping.ToSelectListItems<GridSelectionMode>())"
+                                                @bind-Value="@MultiActionModeSelectedValue"
+                                                Change="GridSelectionModeChanged"
+                                                TextProperty="Text"
+                                                ValueProperty="Value" />
+                            </div>
+                        </div>
+
+                        <div style="color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; position: relative; padding: 4px 14px 6px 14px; margin-bottom: 2px; margin-top: 0; border: 1px solid transparent; border-radius: .25rem; margin-left: 10px; font-family: 'bhoma'; letter-spacing: -0.5px; font-size: 15px;">
+                            مجموع هزینه‌ها:
+                            <strong>
+                                @CostsSum.ToCurrencyStringFormat().ToPersianNumbers()
+                                <span style="font-size: 11px; letter-spacing: 0.5px;font-family: 'bhoma';">
+                                    ریال
+                                </span>
+                            </strong>
+                        </div>
+
+                        //@if (IsMultiActionOnCustomSelection)
+                        //{
+                        //    <TelerikButton Class="primary-button excel-button workhour-excel-button send-all-workhours-button" OnClick="SendAllFilteredWorkHours">@($"ارسال همزمان {SelectedItems.Count()} کارکرد انتخاب شده‌")</TelerikButton>
+                        //}
+                        //else
+                        //{
+                        //    <TelerikButton Class="primary-button excel-button workhour-excel-button send-all-workhours-button" OnClick="SendAllFilteredWorkHours">@($"ارسال همزمان {TotalHaveNotSentWorkHoursCountAtTargetMonth} کارکرد فیلترشده‌")</TelerikButton>
+                        //}
+                    }
+                }
+            </div>
+
+            <TelerikGrid TItem="@FinancialReportDto"
+            @ref="@ReportGridRef"
+                         Data="FinancialReportRawList"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         Resizable="true"
+                         Reorderable="true"
+                         SelectionMode="Telerik.Blazor.GridSelectionMode.Multiple"
+            @bind-SelectedItems="SelectedItems">
+                <GridColumns>
+                    <GridCheckboxColumn Visible="@(FinancialReportRawList.Count > 1 && IsMultiActionOnCustomSelection)" CheckBoxOnlySelection="true" SelectAllMode="GridSelectAllMode.Current" />
+                    <GridColumn Field="@(nameof(FinancialReportDto.RowNo))" Title="ردیف" Width="100px" Locked="false" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var r = (FinancialReportDto)gridContext;
+
+                                <span> @r.RowNo</span>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(FinancialReportDto.PersonnelCode))" Title="کد پرسنلی" Visible="false" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(FinancialReportDto.MainInsuredName))" Title="نام و نام خانوادگی" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(FinancialReportDto.Amount))" Title="مبلغ" Width="100px" Locked="false" Sortable="true">
+                        <Template Context="gridContext">
+                            @{
+                                var r = (FinancialReportDto)gridContext;
+                                <span>@r.Amount.ToCurrencyStringFormat().ToPersianNumbers()
+                                    ریال</span>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(FinancialReportDto.BankAccountNo))" Title="شماره حساب" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(FinancialReportDto.BankShebaNo))" Title="شماره شبا" Width="100px" Locked="false" Sortable="false" />
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+
+    <section id="toPrint" class="grid-section printbase d-none">
+        <div class="page-grid-wrapper printbase">
+
+            @if (ShowResult)
+            {
+                @if (false)
+                {
+                    <div class="page-box-wrapper mt-4 text-align-center" style="font-size: 21px;color: indianred;">
+                        هیچ کارکردی در این ماه توسط این مدیر / معاون تایید نشده است
+                    </div>
+                }
+                else
+                {
+                    @foreach (var report in FinancialReportList)
+                    {
+                        <div class="page-box-wrapper mt-3 printable" style="height: 1165px;
+                                                                            display: flex;
+                                                                            flex-direction: column;
+                                                                            justify-content: space-between;">
+
+                            <div>
+
+                                <div class="row header cell-border" style="border: 1px solid #d1cfcf; display: flex; justify-content: space-between; box-shadow: 5px 5px #d1cfcf; margin-bottom: 20px; width: 100%; margin-right: 0;">
+                                    <div class="col-2">
+                                        <img class="logo" src="@ImageUrls.Pages.ATAContractLogo" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
+                                    </div>
+                                    <div class="title col-8" style="display: flex; flex-direction: column; justify-content: space-evenly; font-weight: bold; letter-spacing: 1px;">
+                                        <div class="top-center-title-print"> @($"لیست پرداخت بیمه تکمیلی کـوثـر") </div>
+                                        <div class="bottom-center-title-print">
+                                            <strong style="margin-right: 60px">
+                                                @($"شماره پرداخت : ")
+                                                <span style="font-size: 23px; margin-right: 5px">@(PageActiveBankPaymentNo?.ToPersianNumbers())</span>
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="ceo-report-table">
+                                    <tr>
+                                        <th>ردیف</th>
+                                        <th>شماره پرسنلی</th>
+                                        <th>نام و نام خانوادگی</th>
+                                        <th>مبلغ</th>
+                                        <th style="min-width: 100px;"> شماره حساب</th>
+                                        <th style="min-width: 100px;"> شماره شبا</th>
+                                    </tr>
+
+                                    @foreach (var c in report)
+                                    {
+                                        <tr class="data-tr">
+                                            <td> @c.RowNo.ToPersianNumbers() </td>
+                                            <td> @c.PersonnelCode </td>
+                                            <td> @c.MainInsuredName </td>
+                                            <td> @c.Amount.ToCurrencyStringFormat().ToPersianNumbers() ریال </td>
+                                            <td> @c.BankAccountNo </td>
+                                            <td> @c.BankShebaNo </td>
+                                        </tr>
+                                    }
+
+                                    <tr class="data-tr">
+                                        <td colspan="3">  </td>
+
+                                        <td>
+                                            <div class="flex justify-content-end" style="margin-left: 5%">
+                                                <strong>
+                                                    جمع مبالغ:
+
+                                                    @CostsSum.ToCurrencyStringFormat().ToPersianNumbers()
+
+                                                    <span style="font-weight: bold">ریال</span>
+
+                                                </strong>
+                                            </div>
+                                        </td>
+
+                                        <td colspan="2">
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="printable" style="width: 100%; height: 40px;"></div>
+                    }
+                }
+            }
+
+        </div>
+    </section>
+
+    <!-- Popup Windows => Save Bank Payment Data -->
+    <article>
+        <TelerikWindow Class="popup-window-custom-wrapper" Width="100%" Height="100%" Centered="true" Visible="IsVisibleSaveBankPaymentDataModal">
+            <WindowContent>
+
+                <div class="popup-window-content versioning-window">
+
+                    <div class="app-versioning-container" style="position: relative">
+
+                        <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsVisibleSaveBankPaymentDataModal = false"
+                             style="width: 30px;left: 7px;float: left;position: absolute;top: 7px;cursor: pointer;" />
+
+                        <div class="col-4 popup-window-content-card">
+                            @{
+
+                                <div>
+                                    <h4 class="version-no-title" style="font-weight: bold;
+                                                                                margin-top: 6px;
+                                                                                margin-bottom: 10px;
+                                                                                color: darkgreen;
+                                                                                font-size: 17px;">
+                                        @($"ثبت اطلاعات پرداخت بانکی")
+                                    </h4>
+
+                                    <div class="personnelCode-to-register-workhours-box">
+                                        <label>تاریخ پرداخت *</label>
+                                        <InputPersianDatePicker Id="clAt"
+                                        @bind-Value="SaveBankPaymentCommand.PayedAtJalali"
+                                                                Name="clRegisteredAt"
+                                                                CssClass="cost-date-picker"
+                                                                Visible="true"
+                                                                ReadOnly="true"
+                                                                Disabled="false"
+                                                                PickerAlign="Align.Right"
+                                                                InitialValue="false"
+                                                                CalendarType="Calendar.SingleModeJalali"
+                                                                DigitType="DigitType.BasedOnCalendar"
+                                                                DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                                MinDateSetOnToday="false"
+                                                                Placeholder="تاریخ پرداخت"
+                                                                OnClear="ApplyFilters"
+                                                                Theme="PickerTheme.RedBlack" />
+                                    </div>
+                                    <div class="personnelCode-to-register-workhours-box">
+                                        <label>کد رهگیری پرداخت</label>
+                                        <div>
+                                            <TelerikTextBox class="full-width"
+                                                            PlaceHolder="کد رهگیری بانک"
+                                            @bind-Value="SaveBankPaymentCommand.BankTrackingNo">
+                                            </TelerikTextBox>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex;
+                                                                                                                    justify-content: space-evenly;
+                                                                                                                    margin-top: 40px;
+                                                                                                                    margin-bottom: 20px;">
+                                        <TelerikButton Class="primary-button" OnClick="OnSaveBankPaymentSubmit"> تایید </TelerikButton>
+
+                                        <TelerikButton Class="default-button" OnClick="() => IsVisibleSaveBankPaymentDataModal = false"> انصراف </TelerikButton>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+            </WindowContent>
+        </TelerikWindow>
+    </article>
+</div>
+

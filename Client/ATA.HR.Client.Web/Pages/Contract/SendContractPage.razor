@@ -1,0 +1,255 @@
+﻿@page "/contracts/send-contract"
+
+@using ATABit.Helper.Utils;
+@using GridSelectionMode = ATA.HR.Client.Web.Enums.GridSelectionMode
+@using DNTPersianUtils.Core
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.SendContractPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="@(UserNameSendingContractTo.IsNotNullOrEmpty() ? $"در حال ارسال قرارداد {UserNameSendingContractTo}" : "")" Visible="@IsLoading" />
+
+<div class="personnel-page">
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="@("پرسنل آتا")" PageDescription="مشاهده‌ی همه‌ی پرسنل آتا برای شروع پروسه‌ی ارسال و امضای قرارداد استخدامی پرسنل – احکام" />
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-6 col-xxl-4">
+                        <label class="input-label">
+                            کاربر
+                        </label>
+                        <div class="searchbar-custom-wrapper">
+                            <img src="@IconUrls.Search" />
+                            <TelerikTextBox class="full-width"
+                                        PlaceHolder="جستجو با شماره‌ی پرسنلی، نام پرسنل یا عنوان سازمانی"
+                                        ValueChanged="SearchTermChanged">
+                            </TelerikTextBox>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-2 filter-box">
+                        <label>واحد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@UnitsSource"
+                                        @bind-Value="@PersonnelToSendContractFilterArgs.Unit"
+                                        TextProperty="Text"
+                                        Change="@(() => ApplyFilters())"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>وضعیت جایگاه کاربر در چارت راهکاران</label>
+                        <div>
+                            <RadzenSelectBar Data="@BoxStatusSource"
+                                         TValue="string"
+                                         @bind-Value=@PersonnelToSendContractFilterArgs.BoxStatusSelectedValue
+                                         Change="@(() => ApplyFilters())"
+                                         TextProperty="Text"
+                                         ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>امکان ارسال قرارداد بر اساس نوع حکم</label>
+                        <div>
+                            <RadzenSelectBar Data="@HokmTypesToSendContractToSource"
+                                         TValue="string"
+                                         @bind-Value=@PersonnelToSendContractFilterArgs.HokmStatusSelectedValue
+                                         Change="@(() => ApplyFilters())"
+                                         TextProperty="Text"
+                                         ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box  flex mt-4">
+                        <div style="margin-left: 10px; margin-top: -1px;">
+                            <TelerikCheckBox Id="onlyCloseToEndingContracts"
+                                         @bind-Value="@PersonnelToSendContractFilterArgs.OnlyPersonnelWithContractsClosingToEnd"
+                                         OnChange="@(() => ApplyFilters())">
+                            </TelerikCheckBox>
+                        </div>
+                        <label>فقط پرسنلی که زمان قراردادشان در حال اتمام است</label>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box  flex mt-4">
+                        <div style="margin-left: 10px; margin-top: -1px;">
+                            <TelerikCheckBox Id="onlyWithNoContracts"
+                                         @bind-Value="@PersonnelToSendContractFilterArgs.OnlyPersonnelWithNoContractsAtAll"
+                                         OnChange="@(() => ApplyFilters())">
+                            </TelerikCheckBox>
+                        </div>
+                        <label>فقط پرسنلی که هیچ قراردادی ندارند</label>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper">
+
+            <div class="page-grid-operation-wrapper @(TotalUsersCounts == 0 ? "visibility-hidden" : "")">
+
+                @{
+                    var additionalClass = IsVisibleMultipleActionButton ? "" : "visibility-hidden";
+
+                    @if (IsMultiActionOnCustomSelection)
+                    {
+                        <TelerikButton Class="primary-button send-all-contracts-button"
+                               OnClick="SendAllFilteredContracts">
+                            @($"ارسال همزمان {SelectedItems.Count()} قرارداد فیلترشده‌")
+                        </TelerikButton>
+                    }
+                    else
+                    {                      
+                        <TelerikButton Class="primary-button send-all-contracts-button"
+                               OnClick="SendAllFilteredContracts">
+                            @($"ارسال همزمان {TotalUsersCounts} قرارداد فیلترشده‌")
+                        </TelerikButton>
+                    }
+
+                    @if (IsVisibleMultipleActionButton)
+                    {
+                        <div class="multiple-action-box">
+                            <label class="select-status-label">حالت انتخابی</label>
+                            <div>
+                                <RadzenDropDown AllowClear="false"
+                                        TValue="string"
+                                        AllowFiltering="false"
+                                        Data="@(EnumMapping.ToSelectListItems<GridSelectionMode>())"
+                                            @bind-Value="@MultiActionModeSelectedValue"
+                                        TextProperty="Text"
+                                        ValueProperty="Value" />
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            @*<div class="orders-archive-status-container">
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+            ثبت شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+            حذف شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+            همه
+            </div>
+            </div>*@
+
+            <TelerikGrid TItem="@UserToSendContractDto"
+                         @ref="@PersonnelGridRef"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         SelectionMode="Telerik.Blazor.GridSelectionMode.Multiple"
+                         @bind-SelectedItems="SelectedItems"
+                         Resizable="true"
+                         Reorderable="true"
+                         OnStateInit="@OnStateInitHandler"
+                         OnRowRender="OnGridRowRender"
+                         OnRead=@OnReadHandler>
+                <GridColumns>
+                    <GridCheckboxColumn Visible="@(IsVisibleMultipleActionButton && IsMultiActionOnCustomSelection)" CheckBoxOnlySelection="true" SelectAllMode="GridSelectAllMode.Current"></GridCheckboxColumn>
+                    <GridColumn Field="@(nameof(UserToSendContractDto.FullName))" Title="نام پرسنل" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.UserId))" Title="UserId" Width="80px" Locked="false" Visible="IsAdmin" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.BoxId))" Title="@(IsAdmin ? "BoxId" : "شناسه جایگاه")" Width="80px" Locked="false" Sortable="false" /><GridColumn Field="@(nameof(UserToSendContractDto.PersonnelCode))" Title="کد پرسنلی" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.NationalCode))" Title="کد ملی" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.EmploymentDateJalali))" Title="ت. استخدام" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.EmploymentStatusTitle))" Title="آخرین حکم" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.LastHokmExecutionDate))" Title="تاریخ اجرا" Width="110px" Locked="false" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToSendContractDto)gridContext;
+
+                                <div>@user.LastHokmExecutionDate?.ToJalaliString().En2FaDigits()</div>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(UserToSendContractDto.LastContractEndDate))" Title="تاریخ اعتبار" Width="110px" Locked="false" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToSendContractDto)gridContext;
+
+                                <div>@user.LastContractEndJalaliDate?.En2FaDigits()</div>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(UserToSendContractDto.PostTitle))" Title="سمت" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.UnitName))" Title="واحد" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.UnitDivisionName))" Title="بخش" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToSendContractDto.PendingContractsCount))" Title="قراردادهای ناتمام" Width="130px" Locked="false" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToSendContractDto)gridContext;
+
+                                //<div style="text-align: center;font-size: 19px;"> @user.PendingContractsCount.ToPersianNumbers() </div>
+                                @foreach (var u in user.ContractDateDisplay)
+                                {
+                                    <div class="chip-badge" style="font-size: 8px; padding-bottom: 2px">
+                                        <a target="_blank" href="@PageUrls.ContractFlowFormsPage(u.Key)"> @u.Value </a>
+                                    </div>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(UserToSendContractDto.UserId))" Title="عملیات" Width="230px" Sortable="false" Locked="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToSendContractDto)gridContext;
+
+                                <div class="grid-action-buttons-wrapper">
+                                    <TelerikButton Class="default-button margin-right-10 send-contract-button"
+                                               Enabled="!IsLoading && user.HasBox && EmploymentStatusIdAllowedToSendContractToList.Any(s => user.EmploymentStatusId == s)"
+                                               OnClick="@(() => OpenPreviewContract(user.UserId))">
+                                        پیش نمایش
+                                    </TelerikButton>
+
+                                    <TelerikButton Class="default-button margin-right-10 send-contract-button"
+                                               Enabled="!IsLoading && user.HasBox && EmploymentStatusIdAllowedToSendContractToList.Any(s => user.EmploymentStatusId == s)"
+                                               OnClick="@(() => SendContract(user))">
+                                        ارسال قرارداد
+                                    </TelerikButton>
+                                </div>
+                            }
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+
+    <!-- Popup Windows => Confirm Contract Deletion -->
+    <section>
+        <ConfirmDialog @bind-IsVisible="IsVisibleDeleteContractConfirmDialog"
+                       Title="تایید حذف قرارداد"
+                       Text="@($"قرارداد {DeletingContractPersonnelName} به طور کامل حذف می‌شود. آ‌یا از حذف آن اطمینان دارید؟")"
+                       OnConfirm="() => DeleteContractById(DeletingContractId)" />
+    </section>
+</div>

@@ -1,0 +1,5 @@
+﻿https://hrm.ATAexp.ir/rest/s1/ATA/ATAPersonInfo?partyId=0063515441
+https://hrm.ATAexp.ir/rest/s1/ATA/ATAPersonInfo?registerNumber=579762
+
+
+https://hrm.ATAexp.ir/rest/s1/ATA/ATAOrganizationChart?partyId=Org16101004300001

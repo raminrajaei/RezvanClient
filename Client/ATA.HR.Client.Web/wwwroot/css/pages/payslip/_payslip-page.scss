@@ -1,0 +1,85 @@
+﻿@import '../../utils/_base.scss';
+
+.payslip-page {
+    .Header {
+        display: flex;
+        height: 100px;
+    }
+
+    .header_logo {
+        border: 1px #000 solid;
+        width: 50%;
+    }
+
+    .header_logo img {
+        height: 70px;
+        width: 220px;
+        text-align: center;
+        margin-top: 15px;
+        margin-left: 20%;
+    }
+
+    .header_title {
+        border: 1px #000 solid;
+        width: 50%;
+        border-right: none;
+        font-size: 16px;
+        height: 100px;
+    }
+
+    .disply_Fle {
+        display: flex;
+        width: 100%;
+    }
+
+    .margin_left_20 {
+        margin-left: 10px;
+    }
+
+    .incomeAnddedu {
+        border: 1px #000 solid;
+        width: 50%;
+        text-align: center;
+    }
+
+    .left_side {
+        border: 1px #000 solid;
+        width: 70%;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    table,
+    td,
+    th {
+        border: 1px solid;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table {
+        width: 95%;
+        border-collapse: collapse;
+    }
+
+    table td {
+        height: 25px;
+    }
+
+    .td_width {
+        width: 10%;
+    }
+
+    .Information {
+        border: 1px #000 solid;
+        text-align: center;
+    }
+
+    .right_side {
+        border: 1px #000 solid;
+        width: 30%;
+        border-top: none;
+        border-left: none;
+        border-bottom: none;
+    }
+}

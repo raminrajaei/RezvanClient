@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Dtos\Food\**" />
+	  <EmbeddedResource Remove="Dtos\Food\**" />
+	  <None Remove="Dtos\Food\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="AppMetadata.cs~RF7fb6d01.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Bit.Universal.Core" Version="9.0.0" />
+		<PackageReference Include="Bit.Utils" Version="1.0.4" />
+		<PackageReference Include="DNTPersianUtils.Core" Version="5.4.5" />
+		<PackageReference Include="ExcelWizard" Version="3.0.8" />
+		<PackageReference Include="jose-jwt" Version="4.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+		<PackageReference Include="Bit.Universal.AutoMapper" Version="9.0.0" />
+		<PackageReference Include="Bit.Universal.Model" Version="9.0.0" />
+		<PackageReference Include="Humanizer.Core" Version="2.14.1" />
+		<PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
+		<PackageReference Include="NetCore.AutoRegisterDi" Version="2.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.5" />
+		<PackageReference Include="ATA.Bit.Shared" Version="6.3.6" />
+	</ItemGroup>
+
+
+	<!--Custom-->
+
+	<ItemGroup>
+		<!-- See Identity/ClaimStrings.resx -->
+		<Compile Update="**\*.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>$([System.String]::Copy('%(Filename)').Replace('.Designer','')).resx</DependentUpon>
+		</Compile>
+		<EmbeddedResource Update="**\*.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>%(Filename).Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+		<EmbeddedResource Update="**\*.en.resx">
+			<Generator></Generator>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Dtos\PaySlip\" />
+	  <Folder Include="Dtos\WorkHours\Reports\" />
+	  <Folder Include="Enums\WorkHours\" />
+	</ItemGroup>
+
+</Project>

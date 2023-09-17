@@ -1,0 +1,266 @@
+﻿@page "/workhours/ceo-report"
+
+@using DNTPersianUtils.Core
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.WorkHoursForCeoConfirmReportPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="در حال آماده‌سازی گزارش" Visible="@IsLoading" />
+
+<div class="personnel-page workhours-page printbase">
+
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="گزارش کارکردهای تایید شده" PageDescription="امکان استخراج گزارش قابل پرینت از کارکردها در مرحله نهایی گردش کار پس از تایید مدیران مستقیم" />
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper" style="padding-bottom: 2.2rem">
+                <div class="row">
+
+                    <div class="col-12 col-md-6 col-xxl-4 filter-box">
+                        <label>سال و ماه کارکرد</label>
+                        <div>
+                            <div class="flex">
+                                <RadzenDropDown AllowClear="false"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@YearsSource"
+                                            @bind-Value="@GetDataArgs.YearSelectedValue"
+                                            TextProperty="Text"
+                                            ValueProperty="Value"
+                                            Style="margin-left: 15px" />
+
+                                <RadzenDropDown AllowClear="false"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@MonthsSource"
+                                            @bind-Value="@GetDataArgs.MonthSelectedValue"
+                                            TextProperty="Text"
+                                            ValueProperty="Value" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-4 filter-box">
+                        <label>واحد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@ConfirmersSource"
+                                        @bind-Value="@GetDataArgs.ConfirmerUserIdSelectedValue"
+                                        TextProperty="Text"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-4 filter-box flex justify-content-center align-items-center">
+                        <div>
+                            <TelerikButton OnClick="GetReport" Class="btn-primary primary-button"> مشاهده گزارش </TelerikButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Grid & Signature -->
+    <section class="grid-section printbase">
+        <div class="page-grid-wrapper printbase">
+
+            @if (ShowResult)
+            {
+                @if (WorkHourSignaturesRef == null)
+                {
+                    <div class="page-box-wrapper mt-4 text-align-center" style="font-size: 21px;color: indianred;">
+                        هیچ کارکردی در این ماه توسط این مدیر / معاون تایید نشده است
+                    </div>
+                }
+                else
+                {
+                    @foreach (var workHoursData in WorkHoursDataList)
+                    {
+                        <div class="page-box-wrapper mt-3 printable" style="height: 1165px;
+                                                                            display: flex;
+                                                                            flex-direction: column;
+                                                                            justify-content: space-between;">
+
+                            <div>
+
+                                <div class="row header cell-border" style="border: 1px solid #d1cfcf; display: flex; justify-content: space-between; box-shadow: 5px 5px #d1cfcf; margin-bottom: 20px; width: 100%; margin-right: 0;">
+                                    <div class="col-2">
+                                        <img class="logo" src="@ImageUrls.Pages.ATAContractLogo" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
+                                    </div>
+                                    <div class="title col-8" style="display: flex; flex-direction: column; justify-content: space-evenly; font-weight: bold; letter-spacing: 1px;">
+                                        <div> @($"کارکرد {UnitName} از تاریخ {CurrentMonth.CurrentMonthStart} لغایت {CurrentMonth.CurrentMonthFinish}") </div>
+                                        <div> @($"اضافه کار و کسر کار از تاریخ {PreviousMonth.PreviousMonthStart} لغایت {PreviousMonth.PreviousMonthFinish}")</div>
+                                    </div>
+                                </div>
+
+                                <table class="ceo-report-table">
+                                    <tr>
+                                        <th>ردیف</th>
+                                        <th>کد پرسنلی</th>
+                                        <th>نام</th>
+                                        <th>نام خانوادگی</th>
+                                        <th> روز کارکرد </th>
+                                        <th> ساعت پرواز خلبان </th>
+                                        <th> ساعت اقامت خارج از مرکز </th>
+                                        <th> کارکرد پرواز فنی </th>
+                                        <th> ساعت پرواز مهماندار </th>
+                                        <th> ساعت اقامت خارج از مرکز مهماندار </th>
+                                        <th> حق پردیوم خلبان و کمک خلبان </th>
+                                        <th> حق پردیوم سرمهماندارومهماندار </th>
+                                        <th> کارکرد اضافه کاری </th>
+                                        <th> جمعه کاری </th>
+                                        <th> کسر کار ماهانه </th>
+                                        <th> حق شیفت ۱۰% </th>
+                                        <th> حق شیفت ۱۵% </th>
+                                        <th> حق شیفت ۲۲.۵% </th>
+                                        <th> کارکرد ساعتی </th>
+                                    </tr>
+
+                                    @foreach (var wh in workHoursData)
+                                    {
+                                        <tr class="data-tr">
+                                            <td> @wh.Id.ToPersianNumbers() </td>
+                                            <td> @wh.UserEmployeePersonnelCodeToDisplay.ToPersianNumbers() </td>
+                                            <td> @wh.UserEmployeeFirstName </td>
+                                            <td> @wh.UserEmployeeLastName </td>
+                                            <td> @wh.WorkDays.ToPersianNumbers() </td>
+                                            <td> @wh.PilotFlightTimeDisplay </td>
+                                            <td> @wh.HoursOfStayOutsideTheCenterTimeDisplay </td>
+                                            <td> @wh.TechnicalFlightTimeDisplay </td>
+                                            <td> @wh.AttendantsFlightTimeDisplay </td>
+                                            <td> @wh.AttendantsHoursOfStayOutsideTheCenterTimeDisplay </td>
+                                            <td> @wh.PilotPerDiemToDisplay.ToPersianNumbers() </td>
+                                            <td> @wh.AttendantsPerDiemToDisplay.ToPersianNumbers() </td>
+                                            <td> @wh.ExtraWorkTimeDisplay </td>
+                                            <td> @wh.FridaysWorkTimeDisplay </td>
+                                            <td> @wh.MonthlyWorkDeductionsTimeDisplay </td>
+                                            <td> @wh.HasShiftWork10PercentExcelDisplay.ToPersianNumbers() </td>
+                                            <td> @wh.HasShiftWork15PercentExcelDisplay.ToPersianNumbers() </td>
+                                            <td> @wh.HasShiftWork225PercentExcelDisplay.ToPersianNumbers() </td>
+                                            <td> @wh.HourlyWorkTimeDisplay </td>
+                                        </tr>
+                                    }
+                                </table>
+
+                            </div>
+
+                            @if (workHoursData.Any(d => d.Id == WorkHoursDataList.LastOrDefault()?.LastOrDefault()?.Id) && ManagerComment.IsNotNullOrEmpty())
+                            {
+                                <div style="margin-top: 15px;
+                                            margin-bottom: -5px;
+                                            margin-right: 10px;">
+                                    <label><i>یادداشت مدیر/معاون:</i></label>
+                                    <div style="margin-right: 10px">
+                                        ○
+                                        @ManagerComment
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="flex justify-content-around signatures mt-4 printbase" style="margin-bottom: -15px">
+
+                                <div style="width: 20%; padding-right: 2%;">
+                                    <label class="bold-text" style="font-size: 15px;"> مسئول امور پرسنلی </label>
+
+                                    @if (WorkHourSignaturesRef != null)
+                                    {
+                                        <span> @WorkHourSignaturesRef.HRSeniorExpertSignedBy </span>
+
+                                        @if (WorkHourSignaturesRef.HRSeniorExpertImageDataURL.IsNotNullOrEmpty())
+                                        {
+                                            <img src="@WorkHourSignaturesRef.HRSeniorExpertImageDataURL" width="100%" class="signature-img" />
+                                        }
+                                    }
+
+                                </div>
+
+                                <div style="width: 20%; padding-right: 2%;">
+                                    <label class="bold-text" style="font-size: 15px;"> مدیر منابع انسانی </label>
+
+                                    @if (WorkHourSignaturesRef != null)
+                                    {
+                                        <span> @WorkHourSignaturesRef.HRSupervisorSignedBy </span>
+
+                                        @if (WorkHourSignaturesRef.HRSupervisorSignatureImageDataURL.IsNotNullOrEmpty())
+                                        {
+                                            <img src="@WorkHourSignaturesRef.HRSupervisorSignatureImageDataURL" width="100%" class="signature-img" />
+                                        }
+                                    }
+                                </div>
+
+                                <div style="width: 20%; padding-right: 2%;">
+                                    <label class="bold-text" style="font-size: 15px;"> معاون منابع انسانی و پشتیبانی </label>
+
+                                    @if (WorkHourSignaturesRef != null)
+                                    {
+                                        <span> @WorkHourSignaturesRef.HRManagerSignedBy </span>
+
+                                        @if (WorkHourSignaturesRef.HRManagerSignatureImageDataURL.IsNotNullOrEmpty())
+                                        {
+                                            <img src="@WorkHourSignaturesRef.HRManagerSignatureImageDataURL" width="100%" class="signature-img" />
+                                        }
+                                    }
+                                </div>
+
+                                <div style="width: 20%; padding-right: 2%;">
+                                    <label class="bold-text" style="font-size: 15px;"> معاون / مدیر قسمت </label>
+
+                                    @if (WorkHourSignaturesRef != null)
+                                    {
+                                        <span> @WorkHourSignaturesRef.DirectManagerSignedBy </span>
+
+                                        @if (WorkHourSignaturesRef.DirectManagerSignatureImageDataURL.IsNotNullOrEmpty())
+                                        {
+                                            <img src="@WorkHourSignaturesRef.DirectManagerSignatureImageDataURL" width="100%" class="signature-img" />
+                                        }
+                                    }
+                                </div>
+
+                                <div style="width: 20%; padding-right: 2%;">
+                                    <label class="bold-text" style="font-size: 15px;"> مدیرعامل </label>
+
+                                    @if (WorkHourSignaturesRef != null)
+                                    {
+                                        <span> @WorkHourSignaturesRef.CEOSignedBy </span>
+
+                                        @if (WorkHourSignaturesRef.CEOSignatureImageDataURL.IsNotNullOrEmpty())
+                                        {
+                                            <img src="@WorkHourSignaturesRef.CEOSignatureImageDataURL" width="100%" class="signature-img" />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span> سهیل قیاسی </span>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="printable" style="width: 100%; height: 40px;"></div>
+                    }
+                }
+            }
+
+        </div>
+    </section>
+</div>
+

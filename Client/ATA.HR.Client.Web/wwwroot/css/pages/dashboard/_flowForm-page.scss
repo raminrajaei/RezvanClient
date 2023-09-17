@@ -1,0 +1,283 @@
+﻿@import '../../utils/_base.scss';
+
+.printable {
+}
+
+@media print {
+    html body *:not(.printable, .printable *, .printbase) {
+        // hide everything but printable elements and their children
+        display: none;
+    }
+
+    .main-content-box {
+        padding: 15px !important;
+    }
+
+    .printable {
+        display: block;
+        //margin-left: -100px;
+
+        .contract-container {
+            width: 100% !important;
+        }
+    }
+}
+
+.flowForm-page {
+
+    .page-box-wrapper, .page-grid-wrapper {
+
+        .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+            margin-top: rem(20px);
+        }
+    }
+
+    .page-box-wrapper {
+        padding: rem(10px) rem(30px) rem(23px) rem(30px);
+        margin-bottom: rem(30px) !important;
+
+        h6 {
+            color: $bluey-grey;
+            font-size: rem(12px);
+            margin-bottom: rem(8px);
+            letter-spacing: rem(2px);
+        }
+
+        p {
+            font-size: rem(22px);
+        }
+    }
+
+    .flow-action-center {
+
+        .section-title {
+            font-weight: bold;
+            font-size: rem(15px);
+            color: $very-dark-gray;
+            margin-bottom: 9px;
+            /* letter-spacing: 0.125rem; */
+            margin-right: rem(10px);
+            margin-top: rem(30px);
+        }
+
+        .comment-box-wrapper {
+            margin-top: rem(1px);
+
+            textarea {
+                margin: 0 rem(0.75px) rem(20px) 0;
+                padding: rem(10px);
+                display: flex;
+                width: 99%;
+                min-height: rem(92px);
+            }
+        }
+
+        .action-buttons-wrapper {
+            margin-top: rem(20px);
+
+            button {
+                margin-right: 5px;
+                margin-left: 5px;
+                font-weight: bold;
+            }
+
+            .send-sms-title {
+                margin-top: rem(20px);
+
+                .invalid-phone-tip {
+                    font-size: 13px;
+                    color: dimgray;
+                    font-weight: bold;
+                    letter-spacing: 0.5px;
+                }
+            }
+
+            .sms-code-box {
+                margin-top: 20px;
+                width: 350px;
+            }
+        }
+    }
+
+    .history-section {
+        padding: rem(10px);
+        margin-top: rem(6px);
+        padding-right: rem(22px);
+        margin-top: rem(-45px);
+
+        .section-title {
+            margin-bottom: 0.8125rem;
+            margin-right: 0.1875rem;
+            font-weight: bold;
+            font-size: 0.9375rem;
+            color: $very-dark-gray;
+        }
+
+        .page-box-wrapper {
+            padding: 0 rem(20px);
+
+            .seperator-line {
+                height: 0.5px;
+                background-color: $pinkish-grey;
+                margin: 0 rem(-20px);
+            }
+
+            .first-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: rem(20px) 0;
+
+                .actor-name {
+                    font-size: rem(15px);
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: rem(18px);
+                        margin-left: rem(7px);
+                    }
+                }
+
+                .action-name {
+                    line-height: 20px;
+                    color: #fff;
+                    padding: 1px 13px 4px 13px;
+                    font-size: 11px;
+                    border-radius: 33px;
+                    background: #14890c;
+                }
+            }
+
+            .second-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: rem(20px);
+
+                .state-name {
+                    color: $dim-gray;
+                    font-size: rem(14px);
+                }
+
+                .acted-at {
+                    color: $dim-gray;
+                    font-size: rem(14px);
+                }
+            }
+
+            .third-row {
+                display: flex;
+                justify-content: start;
+                align-items: center;
+                margin-bottom: 1.25rem;
+                color: $gray;
+                font-size: rem(13px);
+
+                img {
+                    width: rem(20px);
+                    height: rem(20px);
+                    margin-left: rem(10px);
+                }
+            }
+
+            .flow-finished-sign {
+                line-height: rem(20px);
+                color: $white;
+                padding: 1px 13px 4px 13px;
+                font-size: 11px;
+                border-radius: 33px;
+                background: $dark-sea-grean;
+                margin-top: rem(15px);
+                margin-bottom: rem(15px);
+                text-align: center;
+                width: rem(100px);
+                margin-right: auto;
+                margin-left: auto;
+            }
+
+            .todo-section {
+                padding: rem(20px);
+
+                .todo-state-name {
+                    display: flex;
+                    margin-bottom: rem(13px);
+                    font-weight: bold;
+                    color: $gray;
+                    font-size: rem(13px);
+
+                    img {
+                        width: rem(17px);
+                        margin-right: rem(7px);
+                        opacity: 0.5;
+
+                        .rtl & {
+                            transform: rotate(180deg) rotateX(200deg);
+                            margin-left: rem(5px);
+                        }
+                    }
+                }
+
+                .todo-next-state {
+                    margin-bottom: rem(15px);
+                    margin-right: rem(17px);
+                    line-height: 20px;
+                    padding: rem(1px) rem(13px) rem(4px) rem(13px);
+                    font-size: rem(11px);
+                    border-radius: rem(33px);
+                    border: 1px solid gray;
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .todo-actor-name {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: rem(3px);
+                    font-size: rem(15px);
+                    opacity: 0.9;
+
+                    img {
+                        width: rem(18px);
+                        margin-left: rem(7px);
+                        opacity: 0.8;
+                    }
+
+                    .todo-user {
+                        letter-spacing: 0.5px;
+                        color: $dark-four;
+                        margin-bottom: 20px;
+                        margin-top: 20px;
+                    }
+                }
+
+                .todo-actor-post {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 0.1875rem;
+                    font-size: rem(12px);
+                    opacity: 0.9;
+                    margin-top: rem(-18px);
+                    margin-right: rem(27px);
+                }
+            }
+        }
+    }
+
+    .k-tabstrip-top > .k-tabstrip-items {
+        border: none;
+    }
+
+    .k-tabstrip > .k-content.k-state-active {
+        background-color: $white-four;
+        border: none;
+        overflow: hidden;
+    }
+
+    .flow-size {
+        @include lt-md {
+            width: 98%;
+            margin-top: 10px;
+        }
+    }
+}

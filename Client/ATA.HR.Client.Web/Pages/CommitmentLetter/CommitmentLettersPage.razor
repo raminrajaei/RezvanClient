@@ -1,0 +1,395 @@
+﻿@page "/commitment-letters/all-cl"
+
+@using ATABit.Helper.Utils
+@using Calendar = Blazor.PersianDatePicker.Calendar
+@using ATA.HR.Shared.Dtos.CommitmentLetter
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.CommitmentLettersPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<div class="personnel-page">
+
+    <!-- AddOrEdit Header -->
+    <section>
+        @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
+        {
+            <HeaderAddOrEdit>
+                <button class="default-button" @onclick="ChangeToFilterMode">انصراف</button>
+                <button type="submit" form="commitmentLetterForm" class="primary-button">ذخیره</button>
+            </HeaderAddOrEdit>
+        }
+    </section>
+
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <div class="flex align-items-center">
+                    <TopBar PageName="@PageTitles.CommitmentLettersPage.Title" PageDescription="مشاهده‌ی همه‌ی تعهدنامه‌ی محضری پرسنل به همراه زمان شروع و پایان آن‌ها" />
+                </div>
+
+                <AuthorizeView Policy="@Claims.CommitmentLetters_AddAndView">
+                    <div class="flex">
+                        <RadzenButton Style="width: 10.75rem;" class="primary-button" Text="افزودن تعهدنامه جدید" Click="ChangeToAddMode" />
+                    </div>
+                </AuthorizeView>
+            }
+            else if (PageOperationType is OperationType.Add)
+            {
+                <div class="page-add-edit-header">
+                    <div class="page-back-title">
+                        <img src="@IconUrls.Back" @onclick="ChangeToFilterMode" />
+                        <div class="back-title-text">
+                            افزودن تعهدنامه محضری
+                        </div>
+                    </div>
+                    <div class="page-back-links">
+                        <div>تعهدنامه‌ها</div>
+                        <img src="@IconUrls.PaleArrowRight" />
+                        <div>تعهدنامه‌های محضری</div>
+                        <img src="@IconUrls.DarkArrowRight" />
+                        <div class="active-link">
+                            @(PageOperationType == OperationType.Add
+                                ? "افزودن تعهدنامه"
+                                : "نداریم")
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (PageOperationType is OperationType.Edit)
+            {
+                <div class="page-add-edit-header">
+                    <div class="page-back-title">
+                        <img src="@IconUrls.Back" @onclick="ChangeToFilterMode" />
+                        <div class="back-title-text">
+                            ویرایش تعهدنامه
+                        </div>
+                    </div>
+                    <div class="page-back-links">
+                        <div>تعهدنامه‌ها</div>
+                        <img src="@IconUrls.PaleArrowRight" />
+                        <div>تعهدنامه</div>
+                        <img src="@IconUrls.DarkArrowRight" />
+                        <div class="active-link">
+                            @(PageOperationType == OperationType.Edit
+                                ? "ویرایش سند"
+                                : "نداریم")
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+
+                    <div class="col-12 col-md-6 col-xl-6 col-xxl-4">
+                        <label class="input-label">
+                            کاربر
+                        </label>
+                        <div class="searchbar-custom-wrapper">
+                            <img src="@IconUrls.Search" />
+                            <TelerikTextBox class="full-width"
+                                        PlaceHolder="جستجو با شماره‌ی پرسنلی یا نام پرسنل"
+                                        ValueChanged="SearchTermChanged">
+                            </TelerikTextBox>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>واحد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@(EnumMapping.ToSelectListItems<CommitmentLetterUnitSource>().Select(u => new SelectListItem(u.Text, u.Text!)).ToList())"
+                                        @bind-Value="@CommitmentLettersFilter.Unit"
+                                        TextProperty="Text"
+                                        Change="@(_ => ApplyFilters)"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>وضعیت پرونده</label>
+                        <div>
+                            <RadzenSelectBar Data="@UserDismissStatusSource"
+                                             TValue="string"
+                                             @bind-Value=@CommitmentLettersFilter.UserStatusSelectedValue
+                                             Change="@(() => ApplyFilters)"
+                                             TextProperty="Text"
+                                             ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box  flex mt-4">
+                        <div style="margin-left: 10px; margin-top: -1px;">
+                            <TelerikCheckBox Id="onlyCloseToEndingContracts"
+                                         @bind-Value="@CommitmentLettersFilter.OnlyCommitmentLettersClosingToEnd"
+                                         OnChange="@(() => ApplyFilters)">
+                            </TelerikCheckBox>
+                        </div>
+                        <label>فقط تعهدنامه‌های در حال پایان</label>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- CommitmentLetter EditForm -->
+    <section class="documentEditFormSection">
+        @if (PageOperationType is OperationType.Add or OperationType.Edit)
+        {
+            <div class="form-custom-wrapper">
+
+                <EditForm id="commitmentLetterForm" class="row" Model="@CommitmentLetter" OnValidSubmit="OnCommitmentLetterSubmit">
+
+                    <DataAnnotationsValidator />
+
+                    @if (PageOperationType is OperationType.Add)
+                    {
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">مشخصات کلی</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label for="user">
+                                            انتخاب پرسنل *
+                                            <span style="font-size: 11px;margin-right: 10px;color: dimgrey;">(پرسنل عملیات و تعمیرات)</span>
+                                        </label>
+                                        <div class="form-input-wrapper">
+                                            <RadzenDropDown id="user"
+                                                    AllowClear="true"
+                                                    TValue="string"
+                                                    AllowFiltering="true"
+                                                    Placeholder="انتخاب کنید"
+                                                    Data="@(PersonnelSource)"
+                                                    @bind-Value="@CommitmentLetter.UserIdEmployeeSelectedValue"
+                                                    TextProperty="Text"
+                                                    ValueProperty="Value" />
+                                        </div>
+                                        <ValidationMessage For="() => CommitmentLetter.UserIdEmployeeSelectedValue" />
+                                    </div>
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label for="commitmentLetterTitle"> عنوان تعهدنامه * </label>
+                                        <div class="form-input-wrapper">
+                                            <TelerikTextBox id="commitmentLetterTitle"
+                                                    @bind-Value="CommitmentLetter.Title"
+                                                    PlaceHolder="عنوان" />
+                                        </div>
+                                        <ValidationMessage For="() => CommitmentLetter.Title" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">تعهدنامه محضری</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label for="commitmentLetterTitle"> شماره تعهدنامه محضری </label>
+                                        <div class="form-input-wrapper">
+                                            <TelerikTextBox id="commitmentLetterTitle"
+                                                    @bind-Value="CommitmentLetter.CommitmentLetterNo"
+                                                    PlaceHolder="شماره" />
+                                        </div>
+                                        <ValidationMessage For="() => CommitmentLetter.CommitmentLetterNo" />
+                                    </div>
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label> تاریخ تعهدنامه محضری </label>
+                                        <div class="form-input-wrapper">
+                                            <InputPersianDatePicker Id="clAt"
+                                                            @bind-Value="CommitmentLetter.CommitmentLetterRegisteredAtJalali"
+                                                            Name="clRegisteredAt"
+                                                            Visible="true"
+                                                            ReadOnly="false"
+                                                            Disabled="false"
+                                                            PickerAlign="Align.Right"
+                                                            InitialValue="false"
+                                                            CalendarType="Calendar.SingleModeJalali"
+                                                            DigitType="DigitType.BasedOnCalendar"
+                                                            DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                            MinDateSetOnToday="false"
+                                                            Placeholder="تاریخ تعهدنامه"
+                                                            Theme="PickerTheme.RedBlack" />
+                                        </div>
+                                        <ValidationMessage For="() => CommitmentLetter.CommitmentLetterRegisteredAtJalali" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">تاریخ تعهدنامه</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label> تاریخ شروع * </label>
+                                        <div class="form-input-wrapper">
+                                            <InputPersianDatePicker Id="clStartsAt"
+                                                            @bind-Value="CommitmentLetter.CommitmentStartsAtJalali"
+                                                            Name="clStart"
+                                                            Visible="true"
+                                                            Disabled="false"
+                                                            ReadOnly="false"
+                                                            PickerAlign="Align.Right"
+                                                            InitialValue="false"
+                                                            CalendarType="Calendar.SingleModeJalali"
+                                                            DigitType="DigitType.BasedOnCalendar"
+                                                            DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                            MinDateSetOnToday="false"
+                                                            Placeholder="شروع"
+                                                            Theme="PickerTheme.RedBlack" />
+                                        </div>
+                                        <ValidationMessage For="() => CommitmentLetter.CommitmentStartsAtJalali" />
+                                    </div>
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label> تاریخ پایان * </label>
+                                        <div class="form-input-wrapper">
+                                            <InputPersianDatePicker Id="clEndsAt"
+                                                            @bind-Value="CommitmentLetter.CommitmentEndsAtJalali"
+                                                            Name="clEnd"
+                                                            Visible="true"
+                                                            Disabled="false"
+                                                            ReadOnly="false"
+                                                            PickerAlign="Align.Right"
+                                                            InitialValue="false"
+                                                            CalendarType="Calendar.SingleModeJalali"
+                                                            DigitType="DigitType.BasedOnCalendar"
+                                                            DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                            MinDateSetOnToday="false"
+                                                            Placeholder="شروع"
+                                                            Theme="PickerTheme.RedBlack" />
+                                        </div>
+                                        <ValidationMessage For="() => CommitmentLetter.CommitmentEndsAtJalali" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </EditForm>
+
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper">
+            
+            <div class="page-grid-operation-wrapper">
+                
+                <AuthorizeView Policy="@Claims.CommitmentLetters_AddAndView">
+                    <TelerikButton Class="secondary-button excel-button" ImageUrl="@IconUrls.Export" OnClick="ExportDataToExcel"> خروجی Excel </TelerikButton>
+                </AuthorizeView>
+
+            </div>
+
+            @*<div class="page-grid-operation-wrapper d-none">
+            <TelerikButton Class="primary-button send-all-contracts-button d-none">@($"اسناد")</TelerikButton>
+            </div>*@
+
+            @*<div class="orders-archive-status-container">
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+            ثبت شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+            حذف شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+            همه
+            </div>
+            </div>*@
+
+            <TelerikGrid TItem="@CommitmentLetterReadDto"
+                         @ref="@CommitmentLettersGridRef"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         Resizable="true"
+                         Reorderable="true"
+                         OnStateInit="@OnStateInitHandler"
+                         OnRowRender="OnGridRowRender"
+                         OnRead=@OnReadHandler>
+                <GridColumns>
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.UserEmployeeFullName))" Title="نام و نام خانوادگی" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.UserEmployeePersonnelCode))" Title="شماره پرسنلی" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.UserEmployeeUnitName))" Title="واحد" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.Title))" Title="عنوان تعهدنامه" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.CommitmentLetterNo))" Title="شماره تعهد محضری" Width="130px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.CommitmentLetterRegisteredAtJalali))" Title="تاریخ تعهد محضری" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.CommitmentStartsAtJalali))" Title="تاریخ شروع تعهد" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.CommitmentEndsAtJalali))" Title="تاریخ پایان تعهد" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.ValidityDurationDisplay))" Title="مدت اعتبار" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(CommitmentLetterReadDto.Id))" Title="مشاهده" Width="150px" Locked="true" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var cl = (CommitmentLetterReadDto)gridContext;
+
+                                <div class="grid-action-buttons-wrapper">
+                                    <button class="grid-action-button edit" style="margin-right: 5px" title="مشاهده" @onclick="@(() => OpenUserCommitmentLettersPage(cl.UserIdEmployee))">
+                                        <img class="btn-img" src="@IconUrls.FolderOpen" />
+                                        <img class="btn-img-hovered" src="@IconUrls.FolderClose" />
+                                    </button>
+                                </div>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <AuthorizeView Policy="@Claims.CommitmentLetters_DeletePermission">
+                        <GridColumn Field="@(nameof(CommitmentLetterReadDto.Id))" Title="حذف" Width="100px" Locked="true" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var cl = (CommitmentLetterReadDto)gridContext;
+
+                                    <div class="grid-action-buttons-wrapper">
+                                        <button class="grid-action-button delete" title="Delete" @onclick="@(() => ShowDeleteCommitmentLetterConfirmDialog(cl.Id))">
+                                            <img class="btn-img" src="@IconUrls.TrashGray" />
+                                            <img class="btn-img-hovered" src="@IconUrls.TrashWhite" />
+                                        </button>
+                                    </div>
+                                }
+                            </Template>
+                        </GridColumn>
+                    </AuthorizeView>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+
+    <!-- Popup Windows => Confirm Document Deletion -->
+    <section>
+        <ConfirmDialog @bind-IsVisible="IsVisibleDeleteCommitmentLetterConfirmDialog"
+                       Title="تایید حذف تعهدنامه"
+                       Text="این تعهدنامه به طور کامل حذف خواهد شد. آیا از حذف آن اطمینان دارید؟"
+                       OnConfirm="() => DeleteCommitmentLetter(DeletingCommitmentLetterId)" />
+    </section>
+</div>
+

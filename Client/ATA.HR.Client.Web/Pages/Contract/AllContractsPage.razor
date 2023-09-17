@@ -1,0 +1,248 @@
+﻿@page "/contracts/all-contracts"
+
+@using Blazor.PersianDatePicker.Extensions
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.AllContractsPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="@LoadingText" Visible="@IsLoading" />
+
+<div class="dashboard-page">
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="@PageTitles.AllContractsPage.Title" PageDescription="مشاهده‌ی تمامی قراردادهای پرسنل آتا در سامانه‌ی جامع منابع انسانی" />
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-6 col-xxl-4">
+                        <label class="input-label">
+                            کاربر
+                        </label>
+                        <div class="searchbar-custom-wrapper">
+                            <img src="@IconUrls.Search" />
+                            <TelerikTextBox class="full-width"
+                                            PlaceHolder="جستجو با شماره‌ی قرارداد، پرسنلی، نام پرسنل یا عنوان سمت"
+                                            ValueChanged="SearchTermChanged">
+                            </TelerikTextBox>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-xxl-2 filter-box">
+                        <label>واحد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@UnitsSource"
+                                            @bind-Value="@AllContractsFilter.Unit"
+                                            TextProperty="Text"
+                                            Change="@(() => ApplyFilters)"
+                                            ValueProperty="Value" />
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-xxl-2 filter-box">
+                        <label>محل خدمت</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@WorkLocationsSource"
+                                            @bind-Value="@AllContractsFilter.WorkLocation"
+                                            TextProperty="Text"
+                                            Change="@(() => ApplyFilters)"
+                                            ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-2 filter-box">
+                        <label>وضعیت کلی قرارداد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@FlowStatesSource"
+                                            @bind-Value="@AllContractsFilter.FlowState"
+                                            TextProperty="Text"
+                                            Change="@(() => ApplyFilters)"
+                                            ValueProperty="Value" />
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 col-xxl-2 filter-box">
+                        <label>وضعیت امضاهای قرارداد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                            TValue="string"
+                                            AllowFiltering="true"
+                                            Placeholder="انتخاب کنید"
+                                            Data="@ContractProgressSource"
+                                            @bind-Value="@AllContractsFilter.ContractProgressType"
+                                            TextProperty="Text"
+                                            Change="@(() => ApplyFilters)"
+                                            ValueProperty="Value" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper">
+
+            <div class="page-grid-operation-wrapper align-items-center">
+
+                @if (IsLoading is false)
+                {
+                    <div class="contracts-count">
+                        @($"{TotalCount.ToString().EnglishToPersianDigits()} قرارداد")
+                    </div>
+                }
+                else
+                {
+                    <div class="contracts-count">
+                        @($"Loading")
+                    </div>
+                }
+                
+                <TelerikButton Class="secondary-button excel-button contracts-excel-button" ImageUrl="@IconUrls.Export" OnClick="ExportContractsDataToExcel"> خروجی Excel قراردادها </TelerikButton>
+
+                @if (ShowSendWarningSmsToPersonnelOverSignButton)
+                {
+                    <TelerikButton Class="info-button excel-button contracts-excel-button contracts-sms-button" ImageUrl="@IconUrls.Comment" OnClick="ShowSendingSmsModal">  پیامک اخطار امضا </TelerikButton>
+                }
+
+            </div>
+            
+            @*<div class="orders-archive-status-container">
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+                     @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+                    ثبت شده
+                </div>
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+                     @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+                    حذف شده
+                </div>
+                <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+                     @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+                    همه
+                </div>
+            </div>*@
+
+            <TelerikGrid TItem="@ContractReadDto"
+                         @ref="@ContractsGridRef"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         Resizable="true"
+                         Reorderable="true"
+                         OnStateInit="@OnStateInitHandler"
+                         OnRowRender="OnGridRowRender"
+                         OnRead=@OnReadHandler>
+                <GridColumns>
+                    <GridColumn Field="@(nameof(ContractReadDto.Id))" Title="شناسه قرارداد" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsFullName))" Title="نام پرسنل" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsPersonnelCodeDisplay))" Title="کد پرسنلی" Visible="!IsAdmin" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsPersonnelCode))" Title="کد پرسنلی" Visible="IsAdmin" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.UserMobile))" Title="موبایل" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsEmploymentDateDisplay))" Title="تاریخ استخدام" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsPostTitle))" Title="سمت" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsExecutionDateJalaliDisplay))" Title="تاریخ شروع" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsValidityDateJalaliDisplay))" Title="تاریخ پایان" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.ContractDetailsUnit))" Title="واحد" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(ContractReadDto.UserWorkLocation))" Title="محل خدمت" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(ContractReadDto.FlowStatusDisplay))" Title="وضعیت" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(ContractReadDto.Id))" Title="عملیات" Width="80px" Sortable="false" Locked="false">
+                        <Template Context="gridContext">
+                            @{
+                                var contract = (ContractReadDto)gridContext;
+
+                                <div class="grid-action-buttons-wrapper">
+                                    @if (contract.ContractDetails is not null)
+                                    {
+                                        <TelerikButton Class="default-button view-work-button"
+                                                       Enabled="!IsLoading"
+                                                       OnClick="@(() => OpenContractFlowFormsPage(contract.ContractDetails.ContractId))">
+                                            مشاهده
+                                        </TelerikButton>
+                                    }
+                                </div>
+                            }
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+
+</div>
+
+<!-- Popup Windows => Send SMS Modal -->
+<article>
+    <TelerikWindow Class="popup-window-custom-wrapper" Width="100%" Height="100%" Centered="true" Visible="IsVisibleSendingSmsModal">
+        <WindowContent>
+
+            <div class="popup-window-content versioning-window">
+
+                <div class="app-versioning-container" style="position: relative">
+
+                    <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsVisibleSendingSmsModal = false"
+                         style="width: 30px;left: 7px;float: left;position: absolute;top: 7px;cursor: pointer;" />
+
+                    <div class="col-4 popup-window-content-card">
+                        @{
+
+                            <div>
+                                <h4 class="version-no-title" style="font-weight: bold;
+                                                                margin-top: 6px;
+                                                                margin-bottom: 10px;
+                                                                color: darkgreen;
+                                                                font-size: 17px;">
+                                    @($"ارسال پیامک به پرسنل {TotalCount.ToString().EnglishToPersianDigits()} قرارداد فیلترشده")
+                                </h4>
+
+                                <div class="personnelCode-to-register-workhours-box">
+                                    <TelerikTextArea Id="smsContentTextBox"
+                                                 Class="input-personnelCode input-dismiss-sms"
+                                                     @bind-Value="SmsContentToSend"
+                                                 PlaceHolder="متن پیامک را وارد نمایید" />
+                                </div>
+
+                                <div style="display: flex;
+                                                                                                    justify-content: space-evenly;
+                                                                                                    margin-top: 40px;
+                                                                                                    margin-bottom: 20px;">
+                                    <TelerikButton Class="primary-button" OnClick="SendSMS"> ارسال پیامک </TelerikButton>
+
+                                    <TelerikButton Class="default-button" OnClick="() => IsVisibleSendingSmsModal = false"> انصراف </TelerikButton>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+        </WindowContent>
+    </TelerikWindow>
+</article>
+

@@ -1,0 +1,274 @@
+﻿@using Blazor.PersianDatePicker.Extensions
+@inherits BitPageBase
+
+<div class="header-logo-wrapper">
+    <NavLink href="@PageUrls.Dashboard" title="داشبورد">
+        <img class="ATA-logo" src="@ImageUrls.Layout.LogoHeaderWhite" />
+    </NavLink>
+    
+    <div class="full-logo">
+        <img src="@ImageUrls.Layout.AtaAirlinesLogoWhite" />
+    </div>
+</div>
+
+<div class="header-site-name-wrapper">
+    @AppMetadata.PersianFullName
+</div>
+
+
+<div class="header-profile-wrapper">
+    @*<div class="operation notif-wrapper">
+        <img class="notification" src="@ImageUrls.Layout.NotificationsWhite" @onclick="OpenNotificationWindow" />
+        <span class="notification-sign"></span>
+    </div>*@
+
+    <div class="operation notif-wrapper">
+    </div>
+
+    <div class="operation">
+        @{
+        }
+        <div class="online-sign">
+            <div></div>
+        </div>
+    </div>
+</div>
+
+<TelerikWindow Class="window-custom-wrapper" Visible="@IsOpenProfileWindow">
+    <WindowContent>
+        <div class="avatar-window">
+
+            <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsOpenProfileWindow = false" />
+
+            <div class="profile-box">
+                <div class="user-box">
+
+                    <div class="user-image">
+                        @{
+                            <img src="@AvatarPicUrlInProfileModal" width="100" height="100" />
+                        }
+                    </div>
+
+                    <div class="user-profile">
+                        <div class="user-name">
+                            @User.FullName
+                        </div>
+                        <div class="user-name user-info">
+                            @User.PersonnelCode
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-info-container">
+                    
+                    <div class="user-unit-wrapper">
+                        <div class="user-unit"> @User.UnitName </div>
+                        <div class="user-division"> @User.UnitDivisionName </div>
+                    </div>
+
+                    <div class="user-info-wrapper">
+                        <div class="user-info-lable"> تاریخ استخدام </div>
+                        <div class="user-info-title">@User.EmploymentDateJalali</div>
+                    </div>
+
+                    <div class="user-info-wrapper">
+                        <div class="user-info-lable"> سمت سازمانی </div>
+                        <div class="user-info-title">@User.PostTitle</div>
+                    </div>
+
+                    <div class="user-info-wrapper">
+                        <div class="user-info-lable"> محل خدمت </div>
+                        <div class="user-info-title">@User.WorkLocation</div>
+                    </div>
+
+                </div>
+                
+                <div class="user-signature-container">
+                    
+                    <div>
+                        امضای شما
+                    </div>
+
+                    <div>
+                        
+                        @if (HasCurrentUserActiveSignature)
+                        {
+                            <img src="@(AppConstants.SignatureURL(User.PersonnelCode.ToString()))" class="signature-on-profile-img" />
+                        }
+                        else
+                        {
+                            <div class="no-signature-box">
+                                هیچ امضائی برای شما ثبت نشده است
+                            </div>
+                        }
+
+                    </div>
+
+                    <div>
+                        <button class="default-button logout-button"> خروج </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<TelerikWindow Class="window-custom-wrapper" Visible="@IsOpenNotificationWindow">
+    <WindowContent>
+        <div class="notification-window">
+            <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsOpenNotificationWindow = false" />
+            @{
+                if (User.IsMale)
+                {
+                    <img class="margin-t-b-15" src="/images/layout/user-blue.png" />
+                }
+                else
+                {
+                    <img class="margin-t-b-15" src="/images/layout/user-blue.png" />
+                }
+            }
+            <div class="margin-buttom-20">
+                You have no new notifications!
+                <br>
+                Check back later.
+            </div>
+        </div>
+    </WindowContent>
+</TelerikWindow>
+
+<TelerikWindow Class="popup-window-custom-wrapper" Width="100%" Height="100%" Centered="true" Visible="@(VersionChangeList.Count > 0 && IsOpenAppVersioningWindow)">
+    <WindowContent>
+
+        <div class="popup-window-content versioning-window">
+            <div class="app-versioning-container">
+                <div class="col-4 popup-window-content-card">
+                    @{
+                        <div>
+                            @foreach (var change in VersionChangeList)
+                            {
+                                <h4 class="version-no-title"> بروزرسانی @change.Date?.EnglishToPersianDigits() به نسخه @change.Version.EnglishToPersianDigits() </h4>
+
+                                <ul class="list-changes">
+                                    @foreach (var c in change.Changes)
+                                    {
+                                        <li>
+                                            <h6 class="change-title">@c.Title</h6>
+
+                                            <ul class="list-descriptions">
+                                                @foreach (var d in c.Description)
+                                                {
+                                                    if (d.IsNotNullOrEmpty())
+                                                    {
+                                                        <li class="change-description">@d</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    }
+                </div>
+            
+                <button class="primary-button close-versioning-modal-button"> متوجه شدم </button>
+            </div>
+        </div>
+
+    </WindowContent>
+</TelerikWindow>
+
+<TelerikWindow Class="popup-window-custom-wrapper" Width="100%" Height="100%" Centered="true" Visible="@(IsOpenAppVersioningHistoryWindow)">
+    <WindowContent>
+
+        <div class="popup-window-content versioning-window">
+
+            <div class="app-versioning-container" style="position: relative">
+                
+                <img style="width: 26px;position: absolute;left: 30px;top: 10px;" class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsOpenAppVersioningHistoryWindow = false" />
+
+                <div class="col-4 popup-window-content-card" style="width: 50rem;">
+                    @{
+                        <div>
+                            @foreach (var change in VersioningHistory)
+                            {
+                                <h4 class="version-no-title"> بروزرسانی @change.Date?.EnglishToPersianDigits() به نسخه @change.Version.EnglishToPersianDigits() </h4>
+
+                                <ul class="list-changes">
+                                    @foreach (var c in change.Changes)
+                                    {
+                                        <li>
+                                            <h6 class="change-title">@c.Title</h6>
+
+                                            <ul class="list-descriptions">
+                                                @foreach (var d in c.Description)
+                                                {
+                                                    if (d.IsNotNullOrEmpty())
+                                                    {
+                                                        <li class="change-description">@d</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+
+    </WindowContent>
+</TelerikWindow>
+
+<TelerikWindow Class="window-custom-wrapper" Visible="@IsVisibleHangfireDashboards">
+    <WindowContent>
+        <div class="avatar-window" style="width: 35rem">
+
+            <img class="close-button" src="@IconUrls.CloseCircle" @onclick="() => IsVisibleHangfireDashboards = false" />
+
+            <div class="profile-box">
+                <div class="user-box">
+
+                    <div class="row" style="font-size: 18px;
+                                            direction: ltr;
+                                            margin-left: 30px;
+                                            text-decoration: none;">
+                        <div class="col-6">
+                            <div style="    border: 1px solid gray;
+                                        padding: 12px;
+                                        line-height: 30px;
+                                        margin-right: 10px;
+                                        background-color: #f5fff5;">
+                                <a style="text-decoration: none" href="https://employmentcontract.app.ataair.ir/hangfire" target="_blank">
+                                    <div>
+                                        Users / WorkHours Hangfire Dashboard
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div style="    border: 1px solid gray;
+                                        padding: 12px;
+                                        line-height: 30px;
+                                        margin-right: 10px;
+                                        background-color: #f5fff5;">
+                                <a style="text-decoration: none" href="https://hr-insurance-api.app.ataair.ir/hangfire" target="_blank">
+                                    <div>
+                                        Insurance Hangfire Dashboard
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </WindowContent>
+</TelerikWindow>

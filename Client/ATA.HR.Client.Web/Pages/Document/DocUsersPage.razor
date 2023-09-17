@@ -1,0 +1,207 @@
+﻿@page "/docs/users"
+
+@using DNTPersianUtils.Core
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.DocUsersPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<div class="personnel-page">
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="@PageTitles.DocUsersPage.Title" PageDescription="مشاهده‌ی همه‌ی پرسنل آتا به منظور مدیریت و بایگانی الکترونیکی پرونده‌های آن‌ها" />
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-6 col-xxl-3">
+                        <label class="input-label">
+                            کاربر
+                        </label>
+                        <div class="searchbar-custom-wrapper">
+                            <img src="@IconUrls.Search" />
+                            <TelerikTextBox class="full-width"
+                                        PlaceHolder="جستجو با شماره‌ی پرسنلی، نام پرسنل یا عنوان سازمانی"
+                                        ValueChanged="SearchTermChanged">
+                            </TelerikTextBox>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>واحد</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@UnitsSource"
+                                        @bind-Value="@PersonnelToManageDocumentFilterArgs.Unit"
+                                        TextProperty="Text"
+                                        Change="@(() => ApplyFilters)"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>محل خدمت</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@WorkLocationsSource"
+                                        @bind-Value="@PersonnelToManageDocumentFilterArgs.WorkLocation"
+                                        TextProperty="Text"
+                                        Change="@(() => ApplyFilters)"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>وضعیت پرونده</label>
+                        <div>
+                            <RadzenSelectBar Data="@UserDismissStatusSource"
+                                         TValue="string"
+                                         @bind-Value=@PersonnelToManageDocumentFilterArgs.UserStatusSelectedValue
+                                         Change="@(() => ApplyFilters)"
+                                         TextProperty="Text"
+                                         ValueProperty="Value" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper mt-4">
+
+            @*<div class="page-grid-operation-wrapper d-none">
+            <TelerikButton Class="primary-button send-all-contracts-button d-none">@($"اسناد")</TelerikButton>
+            </div>*@
+
+            @*<div class="orders-archive-status-container">
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+            ثبت شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+            حذف شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+            همه
+            </div>
+            </div>*@
+            
+            @if (DocumentsStatistics != null)
+            {
+                <div class="grid-statistics-wrapper">
+                    <div class="stat-box">
+                        <span class="stat-label">تعداد کل اسناد ثبت شده:</span>
+                        <span class="stat-value">@DocumentsStatistics.TotalUploadedDocumentsNo.ToPersianNumbers()</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">تعداد کاربرانی که برای آن‌ها سند ثبت شده:</span>
+                        <span class="stat-value">@DocumentsStatistics.TotalUsersHaveDocs.ToPersianNumbers()</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">تعداد اسناد ثبت شده امروز:</span>
+                        <span class="stat-value">@DocumentsStatistics.TotalDocsUploadedToday.ToPersianNumbers()</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">تعداد اسناد ثبت شده هفت روز اخیر:</span>
+                        <span class="stat-value">@DocumentsStatistics.TotalDocsUploadedLast7Days.ToPersianNumbers()</span>
+                    </div>
+                </div>
+            }
+
+            <TelerikGrid TItem="@UserToManageDocumentDto"
+                         @ref="@PersonnelGridRef"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         Resizable="true"
+                         Reorderable="true"
+                         OnStateInit="@OnStateInitHandler"
+                         OnRowRender="OnGridRowRender"
+                         OnRead=@OnReadHandler>
+                <GridColumns>
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.UserId))" Title="" Width="120px" Locked="false" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToManageDocumentDto)gridContext;
+
+                                <img class="user-profile-img" src="@user.PictureURLToDisplay" @onerror="() => OnUserImageLoadFailed(user)" />
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.UserId))" Title="شناسه کاربر" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.FullName))" Title="نام پرسنل" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.PersonnelCode))" Title="کد پرسنلی" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.PostTitle))" Title="سمت" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.EmploymentDateJalali))" Title="تاریخ استخدام" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.UnitName))" Title="واحد" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.WorkLocation))" Title="محل خدمت" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.Dismissed))" Title="وضعیت پرونده" Width="100px" Locked="false" Sortable="true">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToManageDocumentDto)gridContext;
+
+                                <span> @(user.Dismissed ? "راکد" : "فعال") </span>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.DocumentPersonnelCount))" Title="تعداد سند" Width="70px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.UserId))" Title="نوع اسناد آپلود شده" Width="300px" Locked="false" Sortable="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToManageDocumentDto)gridContext;
+
+                                foreach (var docCategoryTitle in user.UserDocCategories)
+                                {
+                                    var miniDoc = user.DocumentPersonnel.First(d => d.DocCategoryDisplay == docCategoryTitle);
+
+                                    <div class="chip-badge">
+                                        <a target="_blank" href="@PageUrls.PersonnelDocumentsPageWithParams(user.UserId, miniDoc.DocCategory)"> @docCategoryTitle </a>
+                                    </div>
+                                }
+                            }
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@(nameof(UserToManageDocumentDto.UserId))" Title="عملیات" Width="100px" Sortable="false" Locked="false">
+                        <Template Context="gridContext">
+                            @{
+                                var user = (UserToManageDocumentDto)gridContext;
+
+                                <div class="grid-action-buttons-wrapper">
+                                    <TelerikButton Class="default-button margin-right-10 send-contract-button"
+                                               Enabled="true"
+                                               OnClick="@(() => OpenUserDocumentsPage(user.UserId))">
+                                        مشاهده
+                                    </TelerikButton>
+                                </div>
+                            }
+                        </Template>
+                    </GridColumn>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+</div>

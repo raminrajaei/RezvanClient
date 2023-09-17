@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a4070ccf-c2bc-46ab-a43d-719d693d095e</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Necessary_files</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)ATA\ATALogos.rar" />
+    <None Include="$(MSBuildThisFileDirectory)Telerik Blazor UI 3.0\Telerik.DataSource.2.1.1.nupkg" />
+    <None Include="$(MSBuildThisFileDirectory)Telerik Blazor UI 3.0\Telerik.Documents.SpreadsheetStreaming.2022.1.106.nupkg" />
+    <None Include="$(MSBuildThisFileDirectory)Telerik Blazor UI 3.0\Telerik.Recurrence.0.2.0.nupkg" />
+    <None Include="$(MSBuildThisFileDirectory)Telerik Blazor UI 3.0\Telerik.UI.for.Blazor.3.0.0.nupkg" />
+    <None Include="$(MSBuildThisFileDirectory)Telerik Blazor UI 3.0\Telerik.Zip.2022.1.106.nupkg" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{01567F62-72B6-44F1-B07B-965701332D82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{63B1F058-84FA-4862-9226-FF16584FFB41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{622B197D-3641-42D9-8B57-34EC5BE67869}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{DB893EE1-DBDF-4734-8721-20E839DD6260}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BF056EB7-24C9-4786-87F7-574139435C27}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		app_offline.htm = app_offline.htm
+		azure-pipelines.yml = azure-pipelines.yml
+		BitConfig.json = BitConfig.json
+		Directory.build.props = Directory.build.props
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OfficialDocs", "Documents\Official docs\OfficialDocs.shproj", "{635393B6-36F7-4134-A1B0-693443136481}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FilesStorage", "Documents\Necessary files\FilesStorage.shproj", "{A4070CCF-C2BC-46AB-A43D-719D693D095E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TechnicalHelps", "Documents\DbQueries\TechnicalHelps.shproj", "{EF11F4AE-6D82-45F0-8F74-EB208FE3BA5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATA.HR.Shared", "Shared\ATA.HR.Shared\ATA.HR.Shared.csproj", "{5F597339-949A-4E28-95B0-E88F16E027A5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATA.HR.Client.Web", "Client\ATA.HR.Client.Web\ATA.HR.Client.Web.csproj", "{A14D8BA5-073B-4185-8863-F36A0FAF4C6B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ATA.HR.Server.Api", "Server\ATA.HR.Server.Api\ATA.HR.Server.Api.csproj", "{E76730DA-767B-48FB-87FA-14ED24546A64}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F597339-949A-4E28-95B0-E88F16E027A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F597339-949A-4E28-95B0-E88F16E027A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F597339-949A-4E28-95B0-E88F16E027A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F597339-949A-4E28-95B0-E88F16E027A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A14D8BA5-073B-4185-8863-F36A0FAF4C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14D8BA5-073B-4185-8863-F36A0FAF4C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14D8BA5-073B-4185-8863-F36A0FAF4C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A14D8BA5-073B-4185-8863-F36A0FAF4C6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E76730DA-767B-48FB-87FA-14ED24546A64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E76730DA-767B-48FB-87FA-14ED24546A64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E76730DA-767B-48FB-87FA-14ED24546A64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E76730DA-767B-48FB-87FA-14ED24546A64}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{635393B6-36F7-4134-A1B0-693443136481} = {DB893EE1-DBDF-4734-8721-20E839DD6260}
+		{A4070CCF-C2BC-46AB-A43D-719D693D095E} = {DB893EE1-DBDF-4734-8721-20E839DD6260}
+		{EF11F4AE-6D82-45F0-8F74-EB208FE3BA5B} = {DB893EE1-DBDF-4734-8721-20E839DD6260}
+		{5F597339-949A-4E28-95B0-E88F16E027A5} = {622B197D-3641-42D9-8B57-34EC5BE67869}
+		{A14D8BA5-073B-4185-8863-F36A0FAF4C6B} = {01567F62-72B6-44F1-B07B-965701332D82}
+		{E76730DA-767B-48FB-87FA-14ED24546A64} = {63B1F058-84FA-4862-9226-FF16584FFB41}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {152DA8F3-053A-418F-B995-D6FB6A82748A}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Documents\Official docs\Official docs.projitems*{635393b6-36f7-4134-a1b0-693443136481}*SharedItemsImports = 13
+		Documents\Necessary files\Necessary files.projitems*{a4070ccf-c2bc-46ab-a43d-719d693d095e}*SharedItemsImports = 13
+		Documents\DbQueries\DbQueries.projitems*{ef11f4ae-6d82-45f0-8f74-eb208fe3ba5b}*SharedItemsImports = 13
+	EndGlobalSection
+EndGlobal

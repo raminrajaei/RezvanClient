@@ -1,0 +1,349 @@
+﻿@page "/docs/user-docs/{UserId:int}"
+@page "/docs/user-docs/{UserId:int}/{DocumentCategory:int}"
+@page "/docs/user-docs/{UserId:int}/{DocumentCategory:int}/{SubCategoryId:int}"
+@page "/docs/user-docs/{UserId:int}/{DocumentCategory:int}/{SubCategoryId:int}/{IsFromCommitmentLetter:int}"
+
+@using ATABit.Helper.Utils
+@using ATA.HR.Shared.Enums.Document
+@using ATA.HR.Shared.Dtos.Document
+@inherits BitPageBase
+
+<PageTitle>
+    @($"{PageTitles.PersonnelDocumentsPage.Title} {User?.FullName}")
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+<TelerikLoaderContainer Text="Uploading The Document" Visible="@IsUploading" LoaderType="LoaderType.ConvergingSpinner" />
+
+<div class="personnel-page">
+
+    <!-- AddOrEdit Header -->
+    <section>
+        @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
+        {
+            <HeaderAddOrEdit>
+                <button class="default-button" @onclick="ChangeToFilterMode">انصراف</button>
+                <button type="submit" form="documentForm" class="primary-button">ذخیره</button>
+            </HeaderAddOrEdit>
+        }
+    </section>
+
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <div class="flex align-items-center">
+                    <img class="doc-profile-img" src="@AvatarPicUrl" @onerror="OnUserImageLoadFailed" />
+
+                    <TopBar PageName="@($"{PageTitles.PersonnelDocumentsPage.Title} {User?.FullName}")" PageDescription="مشاهده‌ی همه‌ی مستندات الکترونیکی بایگانی شده‌ی پرونده‌ی کاربر و آپلود اسناد جدید" />
+                </div>
+
+                <div class="flex">
+                    <button class="default-button" style="margin-left: 20px" @onclick="BackButtonHandler">بازگشت</button>
+                    <RadzenButton class="primary-button" Text="افزودن سند" Click="ChangeToAddMode" />
+                </div>
+            }
+            else if (PageOperationType is OperationType.Add)
+            {
+                <div class="page-add-edit-header">
+                    <div class="page-back-title">
+                        <img src="@IconUrls.Back" @onclick="ChangeToFilterMode" />
+                        <div class="back-title-text">
+                            @($"افزودن سند الکترونیکی به پرونده‌ی {User?.FullName}")
+                        </div>
+                    </div>
+                    <div class="page-back-links">
+                        <div>بایگانی الکترونیکی</div>
+                        <img src="@IconUrls.PaleArrowRight" />
+                        <div>@(User?.FullName)</div>
+                        <img src="@IconUrls.DarkArrowRight" />
+                        <div class="active-link">
+                            @(PageOperationType == OperationType.Add
+                                ? "افزودن سند"
+                                : "نداریم")
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (PageOperationType is OperationType.Edit)
+            {
+                <div class="page-add-edit-header">
+                    <div class="page-back-title">
+                        <img src="@IconUrls.Back" @onclick="ChangeToFilterMode" />
+                        <div class="back-title-text">
+                            @($"ویرایش سند الکترونیکی به پرونده‌ی {User?.FullName}")
+                        </div>
+                    </div>
+                    <div class="page-back-links">
+                        <div>بایگانی الکترونیکی</div>
+                        <img src="@IconUrls.PaleArrowRight" />
+                        <div>@(User?.FullName)</div>
+                        <img src="@IconUrls.DarkArrowRight" />
+                        <div class="active-link">
+                            @(PageOperationType == OperationType.Edit
+                                ? "ویرایش سند"
+                                : "نداریم")
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+        @if (PageOperationType == OperationType.Filter)
+        {
+            <div class="page-box-wrapper">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>گروه سند</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@(EnumMapping.ToSelectListItems<PersonnelDocumentCategoryType>())"
+                                        @bind-Value="@PersonnelDocumentFilterArgs.DocCategorySelectedValue"
+                                        TextProperty="Text"
+                                        Change="@(c => OnFilterCategoryDropdownChanged(c))"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                        <label>زیرگروه سند</label>
+                        <div>
+                            <RadzenDropDown AllowClear="true"
+                                        TValue="string"
+                                        AllowFiltering="true"
+                                        Placeholder="انتخاب کنید"
+                                        Data="@FilterSubCategoriesSource"
+                                        @bind-Value="@PersonnelDocumentFilterArgs.DocSubCategorySelectedValue"
+                                        TextProperty="Text"
+                                        Change="@(() => ApplyFilters)"
+                                        ValueProperty="Value" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </section>
+
+    <!-- Document EditForm -->
+    <section class="documentEditFormSection">
+        @if (PageOperationType is OperationType.Add or OperationType.Edit)
+        {
+            <div class="form-custom-wrapper">
+
+                <EditForm id="documentForm" class="row" Model="@PersonnelDocument" OnValidSubmit="OnDocumentSubmit">
+
+                    <DataAnnotationsValidator />
+
+                    @if (PageOperationType is OperationType.Add)
+                    {
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">نوع سند</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-3 form-item-wrapper">
+                                        <label for="documentCategory">گروه سند * </label>
+                                        <div class="form-input-wrapper">
+                                            <RadzenDropDown id="documentCategory"
+                                                    AllowClear="true"
+                                                    TValue="string"
+                                                    AllowFiltering="true"
+                                                    Placeholder="انتخاب کنید"
+                                                    Data="@(EnumMapping.ToSelectListItems<PersonnelDocumentCategoryType>())"
+                                                    @bind-Value="@PersonnelDocument.DocumentCategorySelectedValue"
+                                                    TextProperty="Text"
+                                                    Change="@(OnFormCategoryDropdownChanged)"
+                                                    ValueProperty="Value" />
+                                        </div>
+                                        <ValidationMessage For="() => PersonnelDocument.DocumentCategorySelectedValue" />
+                                    </div>
+
+                                    <div class="col-3 form-item-wrapper">
+                                        <label for="productSubCategory">
+                                            زیرگروه سند *
+                                        </label>
+                                        <div class="form-input-wrapper">
+                                            <RadzenDropDown id="productSubCategory"
+                                                    AllowClear="true"
+                                                    TValue="string"
+                                                    AllowFiltering="true"
+                                                    Placeholder="انتخاب کنید"
+                                                    Data="@FormSubCategoriesSource"
+                                                    @bind-Value="@PersonnelDocument.DocumentSubCategorySelectedValue"
+                                                    TextProperty="Text"
+                                                    ValueProperty="Value" />
+                                        </div>
+                                        <ValidationMessage For="() => PersonnelDocument.DocumentSubCategorySelectedValue" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">آپلود</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-5 form-item-wrapper">
+                                        <label> بارگزاری سند * </label>
+                                        <div class="form-input-wrapper">
+                                            <TelerikUpload SaveUrl="@SaveUrl"
+                                                   SaveField="file"
+                                                   OnUpload="OnUploadHandler"
+                                                   MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
+                                                   MinFileSize="1024"
+                                                   OnSelect="OnFileSelectToUpload"
+                                                   OnSuccess="OnFileSuccessUpload">
+                                            </TelerikUpload>
+                                            <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
+                                        </div>
+                                        <ValidationMessage For="() => PersonnelDocument.FilePath" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Form Section -->
+                    <div class="row form-section">
+                        <div class="col-2 form-section-title">توضیحات</div>
+                        <div class="col-10">
+                            <div class="row">
+
+                                <div class="col-5 form-item-wrapper">
+                                    <label for="documentDesc"> توضیحات سند </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextArea id="documentDesc" Style="width: 100%" @bind-Value="PersonnelDocument.Description" placeholder="توضیحات" />
+                                    </div>
+                                    <ValidationMessage For="() => PersonnelDocument.Description" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </EditForm>
+
+            </div>
+        }
+    </section>
+
+    <!-- Grid -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper mt-4">
+
+            @*<div class="page-grid-operation-wrapper d-none">
+            <TelerikButton Class="primary-button send-all-contracts-button d-none">@($"اسناد")</TelerikButton>
+            </div>*@
+
+            @*<div class="orders-archive-status-container">
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Active ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Active)">
+            ثبت شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.Archived ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.Archived)">
+            حذف شده
+            </div>
+            <div class="@(OrdersDataFilter.DataArchivableState == (int)ArchivableState.All ? "active" : "")"
+            @onclick="() => FilterOrdersBasedOnArchivedState(ArchivableState.All)">
+            همه
+            </div>
+            </div>*@
+
+            <TelerikGrid TItem="@PersonnelDocumentReadDto"
+                         @ref="@DocumentsGridRef"
+                         Height="100%"
+                         Pageable="true"
+                         PageSize="PageSize"
+                         Sortable="true"
+                         Groupable="false"
+                         Resizable="true"
+                         Reorderable="true"
+                         OnStateInit="@OnStateInitHandler"
+                         OnRowRender="OnGridRowRender"
+                         OnRead=@OnReadHandler>
+                <GridColumns>
+                    <GridColumn Field="@(nameof(PersonnelDocumentReadDto.DocCategoryDisplay))" Title="گروه سند" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(PersonnelDocumentReadDto.SubCategoryTitle))" Title="زیرگروه سند" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(PersonnelDocumentReadDto.UserUploaderFullName))" Title="آپلود کننده" Width="100px" Locked="false" Sortable="true" />
+                    <GridColumn Field="@(nameof(PersonnelDocumentReadDto.CreatedAtJalali))" Title="تاریخ آپلود" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(PersonnelDocumentReadDto.Description))" Title="توضیحات" Width="100px" Locked="false" Sortable="false" />
+                    <GridColumn Field="@(nameof(PersonnelDocumentReadDto.Id))" Title="مشاهده" Width="100px" Locked="false" Sortable="true">
+                        <Template Context="gridContext">
+                            @{
+                                var document = (PersonnelDocumentReadDto)gridContext;
+
+                                <a style="font-weight: bold; margin-left: 8px" target="_blank" href="@ToDocFullURL(document.FilePath)">
+                                    @if (document.FileType == (int)FileType.Image)
+                                    {
+                                        <img src="@IconUrls.ImageIcon" width="30" height="30" />
+                                    }
+                                    @if (document.FileType == (int)FileType.Pdf)
+                                    {
+                                        <img src="@IconUrls.PdfIcon" width="30" height="30" />
+                                    }
+                                    @if (document.FileType == (int)FileType.Excel)
+                                    {
+                                        <img src="@IconUrls.ExcelIcon" width="30" height="30" />
+                                    }
+                                </a>
+                            }
+                        </Template>
+                    </GridColumn>
+                    <AuthorizeView Policy="@Claims.Docs_IdentityInformation">
+                        <GridColumn Field="@(nameof(PersonnelDocumentReadDto.Id))" Title="ویرایش" Width="100px" Locked="true" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var document = (PersonnelDocumentReadDto)gridContext;
+
+                                    <div class="grid-action-buttons-wrapper">
+                                        <button class="grid-action-button edit" title="Edit" @onclick="@(() => ChangeToEditMode(document.Id))">
+                                            <img class="btn-img" src="@IconUrls.PenGray" />
+                                            <img class="btn-img-hovered" src="@IconUrls.PenWhite" />
+                                        </button>
+                                    </div>
+                                }
+                            </Template>
+                        </GridColumn>
+                    </AuthorizeView>
+                    <AuthorizeView Policy="@Claims.Docs_DeletePermission">
+                        <GridColumn Field="@(nameof(PersonnelDocumentReadDto.Id))" Title="حذف" Width="100px" Locked="true" Sortable="false">
+                            <Template Context="gridContext">
+                                @{
+                                    var document = (PersonnelDocumentReadDto)gridContext;
+
+                                    <div class="grid-action-buttons-wrapper">
+                                        <button class="grid-action-button delete" title="Delete" @onclick="@(() => ShowDeleteDocumentConfirmDialog(document.Id))">
+                                            <img class="btn-img" src="@IconUrls.TrashGray" />
+                                            <img class="btn-img-hovered" src="@IconUrls.TrashWhite" />
+                                        </button>
+                                    </div>
+                                }
+                            </Template>
+                        </GridColumn>
+                    </AuthorizeView>
+                </GridColumns>
+            </TelerikGrid>
+        </div>
+    </section>
+
+    <!-- Popup Windows => Confirm Document Deletion -->
+    <section>
+        <ConfirmDialog @bind-IsVisible="IsVisibleDeleteDocumentConfirmDialog"
+                       Title="تایید حذف سند"
+                       Text="این سند به طور کامل حذف خواهد شد. آیا از حذف آن اطمینان دارید؟"
+                       OnConfirm="() => DeleteDocument(DeletingDocumentId)" />
+    </section>
+</div>
+

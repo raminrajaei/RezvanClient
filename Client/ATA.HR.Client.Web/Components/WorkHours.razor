@@ -1,0 +1,192 @@
+﻿@using DNTPersianUtils.Core
+@using ATA.HR.Shared.Enums.Workflow
+@inherits BitPageBase
+
+<div class="contract-component" style="padding-left: 26px; @DisabledStyle">
+
+    @if (UserWorkHour is null)
+    {
+        <div class="loading-contract-wrapper"> در حال بارگزاری کارکرد ... </div>
+    }
+    else
+    {
+        <div class="container-fluid">
+
+            <div class="normal-contract">
+
+                <div class="row header cell-border">
+                    <div class="col-2">
+                        <img class="logo" src="@ImageUrls.Pages.ATAContractLogo" />
+                    </div>
+                    <div class="title col-8">
+                        <div>هواپیمایی آتا</div>
+                        <div>
+                            کارکرد پرسنل
+                            <b>@UserWorkHour.UserEmployeeFullName</b>
+                            در
+                            @UserWorkHour.Month.GetPersianMonthName()
+                            @UserWorkHour.Year.ToPersianNumbers()
+                        </div>
+                        <div style="margin-bottom: 6px; font-size: 13px">
+                            کارکرد بر اساس ماه
+                            @UserWorkHour.Month.GetPersianMonthName()
+                            اضافه کار و کسر کار بر اساس ماه
+                            @(UserWorkHour.Month == 1 ? "اسفند" : (UserWorkHour.Month - 1).GetPersianMonthName())
+                        </div>
+                    </div>
+                    <div class="header-style col-2">
+                        <div class="flex flex-column">
+                            <div class="flex" style="margin-right: 10px">
+                                شناسه کارکرد:
+                                <div class="header-left-sec"> @WorkHoursId.ToPersianNumbers() </div>
+                            </div>
+                            <div class="flex" style="margin-right: 10px">
+                                تاریخ ثبت:
+                                <div class="header-left-sec"> @(UserWorkHour.CreatedAt.ToJalaliString()) </div>
+                            </div>
+                            <div class="flex" style="margin-right: 10px">
+                                شماره پرسنلی:
+                                <div class="header-left-sec">@UserWorkHour.UserEmployeePersonnelCode?.ToPersianNumbers() </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column-holder row column-border">
+                    <div class="column-style title-bold col sm-font-size" style="width:50% ;">
+                        نوع کارکرد:
+                        @UserWorkHour.EmployeeWorkingTypeDisplay
+                    </div>
+                </div>
+                <div class="column-holder row col-merge column-border ">
+                    <div class="column-holder row bio-size " style="background: rgb(250, 243, 243)">
+                        <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام و نام خانوادگی</div>
+                        <div class="col-2 column-style holder-padding sm-font-size">@UserWorkHour.UserEmployeeFullName </div>
+                        <div class="col-2 column-style holder-padding title-bold sm-font-size"> کد پرسنلی</div>
+                        <div class="col-2 column-style holder-padding sm-font-size">@UserWorkHour.UserEmployeePersonnelCode?.ToPersianNumbers()</div>
+                        <div class="col-2 column-style holder-padding title-bold sm-font-size">واحد</div>
+                        <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@UserWorkHour.UserEmployeeUnitName</div>
+                    </div>
+                    <div class="column-holder row bio-size">
+                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">روز کارکرد:</div>
+                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@UserWorkHour.WorkDays.ToString().En2FaDigits()</div>
+                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">ساعت پرواز خلبان:</div>
+                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@UserWorkHour.PilotFlightTimeDisplay.En2FaDigits()</div>
+                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> ساعت اقامت خارج از مرکز:</div>
+                        <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@UserWorkHour.HoursOfStayOutsideTheCenterTimeDisplay.En2FaDigits()</div>
+                    </div>
+                    <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                        <div class="col-2 column-style holder-padding sm-font-size title-bold">کارکرد پرواز فنی:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size">@UserWorkHour.TechnicalFlightTimeDisplay.En2FaDigits()</div>
+                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">ساعت پرواز مهمانداران:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size ">@UserWorkHour.AttendantsFlightTimeDisplay.En2FaDigits()</div>
+                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">حق پردیوم خلبان و کمک خلبان:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size">@UserWorkHour.PilotPerDiem.ToString().En2FaDigits()</div>
+                    </div>
+                    <div class="column-holder row bio-size">
+                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">حق پردیوم سرمهماندار و مهماندار:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size">@UserWorkHour.AttendantsPerDiem.ToString().En2FaDigits()</div>
+                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">کارکرد اضافه کاری:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size">@UserWorkHour.ExtraWorkTimeDisplay.En2FaDigits()</div>
+                        <div class="col-2 column-style holder-padding  sm-font-size title-bold">جمعه کاری:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size">@UserWorkHour.FridaysWorkTimeDisplay.En2FaDigits()</div>
+                    </div>
+                    <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                        <div class="col-2 column-style holder-padding sm-font-size title-bold">کسر کار ماهانه:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size"> @UserWorkHour.MonthlyWorkDeductionsTimeDisplay.En2FaDigits() </div>
+                        <div class="col-2 column-style holder-padding sm-font-size title-bold">کارکرد نوبت کاری:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size ">@UserWorkHour.WorkShiftGridDisplay.En2FaDigits()</div>
+                        <div class="col-2 column-style holder-padding sm-font-size title-bold">کارکرد ساعتی:</div>
+                        <div class="col-2 column-style holder-padding sm-font-size" style="padding-right:0px;">@UserWorkHour.HourlyWorkTimeDisplay.En2FaDigits()</div>
+                    </div>
+                    @*<div class="column-holder row bio-size">
+                <div class="col-4 sm-font-size  holder-padding  title-bold ">آدرس:</div>
+                <div class="col-8 sm-font-size  holder-padding ">@UserContract.ContractDetails.UserAddress</div>
+                </div>*@
+                </div>
+            </div>
+
+            <div class="normal-contract">
+
+                <div class="column-border row sign" style="margin-left:10px">
+                    <div class="col-3 column-style sign-cell" style="width:auto; padding-bottom:10px;">
+                        <div class="sm-font-size">
+                            کارشناس ارشد امور پرسنلی:
+                            <b>@UserWorkHour.HRSeniorExpertSignedBy</b>
+                        </div>
+                        <div class="flex">
+                            <div><i>امضا</i></div>
+
+                            @if (UserWorkHour.HRSeniorExpertImageDataURL.IsNotNullOrEmpty())
+                            {
+                                <img src="@UserWorkHour.HRSeniorExpertImageDataURL" class="signature-img" />
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-3 column-style sign-cell" style="width:auto; padding-bottom:10px; border-right:.5px solid rgb(209,207,207) ;">
+                        <div class="sm-font-size">
+                            مدیر منابع انسانی:
+                            <b>@UserWorkHour.HRSupervisorSignedBy</b>
+                        </div>
+                        <div class="flex">
+                            <div><i>امضا</i></div>
+
+                            @if (UserWorkHour.HRSupervisorSignatureImageDataURL.IsNotNullOrEmpty())
+                            {
+                                <img src="@UserWorkHour.HRSupervisorSignatureImageDataURL" class="signature-img" />
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-3 column-style sign-cell" style="">
+                        <div class="sm-font-size">
+                            معاونت منابع انسانی:
+                            <b>@UserWorkHour.HRManagerSignedBy</b>
+                        </div>
+                        <div class="flex">
+                            <div><i>امضا</i></div>
+
+                            @if (UserWorkHour.HRManagerSignatureImageDataURL.IsNotNullOrEmpty())
+                            {
+                                <img src="@UserWorkHour.HRManagerSignatureImageDataURL" class="signature-img" />
+                            }
+                        </div>
+                    </div>
+                    <div class="col-3 column-style sign-cell" style="border-right:.5px solid rgb(209,207,207) ; margin-top: -25px">
+                        <div class="sm-font-size">
+                            مدیر مستقیم:
+                            <b>@UserWorkHour.DirectManagerSignedBy</b>
+                        </div>
+                        <div class="flex">
+                            <div><i>امضا</i></div>
+
+                            @if (UserWorkHour.DirectManagerSignatureImageDataURL.IsNotNullOrEmpty())
+                            {
+                                <img src="@UserWorkHour.DirectManagerSignatureImageDataURL" class="signature-img" />
+                            }
+                        </div>
+                    </div>
+                    <div class="col-3  column-style sign-cell" style="">
+                        <div class=" sm-font-size">
+                            مدیرعامل:
+                            <b>@UserWorkHour.CEOSignedBy</b>
+                        </div>
+                        <div class="flex">
+                            <div><i>امضا</i></div>
+
+                            @if (UserWorkHour.CEOSignatureImageDataURL.IsNotNullOrEmpty())
+                            {
+                                <img src="@UserWorkHour.CEOSignatureImageDataURL" class="signature-img" />
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

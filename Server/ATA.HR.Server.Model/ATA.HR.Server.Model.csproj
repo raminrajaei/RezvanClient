@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ATA.Bit.Model" Version="6.3.6" />
+		<PackageReference Include="Bit.Universal.Model" Version="9.0.0" />
+		<PackageReference Include="Bit.Universal.Data" Version="9.0.0" />
+		<PackageReference Include="EFCore.BulkExtensions" Version="6.4.4" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\ATA.HR.Shared\ATA.HR.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

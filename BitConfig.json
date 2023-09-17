@@ -1,0 +1,19 @@
+﻿{
+  "BitCodeGeneratorConfigs": {
+    "BitCodeGeneratorMappings": [
+      {
+        "GenerationType": "CSharpHttpClient",
+        "Route": "EmploymentContract",
+        "DestinationFileName": "Bit\\ATA.HR.Model.Context",
+        "SourceProjects": [
+          {
+            "Name": "ATA.HR.Server.Api"
+          }
+        ],
+        "DestinationProject": {
+          "Name": "ATA.HR.Client.Web"
+        }
+      }
+    ]
+  }
+}

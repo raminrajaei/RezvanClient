@@ -1,0 +1,167 @@
+﻿@page "/settings/job-notify-managers-confirm-workhours"
+
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.NotifyManagersWorkHourJobSettingsPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<div class="personnel-page">
+
+<!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Edit)
+            {
+                <div class="flex align-items-center">
+                    <TopBar PageName="@PageTitles.NotifyManagersWorkHourJobSettingsPage.Title" PageDescription="@JobDescription" />
+                </div>
+            }
+        </div>
+    </section>
+
+<!-- Job Settings EditForm -->
+    <section class="documentEditFormSection">
+        @if (PageOperationType is OperationType.Edit)
+        {
+            <div class="form-custom-wrapper">
+
+                <EditForm id="jobSettingsForm" class="row" Model="@JobDbSettings" OnValidSubmit="OnSaveSettings">
+
+                    <DataAnnotationsValidator />
+
+                    @if (PageOperationType is OperationType.Edit)
+                    {
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">وضعیت کلی</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label for="user">
+                                            وضعیت فعال بودن
+                                        </label>
+                                        <div class="form-input-wrapper">
+                                            <RadzenSelectBar Data="@JobStatusSource"
+                                                             TValue="string"
+                                                             @bind-Value=@JobEnabledSelectedValue
+                                                             TextProperty="Text"
+                                                             ValueProperty="Value" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">استثناها</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label for="commitmentLetterTitle"> لیست پرسنلی که برایشان پیامک نرود </label>
+                                        <div class="form-input-wrapper">
+                                            <section>
+                                                  @foreach (var excludedUser in ExcludedUsers)
+                                                  {
+                                                      <div class="flex" style="color: #000000;
+                                                                               background-color: #ECECEC;
+                                                                               border: 0.5px solid #AFAFBE;
+                                                                               box-sizing: border-box;
+                                                                               border-radius: 4px;
+                                                                               padding: 4px 8px;
+                                                                               font-weight: 500;
+                                                                               font-size: 12px;
+                                                                               line-height: 16px;
+                                                                               margin-right: 9px;
+                                                                               margin-top: 3px;
+                                                                               margin-bottom: 3px;
+                                                                               display: inline-flex;
+                                                                               padding-bottom: 8px;">
+                                                          <div>@excludedUser.Text</div>
+                                                          @*<div><img src="@IconUrls.CloseCircle" style="width: 20px;margin-right: 15px; cursor: pointer" @onclick="() => DeleteUserFromExcludes(excludedUser.Value!.ToInt())" /></div>*@
+                                                      </div>
+                                                  }
+                                            </section>
+                                        </div>
+                                        
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">شماره‌های پشتیبان</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label> لیست شماره‌ها برای پیامک عدم توجه مدیر  </label>
+                                        <div class="form-input-wrapper">
+                                            @foreach (var mobile in JobDbSettings.MobilesToNotifyWhenAManagerIgnores)
+                                            {
+                                                <div class="flex" style="color: #000000;
+                                                                         background-color: #ECECEC;
+                                                                         border: 0.5px solid #AFAFBE;
+                                                                         box-sizing: border-box;
+                                                                         border-radius: 4px;
+                                                                         padding: 4px 8px;
+                                                                         font-weight: 500;
+                                                                         font-size: 12px;
+                                                                         line-height: 16px;
+                                                                         margin-right: 9px;
+                                                                         margin-top: 3px;
+                                                                         margin-bottom: 3px;
+                                                                         display: inline-flex;
+                                                                         padding-bottom: 5px;">
+                                                    <div style="letter-spacing: 1px">@mobile</div>
+                                                    @*<div><img src="@IconUrls.CloseCircle" style="width: 20px;margin-right: 15px; cursor: pointer" @onclick="() => DeleteUserFromSupport(mobile)" /></div>*@
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Form Section -->
+                        <div class="row form-section">
+                            <div class="col-2 form-section-title">متن پیامک</div>
+                            <div class="col-10">
+                                <div class="row">
+
+                                    <div class="col-4 form-item-wrapper">
+                                        <label> متن پیامک ارسالی به مدیران </label>
+                                        <div class="form-input-wrapper">
+                                            <TelerikTextArea 
+                                                @bind-Value="JobDbSettings.SmsContent"
+                                                Class="sms-input"></TelerikTextArea>
+                                        </div>
+                                        <ValidationMessage For="() => JobDbSettings.SmsContent" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </EditForm>
+
+            </div>
+        }
+    </section>
+
+    <!-- Save Button -->
+    <section class="grid-section">
+        <div class="page-grid-wrapper">
+            <div class="page-grid-operation-wrapper">
+                <button type="submit" form="jobSettingsForm" style="padding-bottom: 5px" class="primary-button">ذخیره</button>
+            </div>
+        </div>
+    </section>
+</div>
+

@@ -1,0 +1,171 @@
+﻿@page "/flow-forms/work-hours/{WorkHoursId:int}"
+@using ButtonType = Radzen.ButtonType
+@using ButtonStyle = Radzen.ButtonStyle
+@inherits BitPageBase
+
+<PageTitle> @PageTitles.WorkHoursFlowFormsPage.TitleMain </PageTitle>
+
+<!-- Page Heading Title -->
+<section>
+    <div class="page-header-wrapper">
+        <div class="page-add-edit-header">
+            <div class="page-back-title">
+                <img src="@IconUrls.Back" @onclick="NavigateBackToDashboardPage" />
+                <div class="back-title-text">
+                    @(PageTitles.WorkHoursFlowFormsPage.TitleMain)
+                </div>
+            </div>
+            <div class="page-back-links">
+                <div> داشبورد </div>
+                <img src="@IconUrls.PaleArrowRight" />
+                <div> کارکرد پرسنل </div>
+                <img src="@IconUrls.DarkArrowRight" />
+                <div class="active-link">
+                    گردش کار
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<TelerikLoaderContainer Visible="@IsLoading" Text="" />
+
+
+@if (AllWorkHoursForms is not null)
+{
+    <div class="row flowForm-page ">
+
+        <div class="col-xs-12 col-lg-9">
+            <div class="tab-section-wrapper">
+
+                <div class="hokm">
+
+                    <WorkHours WorkHoursId="WorkHoursId"
+                              ToDoPersonnelCode="ToDoPersonnelCode"
+                              IsCurrentUserActor="AllWorkHoursForms.IsCurrentUserActor"
+                              HasCurrentUserActiveSignature="HasActiveSignature" />
+
+                </div>
+
+            </div>
+
+            <div class="flex">
+
+                @if (AllWorkHoursForms.IsCurrentUserActor)
+                {
+                    <div class="row flow-action-center">
+
+                        @*<h3 class="section-title">
+                توضیحات شما
+                </h3>
+
+                <div class="col-12 comment-box-wrapper">
+                <RadzenTextArea @bind-Value="@Action.Comment" PlaceHolder="توضیحات خود را وارد نمایید (اختیاری)" />
+                </div>*@
+
+                        <div class="col-12 action-buttons-wrapper" style="display: none">
+                            @if (PossibleActions?.Actions is not null)
+                            {
+                                @foreach (var action in PossibleActions.Actions)
+                                {
+                                    var radzenButtonStyle = action.ActionTag switch
+                                    {
+                                        "Confirm" => ButtonStyle.Success,
+                                        "Reject" => ButtonStyle.Danger,
+                                        _ => ButtonStyle.Info
+                                    };
+
+                                    var buttonText = action.ActionName;
+
+                                    <RadzenButton ButtonType="ButtonType.Button" Disabled="@(HasActiveSignature is false)" ButtonStyle="radzenButtonStyle" Text="@buttonText" Click="() => DoAction(action.ActionTag)"></RadzenButton>
+                                }
+                            }
+
+                     
+                        </div>
+
+                    </div>
+                }
+
+               
+
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-lg-3 history-section flow-size">
+
+            <h3 class="section-title">
+                گردش کار
+            </h3>
+
+            <div class="page-box-wrapper">
+
+                @if (History is not null)
+                {
+                    var firstRecord = true;
+
+                    @foreach (var history in History.History)
+                    {
+                        if (!firstRecord)
+                        {
+                            <div class="seperator-line"></div>
+                        }
+
+                        firstRecord = false;
+
+                        <div class="first-row">
+                            <div class="actor-name">
+                                <img src="@IconUrls.User" />
+                                <div>@history.ActorName</div>
+                            </div>
+                            <div class="action-name">@history.ActionName</div>
+                        </div>
+                        <div class="second-row">
+                            <div class="state-name"> @history.StateName</div>
+                            <div class="acted-at">@history.ActionDate?.En2FaDigits()</div>
+                        </div>
+
+                        @if (history.ActorComment.IsNotNullOrEmpty())
+                        {
+                            <div class="third-row">
+                                <img src="@IconUrls.Comment" />
+
+                                <div> @history.ActorComment</div>
+                            </div>
+                        }
+                    }
+
+                    <!--To Does-->
+
+                    <div class="seperator-line"></div>
+
+                    @if (AllWorkHoursForms.IsFlowFinished)
+                    {
+                        <div class="flow-finished-sign">پایان</div>
+                    }
+                    else
+                    {
+                        <div class="todo-section">
+                            <div class="todo-state-name">
+                                <img src="@IconUrls.CurvedRightArrow" />
+                                <div>وضعیت جاری</div>
+                            </div>
+
+                            <div class="todo-next-state"> @History.ToDoes.StateName </div>
+
+                            @foreach (var user in History.ToDoes?.Users)
+                            {
+                                <div class="todo-actor-name">
+                                    <img src="@IconUrls.User" />
+                                    <div class="todo-user">@user.FullName</div>
+                                </div>
+                                <div class="todo-actor-post">@user.PostTitle</div>
+                            }
+
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}

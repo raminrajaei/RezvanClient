@@ -1,0 +1,679 @@
+﻿@using ATA.HR.Shared.Dtos.Contract
+@using ATA.HR.Shared.Enums.Workflow
+@using DNTPersianUtils.Core
+@inherits BitPageBase
+
+<div class="contract-component" style="padding-left: 26px; @ContractOpacityStyle">
+
+    @if (UserContract?.ContractDetails is null)
+    {
+        <div class="loading-contract-wrapper"> در حال بارگزاری قرارداد ... </div>
+    }
+    else
+    {
+        <div class="container-fluid">
+
+            @if (IsHourlyContract is false)
+            {
+                <div class="normal-contract">
+
+                    <div class="row header cell-border">
+                        <div class="col-2">
+                            <img class="logo" src="@ImageUrls.Pages.ATAContractLogo" />
+                        </div>
+                        <div class="title col-8">
+                            <div>هواپیمایی آتا</div>
+                            <div>قرارداد کار مدت معین</div>
+                            <div style="margin-bottom: 6px; font-size: 13px">
+                                این قرارداد بموجب ماده ۱۰ قانون کار جمهوری اسلامی ایران و تبصره ۳ الحاقی به ماده ۷ قانون کار موضوع بند (الف) ماده
+                                "۸"
+                                قانون رفع برخی از موانع تولید و سرمایه گذاری صنعتی - مصوب ۱۳۸۷/۸/۲۵ مجمع تشخیص مصلحت نظام - بین
+                                کارفرما / نماینده قانونی کارفرما و کارمند منعقد می‌گردد.
+                            </div>
+                        </div>
+                        <div class="header-style col-2">
+                            <div class="flex flex-column">
+                                <div class="flex" style="margin-right: 10px">
+                                    شماره قرارداد:
+                                    <div class="header-left-sec"> @ContractId.ToPersianNumbers() </div>
+                                </div>
+                                <div class="flex" style="margin-right: 10px">
+                                    تاریخ:
+                                    <div class="header-left-sec"> @(UserContract.RequestedAt.ToJalaliString()) </div>
+                                </div>
+                                <div class="flex" style="margin-right: 10px">
+                                    شماره پرسنلی:
+                                    <div class="header-left-sec">@UserContract.ContractDetails.PersonnelCode?.En2FaDigits() </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column-holder column-border flex article-1">
+                        <div class="column-style title-bold sm-font-size employer">ماده 1 - نام کارفرما: </div>
+                        <div class="column-style sm-font-size">شرکت هواپیمایی آتا به شماره ثبت @(25533.ToPersianNumbers()) و شناسه ملی @(10200336102.ToPersianNumbers())</div>
+                    </div>
+                    <div class="column-holder row column-border">
+                        <div class="column-style title-bold col sm-font-size" style="width:50% ;">ماده 2 - مشخصات کارمند : </div>
+                    </div>
+                    <div class="column-holder row col-merge column-border ">
+                        <div class="column-holder row bio-size " style="background: rgb(250, 243, 243)">
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام و نام خانوادگی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@UserContract.ContractDetails.FullName </div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">نام پدر</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@UserContract.ContractDetails.FatherName</div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">کد ملی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@UserContract.ContractDetails.NationalID?.En2FaDigits()</div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">شماره شناسنامه:</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@UserContract.ContractDetails.Shenasname?.En2FaDigits()</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">محل تولد:</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@UserContract.ContractDetails.BirthCity</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> محل صدور شناسنامه:</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@UserContract.ContractDetails.BirthCertificateIssuingPlace</div>
+                        </div>
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">مدرک تحصیلی:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@UserContract.ContractDetails.EducationDegree</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">رشته تحصیلی:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size ">@UserContract.ContractDetails.EducationField</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">تاریخ تولد:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@UserContract.User?.BirthDateJalali</div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">وضعیت تاهل:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@UserContract.ContractDetails.MaritualStatus</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">تاریخ شروع همکاری:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@UserContract.ContractDetails.EmploymentDate?.En2FaDigits()</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">نوع استخدام:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@UserContract.ContractDetails.EmploymentTypeCodeDisplay</div>
+                        </div>
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شماره موبایل:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size"> @UserContract.User!.Mobile?.En2FaDigits() </div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">مدت تجربه در آتا</div>
+                            <div class="col-2 column-style holder-padding sm-font-size ">@(UserContract.ContractDetails.WorkDurationFriendlyDisplay.En2FaDigits())</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">محل خدمت:</div>
+                            <div class="col-2 column-style holder-padding sm-font-size" style="padding-right:0px;">@UserContract.ContractDetails.WorkingPlace</div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-4 sm-font-size  holder-padding  title-bold ">آدرس:</div>
+                            <div class="col-8 sm-font-size  holder-padding ">@UserContract.ContractDetails.UserAddress</div>
+                        </div>
+                    </div>
+                    <div class="column-holder row col-merge col2-merge column-border">
+
+                        <div class="column-style col-12  holder-padding sm-font-size title-bold " style="width:50% ;">ماده 3 - موضوع قرارداد:</div>
+
+                    </div>
+                    <div class="column-holder row col-merge col3-merge column-border">
+                        <div class="column-holder col-12 sm-font-size" style="padding:7px;">
+                            <div>
+                                عبارت است از بکارگیری طرف قرارداد با عنوان شغلی
+                                <b>@UserContract.ContractDetails.PostTitle</b>
+                                در معاونت/مدیریت
+                                <b>@UserContract.ContractDetailsUnit</b>
+                                جهت انجام امور محوله
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column-holder row col-merge column-border">
+                        <div class="flex column-style col-12 holder-padding sm-font-size" style="width: 100%">
+                            <b>ساعت کار : </b>
+                            بر اساس عرف و رویه شرکت و با رعایت مفاد مبحث دوم فصل سوم قانون کار
+                        </div>
+                    </div>
+                    <div class="column-holder  row  column-border">
+                        <div class="column-holder ">
+                            <div class="col-4 sm-font-size pe-2 ps-0 title-bold ">ماده 5- مدت قرارداد:</div>
+                            <div class="col-2 sm-font-size title-bold">تاریخ شروع :</div>
+                            <div class="col-2 sm-font-size" style="font-size: 16px;">@UserContract.ContractDetails.ExecutionDate?.ToJalaliString().En2FaDigits()</div>
+                            <div class="col-2 sm-font-size title-bold">تاریخ خاتمه :</div>
+                            <div class="col-2 sm-font-size" style="font-size: 16px;">@UserContract.ContractDetails.ValidityDateJalali?.En2FaDigits()</div>
+                        </div>
+
+                    </div>
+                    <div class="column-holder row  column-border">
+                        <div class="column-holder ">
+                            <div class="col-3 title-bold tbl-header-align">ماده 6- حق الزحمه :</div>
+                            <div class="col-9 sm-font-size ">حق الزحمه برابر توافق طرفین به شرح زیر تعیین و پس از وضع کسور قانونی مابقی به طرف قرارداد پرداخت می شود.</div>
+                        </div>
+                    </div>
+                    <!-- حقوق و مزایا -->
+                    <div class="column-holder col-merge row column-border  ">
+                        <div class="column-holder row " style="justify-content:center; margin-bottom: -2px; margin-right:0px">
+                            <div class="col-2 sm-font-size column-style-item  column-border tbl-header" style="border-left:none ;"></div>
+                            <div class="col-5 sm-font-size column-style-item column-border tbl-header title-bold tbl-header-align tbl-header-align-1">حقوق و مزایا</div>
+                            <div class="col-2 sm-font-size column-style-item column-border tbl-header title-bold tbl-header-align">روزانه</div>
+                            <div class="col-2 sm-font-size column-style-item column-border tbl-header title-bold tbl-header-align">ماهیانه</div>
+                            <div class="col-1 sm-font-size column-style-item column-border tbl-header title-bold tbl-header-align">واحد پولی</div>
+                        </div>
+
+                        <div class="column-holder row" style="justify-content:center ; margin-top: -12px; margin-right:0px">
+                            <div class="col-2 sm-font-size column-style-item column-border">مزد مبنا</div>
+                            <div class="col-5 tbl-item column-style-item column-border">
+                                <div class=" sm-font-size cell-style">الف - مزد شغل</div>
+                                <div class=" sm-font-size cell-style" style="padding-bottom:13px;">ب - پایه سنوات</div>
+                            </div>
+                            <div class="col-2 tbl-item  column-style-item column-border">
+                                <div class=" cell-style sm-font-size">@UserContract.ContractDetails.DailyWage.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.DailyYearsBasePay.ToRialDisplay()</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size" style="padding-right:0px;">@UserContract.ContractDetails.TargetJobWage.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.YearsBasePay.ToRialDisplay()</div>
+                            </div>
+                            <div class="col-1 tbl-item column-style-item column-border">
+                                <div class=" cell-style cell-aligh-txt sm-font-size ">ریال</div>
+                                <div class=" cell-style cell-aligh-txt sm-font-size " style="padding-bottom:13px;">ریال</div>
+                            </div>
+                        </div>
+
+                        <div class="column-holder row" style="justify-content:center ; margin-top: -17px;margin-right:0px;">
+                            <div class="col-2 column-style-item column-border sm-font-size">مزایای شغلی</div>
+                            <div class="col-5 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">ب- حق مسئولیت</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">ت - فوق العاده گواهینامه</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">ج - حق جذب</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">&nbsp;</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">&nbsp;</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">&nbsp;</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">@UserContract.ContractDetails.ResponsibilityRight.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.LicenceRight.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.EmploymentRight.ToRialDisplay()</div>
+                            </div>
+                            <div class="col-1 tbl-item column-style-item column-border">
+                                <div class=" cell-style cell-aligh-txt sm-font-size">ریال</div>
+                                <div class=" cell-style cell-aligh-txt sm-font-size" style="padding-bottom:13px;">ریال</div>
+                                <div class=" cell-style cell-aligh-txt sm-font-size" style="padding-bottom:13px;">ریال</div>
+                            </div>
+                        </div>
+                        <div class="column-holder row" style="justify-content:center ; margin-top: -17px; margin-right:0px;">
+                            <div class="col-2 column-style-item column-border sm-font-size" style="padding-top:0px; padding-bottom:0px;">مزایای انگیزشی و رفاهی</div>
+                            <div class="col-5 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">چ - پاداش اعطایی مدیریت</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">خ - راندمان و کارایی</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">&nbsp;</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">&nbsp;</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">@UserContract.ContractDetails.CEOReward.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.EfficiencyRight.ToRialDisplay()</div>
+                            </div>
+                            <div class="col-1 tbl-item column-style-item column-border total-cell-border">
+                                <div class=" cell-style total-cell-border cell-aligh-txt sm-font-size">ریال</div>
+                                <div class=" cell-style total-cell-border cell-aligh-txt sm-font-size" style="padding-bottom:13px;">ریال</div>
+                            </div>
+                        </div>
+
+
+                        <div class="column-holder row" style="justify-content:center ; margin-top: -17px; margin-right:0px">
+                            <div class="col-2 column-style-item column-border sm-font-size">مزایای قانونی</div>
+                            <div class="col-5 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">د - حق مسکن</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">ذ - حق اولاد</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">ر - خواربار و بن</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">ز - حق ایاب و ذهاب</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">س - فوق العاده ویژه</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">&nbsp;</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">&nbsp;</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">&nbsp;</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">&nbsp;</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">&nbsp;</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" cell-style sm-font-size">@UserContract.ContractDetails.HousingAllowance.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.ChildrenAllowance.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.GroceryAllowance.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.TransportationRight.ToRialDisplay()</div>
+                                <div class=" cell-style sm-font-size" style="padding-bottom:13px;">@UserContract.ContractDetails.SpecialRight.ToRialDisplay()</div>
+                            </div>
+                            <div class="col-1 tbl-item column-style-item column-border">
+                                <div class=" sm-font-size cell-style cell-aligh-txt">ریال</div>
+                                <div class=" sm-font-size cell-style cell-aligh-txt" style="padding-bottom:13px;">ریال</div>
+                                <div class=" sm-font-size cell-style cell-aligh-txt" style="padding-bottom:13px;">ریال</div>
+                                <div class=" sm-font-size cell-style cell-aligh-txt" style="padding-bottom:13px;">ریال</div>
+                                <div class=" sm-font-size cell-style cell-aligh-txt" style="padding-bottom:13px;">ریال</div>
+                            </div>
+                        </div>
+
+                        <div class="column-holder row" style="justify-content:center ; margin-top: -17px; margin-right:0px">
+                            <div class="col-2 column-style-item column-border sm-font-size">سایر</div>
+                            <div class="col-5 tbl-item column-style-item column-border">
+                                <div class=" sm-font-size cell-style">سایر 1</div>
+                                <div class=" sm-font-size cell-style" style="padding-bottom:13px;">سایر 2</div>
+                                <div class=" sm-font-size cell-style" style="padding-bottom:13px;">سایر 3 </div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" sm-font-size cell-style">&nbsp;</div>
+                                <div class=" sm-font-size cell-style" style="padding-bottom:13px;">&nbsp;</div>
+                                <div class=" sm-font-size cell-style" style="padding-bottom:13px;">&nbsp;</div>
+                            </div>
+                            <div class="col-2 tbl-item column-style-item column-border">
+                                <div class=" sm-font-size cell-style">@UserContract.ContractDetails.Other1.ToRialDisplay()</div>
+                                <div class=" sm-font-size cell-style" style="padding-bottom:13px;">@UserContract.ContractDetails.Other2.ToRialDisplay()</div>
+                                <div class=" sm-font-size cell-style" style="padding-bottom:13px;">@UserContract.ContractDetails.Other3.ToRialDisplay()</div>
+                            </div>
+                            <div class="col-1 tbl-item column-style-item column-border">
+                                <div class=" sm-font-size cell-style cell-aligh-txt">ریال</div>
+                                <div class=" sm-font-size cell-style cell-aligh-txt" style="padding-bottom:13px;">ریال</div>
+                                <div class=" sm-font-size cell-style cell-aligh-txt" style="padding-bottom:13px;">ریال</div>
+                            </div>
+                        </div>
+
+                        <div class="column-holder row total-cell" style="margin-right:0px">
+                            <div class="col-2 sm-font-size tbl-item column-style-item column-border" style="border-left:none ; border-right: none"></div>
+                            <div class="col-3 sm-font-size tbl-item column-style-item column-border" style="border-right: none; border-left: none;">جمع کل حقوق و مزایا به عدد</div>
+                            <div class="col-5 sm-font-size tbl-item column-style-item column-border" style="border-left:none ; padding-right:30px">@UserContract.ContractDetails.HokmSum.ToRialDisplay()</div>
+                            <div class="col-1 sm-font-size tbl-item column-style-item column-border" style="border-right:none ;"></div>
+                            <div class="col-1 sm-font-size tbl-item column-style-item column-border cell-aligh-txt">ریال</div>
+                        </div>
+
+                        <div class="column-holder row total-cell" style="margin-right:0px">
+                            <div class="col-2 sm-font-size tbl-item column-style-item column-border" style="border-left:none ; border-right: none"></div>
+                            <div class="col-3 sm-font-size tbl-item column-style-item column-border" style="border-right: none; border-left:none ;">جمع کل حقوق و مزایا به حروف</div>
+                            <div class="col-5 sm-font-size tbl-item column-style-item column-border" style="border-left:none ; padding-right:30px">@UserContract.ContractDetails.HokmSum.ConvertNumberToText(Language.Persian) </div>
+                            <div class="col-1 sm-font-size tbl-item column-style-item column-border" style="border-right:none ;"></div>
+                            <div class="col-1 sm-font-size tbl-item column-style-item column-border cell-aligh-txt">ریال</div>
+                        </div>
+
+                        <div class="column-holder row total-cell" style="margin-right:0px">
+                            <div class="col-12 column-style sm-font-size" style=" width:100%">علاوه بر حقوق و مزایای فوق اضافه کار ماهیانه بر اساس گزارش کارکرد و در چارچوب مقررات شرکت پرداخت خواهد گردید .</div>
+                        </div>
+                    </div>
+
+                    <!-- ماده 7 به بعد -->
+
+                    <div class="column-holder row col-merge column-border">
+                        <div class="col-12">
+                            <span class=" sm-font-size  title-bold " style="padding-bottom:25px ;">ماده 7- تمدید یا تجدید :</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto ;">در صورت توافق طرفین یک ماه مانده به پایان این قرارداد ، قرارداد موجود تمدید و یا قرارداد دیگری تنظیم خواهد شد و در صورت عدم تمدید قرارداد ، قرارداد از هر نظر فسخ شده تلقی می گردد .</span>
+                        </div>
+                    </div>
+                    <div class=" row column-holder col-merge column-border">
+                        <div class="col-12">
+                            <span class="sm-font-size title-bold " style="padding-bottom:25px ;">ماده 8:</span>
+
+                            <span class="sm-font-size column-style margin-l-r-15" style="width:auto ;"> در صورت فسخ قرارداد و به هنگام تسویه حساب شرکت مکلف است بابت حق سنوات به ازای یکسال خدمت یک ماه حق الزحمه به طرف قرارداد پرداخت نماید . در صورتیکه مدت قرارداد از یکسال کمتر باشد پرداخت مذکور به نسبت مدت قرارداد و بر مبنای فوق محاسبه و پرداخت خواهد شد .</span>
+                        </div>
+                    </div>
+
+                    <div class="row column-holder col-merge column-border">
+                        <div class="col-12">
+                            <span class="column-style sm-font-size title-bold " style="padding-bottom:25px ;">ماده 9:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:20px;">طرف قرارداد به لحاظ برخورداری از مزایای بیمه و بازشستگی مشمول قانون تامین اجتماعی بوده و شرکت مکلف است طبق مقررات قانون مذکور طرف قرارداد را در طول مدت قرارداد بیمه نماید  .</span>
+                            <div class="column-style sm-font-size" style="width:auto ;">تبصره : شرکت موظف است هر ماه از جمع حق الزحمه و فوق العاده های متعلقه به طرف قرارداد (به جز حق اولاد) حق بیمه و کسور بازشستگی مقرر را کسر و به اضافه سهم خود به سازمان تامین اجتماعی پرداخت نماید .  .</div>
+
+                        </div>
+                    </div>
+
+                    <div class="column-holder row col-merge column-border">
+                        <div class="col-12">
+                            <span class=" sm-font-size column-style title-bold " style="padding-bottom:25px ;">ماده 10:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:20px;"> طرف قرارداد سالیانه از 26 روز مرخصی استحقاقی معادل 192 ساعت برخوردار خواهد شد و در صورت تمدید قرارداد مرخصی استحقاقی حداکثر تا 9 روز معادل 66 ساعت قابل ذخیره خواهد بود . در صورت فسخ قرارداد به هر دلیل ذخیره مرخصی استحقاقی بازخرید می گردد .</span>
+                            <div class="column-style sm-font-size" style="width:auto ;">در صورت همکاری پاره وقت طرف قرارداد به تناسب ایام کارکرد از مرخصی استحقاقی برخوردار می گردد.</div>
+
+                        </div>
+                    </div>
+
+                    <div class="column-holder col-merge row column-border">
+                        <div class="col-12">
+                            <span class="column-style sm-font-size title-bold " style="padding-bottom:25px ;">ماده 11:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:20px;">چنانچه اعزام طرف قرارداد برای انجام ماموریت هایی که مربوط به این قرارداد می گردد در داخل و یا خارج از کشور ضرورت یابد طرف قرارداد ملزم است به دستور شرکت به محل ماموریت اعزام نماید . .</span>
+                            <div class="column-style sm-font-size" style="width:auto ;">
+                                تامین وسیله ایاب و ذهاب و محل اقامت برای انجام چنین ماموریت‌هایی به عهده شرکت بوده و فوق العاده روزانه بر اساس روش های جاری شرکت به نامبرده پرداخت خواهد شد.
+                                در ضمن ماموریت‌های بین تهران و تبریز و بالعکس شامل حق ماموریت نمی‌شود.
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="column-holder row col-merge column-border">
+                        <div class="col-12">
+                            <span class="column-style sm-font-size title-bold " style="padding-bottom:25px ;">ماده 12:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:20px;">
+                                طرف قرارداد حق انعقاد قراردادهای مشابه این قرارداد با سایر موسسات را در زمان اعتبار این قرارداد ندارد و چنانچه بعدا به شرکت خلاف این امر ثابت گردد، طرف قرارداد ملزم است بدون عذر زیان‌های مادی و معنوی که به سبب این تخلف به شرکت وارد شده طبق تشخیص شرکت که قطعی و غیرقابل اعتراض است جبران نماید. در صورتیکه طرف قرارداد اقدام به لغو
+                                قرارداد همکاری نماید و یا اقدامی نماید که منجر به اخراج وی گردد، مکلف است کلیه هزینه‌های آموزشی انجام شده و همچنین ضرر و زیان وارده به شرکت از بابت نقض قرارداد را جبران نماید.
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="column-holder col-merge row column-border">
+                        <div class="col-12">
+                            <span class="column-style title-bold sm-font-size" style="padding-bottom:25px ;">ماده 13:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:20px;">در صورتیکه طرف قرارداد با موسسات و سازمانهای حقیقی یا حقوقی که طرف معامله پیمان حق العمل کاری و غیره با شرکت می باشند بطور مستقیم و یا غیر مستقیم اشتراک منافع و یا مشارکت داشته و یا ذیسهم و یا ذینفع باشد ، یا صاحبان ، شرکا و سهامداران این موسسات و سازمانها قرابت سببی و نسبی از نوع درجه یک (پدر ، مادر ، خواهر ، برادر ، همسر ، فرزند ، عروس و داماد) داشته باشند، موظف است مراتب را کتبا به اطلاع شرکت برساند . قصور در این امر کتمان حقیقت تلقی شده و طبق آیین نامه انضباطی رفتار خواهد شد . </span>
+                        </div>
+                    </div>
+
+                    <div class="column-holder row col-merge column-border">
+                        <div class="col-12">
+                            <span class="column-style sm-font-size title-bold " style="padding-bottom:25px ;">ماده 14:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:20px;">سایر موارد پیش بینی نشده در این قرارداد تابع رویه و مقررات داخلی شرکت و ضوابط قانون کار می باشد و مرجع رسیدگی به اختلافات احتمالی اداره کل کار و امور اجتماعی خواهد بود. </span>
+                        </div>
+                    </div>
+
+                    <div class="column-holder col-merge row column-border">
+                        <div class="col-12">
+                            <span class="column-style title-bold " style="padding-bottom:25px ;">ماده 15:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:10px;">این قرارداد در صورت تحقق شرایط زیر بدون اخطار قبلی توسط شرکت آتا فسخ می گردد :</span>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">الف - کاهش عملیات و فعالیت های شرکت و تغییرات سازمانی و موارد مشابه</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">ب - تسامح و تعلل و تاخیر در انجام وظایف محوله و سرپیچی از اجرای مقررات و دستورات </div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">ج - غیبت بدون اطلاع قبلی بمدت 3 روز متوالی و یا 5 روز متناوب به ازاء هر سه ماه قرارداد.</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">د - اعتیاد به مواد مخدر و مشروبات الکلی .</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">ه - سوء استفاده از اموال و ایجاد خسارت مادی به شرکت آتا</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">و- محکومیت توسط دادگاههای کیفری</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">ی - عدم صحت مزاج و توانایی نسبت به انجام وظایف محوله</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">چنانچه موارد (ه)و (و) مضافا زیان و خسارتی به شرکت وارد نماید طرف قرارداد طبق تشخیص شرکت ملزم به جبران آنها خواهد شد.</div>
+                        </div>
+                    </div>
+
+                    <div class="column-holder col-merge row column-border">
+                        <div class="col-12">
+                            <span class="column-style title-bold sm-font-size " style="padding-bottom:25px ;">ماده 16:</span>
+
+                            <span class="column-style sm-font-size margin-l-r-15" style="width:auto;  padding-bottom:20px;">این قرارداد در 16 ماده و یک تبصره و در یک نسخه با متن واحد تنظیم و به امضا الکترونیک طرفین رسیده و مواد آن کلا معتبر و قابل استناد است و هر نسخه حکم واحد را دارد .</span>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            else
+            {
+                <div class="hourly-contract">
+
+                    <div class="row header cell-border">
+                        <div class="col-3  ">
+                            <img class="logo" src="@ImageUrls.Pages.ATAContractLogo" />
+                        </div>
+                        <div class="title col-6">
+                            <div>هواپیمایی آتا</div>
+                            <div>قرارداد همکاری ساعتی</div>
+                        </div>
+                        <div class="header-style col-3">
+                            شماره پرسنلی:
+                            @UserContract.ContractDetails.PersonnelCode?.En2FaDigits()
+                            <div id="personel-cod"> </div>
+                        </div>
+                    </div>
+
+                    <div class="column-holder row column-border" style="border-bottom:none;">
+                        <div class="col-2 column-style title-bold sm-font-size">این قرارداد فی مابین شرکت  </div>
+                        <div class="col-1 column-style sm-font-size">هواپیمایی آتا</div>
+                        <div class="col-2 column-style sm-font-size title-bold">به نمایندگی آقای </div>
+                        <div class="col-1 column-style sm-font-size">
+                            @UserContract.ContractDetails.ATACEOName 
+                        </div>
+                        <div class="col-1 column-style sm-font-size title-bold">به نشانی  </div>
+                        <div class="col-5 column-style sm-font-size" style="border-bottom: none;">
+                            @UserContract.ContractDetails.ATAAddress
+                        </div>
+                    </div>
+
+                    <div class="column-holder row column-border" style="border-top:none;">
+                        <div class="column-style title-bold col sm-font-size" style="width:50% ;border-top:none;">  که از این پس کارفرما نامیده می شود از یک طرف و آقا/خانم  </div>
+
+
+                    </div>
+
+                    <div class="column-holder row col-merge column-border ">
+                        <div class="column-holder row bio-size " style="background:rgb(250, 243, 243)">
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام و نام خانوادگی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">
+                                <b>@UserContract.ContractDetails.FullName</b>
+                            </div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">نام پدر</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">
+                                @UserContract.ContractDetails.FatherName
+                            </div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">کد ملی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">
+                                @UserContract.ContractDetails.NationalID?.En2FaDigits()
+                            </div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">شماره شناسنامه:</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@UserContract.ContractDetails.Shenasname?.En2FaDigits()</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">تاریخ تولد:</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">
+                                @UserContract.UserBirthDateJalali
+                            </div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> محل صدور شناسنامه:</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">
+                                @UserContract.ContractDetails.BirthCity
+                            </div>
+                        </div>
+
+
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-3 column-style holder-padding sm-font-size title-bold">شماره موبایل:</div>
+                            <div class="col-9 column-style holder-padding sm-font-size"> @UserContract.User!.Mobile?.En2FaDigits() </div>
+
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-4 sm-font-size  holder-padding  title-bold ">آدرس:</div>
+                            <div class="col-8 sm-font-size  holder-padding ">
+                                @UserContract.ContractDetails.UserAddress
+                            </div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-12 sm-font-size  holder-padding  title-bold ">از طرف دیگر که منبعد طرف قرارداد نامیده می شود ، با شرایط زیر منعقد می گردد.</div>
+
+                        </div>
+                    </div>
+
+                    <div class="column-holder row col-merge column-border">
+                        <div class="column-style col-12 holder-padding title-bold sm-font-size" style="width:100%">ماده 1. نوع قرارداد: قرارداد همکاری ساعتی</div>
+                    </div>
+
+                    <div class="column-holder row col-merge col2-merge column-border">
+
+                        <div class="column-style col-12  holder-padding sm-font-size title-bold " style="width:50% ;">ماده 2. موضوع قرارداد:</div>
+
+                    </div>
+
+                    <div class="column-holder row col-merge col3-merge column-border">
+                        <div class="column-holder col-12 sm-font-size" style="padding:7px;">
+                            <div>
+                                عبارت است از بکارگیری طرف قرارداد با عنوان شغلی
+                                <b>@UserContract.ContractDetails.PostTitle</b>
+                                در معاونت/مدیریت
+                                <b>@UserContract.ContractDetailsUnit</b>
+                                جهت انجام امور محوله
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column-holder  row  column-border">
+                        <div class="column-holder row bio-size">
+                            <div class="col-6 sm-font-size  holder-padding  title-bold ">ماده 3. محل انجام کار: هواپیمایی آتا </div>
+                            <div class="col-6 sm-font-size  holder-padding ">
+                                دفتر 
+                                @UserContract.UserWorkLocation
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column-holder  row  column-border">
+                        <div class="column-holder ">
+                            <div class="col-4 sm-font-size pe-2 ps-0 title-bold ">ماده 4. مدت قرارداد:</div>
+                            <div class="col-2 sm-font-size title-bold">تاریخ شروع :</div>
+                            <div class="col-2 sm-font-size" style="font-size: 17px">
+                                @UserContract.ContractDetails.ExecutionDate?.ToJalaliString().En2FaDigits()
+                            </div>
+                            <div class="col-2 sm-font-size title-bold">تاریخ خاتمه :</div>
+                            <div class="col-2 sm-font-size" style="font-size: 17px">
+                                @UserContract.ContractDetails.ValidityDateJalali?.En2FaDigits()
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column-holder row col-merge column-border">
+                        <div class="column-style col-12 holder-padding title-bold sm-font-size" style="width:100%">ماده 5. ساعات کاری: ماهیانه حداکثر بمدت 
+                            @MaxHours
+                            ساعت که توزیع روزانه آن به عهده کارفرما خواهد بود </div>
+                    </div>
+
+                    <div class=" row column-holder col-merge column-border">
+                        <div class="col-12">
+                            <span class="sm-font-size title-bold " style="padding-bottom:25px ;">ماده 6. حق السعی</span>
+                            <span class="sm-font-size column-style margin-l-r-15" style="width:auto ;"> بابت ارائه خدمات موضوع ماده 2 این قرارداد از سوی طرف قرارداد دستمزد هر ساعت کارکرد مبلغ
+                                @UserContract.ContractDetails.HourlyRate.ToRialDisplay()
+                                ریال طبق گزارش کارکرد واحد اداری و رویه جاری شرکت پس از انجام کار و تایید مدیریت /معاونت ذیربط محاسبه و پس از وضع کسور قانونی و مالیات متعلقه از طرف امور مالی شرکت مابقی به طرف قرارداد پرداخت می‌شود. </span>
+                        </div>
+                    </div>
+
+                    <div class="column-holder col-merge row column-border">
+                        <div class="col-12">
+                            <span class="column-style title-bold " style="padding-bottom:25px ;">ماده 7. سایر شرایط:</span>
+
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">1-7-طرف قرارداد ملزم به رعایت کلیه مقررات و ضوابط و آیین نامه های داخلی شرکت می باشد .</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">2-7- طرف قرارداد مکلف است از اسناد و مدارکی که بنا به مقتضیات کار در اختیار او قرار می گیرد بنحو مطلوب حفاظت نماید</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">3-7- این قرارداد در پایان مهلت قرارداد خاتمه یافته تلقی و ادامه همکاری مستلزم توافق طرفین و انعقاد قرارداد جدید می باشد</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">4-7- این قرارداد هیچگونه رابطه استخدامی بین شرکت و طرف قرارداد ایجاد نمی نماید</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">5-7-سایر شرایط پیش بینی نشده در این قرارداد طبق توافق طرفین و صدور الحاقیه ، ضمیمه قرارداد شده و قابل اجرا خواهد بود.</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">6-7- در صورت رضایت از عملکرد و خدمات طرف قرارداد شرکت مخیر است به تشخیص مدیریت مبالغی به عنوان حق الزحمه فوق العاده به طرف قرارداد پرداخت نماید.</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">7-7-در صورتیکه طرف قرارداد با موسسات یا سازمان های حقیقی یا حقوقی که طرف معامله پیمان حق العمل کاری و غیره با شرکت می باشند بطور مستقیم یا غیر مستقیم اشتراک منافع یا مشارکت داشته ویا ذی سهم یا ذینفع باشد ، یا با صاحبان ، شرکا و سهامداران این موسسات و سازمان‌ها قرابت سببی و نسبی از نوع درجه یک (پدر ، مادر ، خواهر ، برادر، همسر، فرزند عروس ، داماد )داشته باشد ، موظف است مراتب را کتبا به اطلاع شرکت برساند . قصور در این امر کتمان حقیقت تلقی شده و طبق آیین نامه انضباطی رفتار خواهد شد . </div>
+
+                        </div>
+                    </div>
+
+                    <div class="column-holder col-merge row column-border">
+                        <div class="col-12">
+                            <span class="column-style title-bold " style="padding-bottom:25px ;">ماده 8. شرایط فسخ قرارداد:</span>
+
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">1-8- در صورت عدم تمایل به ادامه همکاری از سوی شرکت یا عدم رضایت از عملکرد طرف قرارداد ، کارفرما می تواند با اعلام کتبی یکماه قبل نسبت به فسخ این قرارداد اقدام نماید .</div>
+                            <div class="column-style sm-font-size" style="width:auto;  padding-bottom:10px;">2-8-هر گونه فعل یا ترک فعل مغایر با قوانین و مقررات و شئونات اداری موجب فسخ قرارداد می شود </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class=" row column-holder col-merge column-border">
+                        <div class="col-12">
+                            <span class="sm-font-size title-bold " style="padding-bottom:25px ;">ماده 9.</span>
+                            <span class="sm-font-size column-style margin-l-r-15" style="width:auto ;"> این قرارداد در 9 ماده و 9 بند و در دو نسخه تنظیم و به امضای طرفین رسیده که هر کدام حکم واحد را دارد.</span>
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            <div class="normal-contract">
+                
+                <div class="column-border row sign" style="margin-left:10px">
+                <div class="col-3 column-style sign-cell" style="width:auto; padding-bottom:10px;">
+                    <div class="sm-font-size">با اطلاع از مفاد این قرارداد و تعهد رعایت ضوابط اداری و شرایط قرارداد آن را قبول و امضاء می‌نمایم</div>
+                    <div class="title-bold">
+                        نام و نام خانوادگی:
+                        <b>@UserContract.ContractDetails.FullName</b>
+                    </div>
+                    <div class="title-bold flex">
+                        <div>امضا</div>
+
+                        @if (UserContract.EmployeeSignatureImageDataURL.IsNotNullOrEmpty())
+                        {
+                            <img src="@UserContract.EmployeeSignatureImageDataURL" class="signature-img" />
+                        }
+                        else if (UserContract.WorkflowCurrentStateTag == ContractStateTag.SignContractByEmployee.ToString())
+                        {
+                            if (IsCurrentUserActor && HasCurrentUserActiveSignature && false)
+                            {
+                                <img src="@(AppConstants.SignatureURL(UserContract.ContractDetailsPersonnelCode))" class="signature-img" />
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="col-3 column-style sign-cell" style="border-right:.5px solid rgb(209,207,207) ;">
+                    <div class="sm-font-size title-bold">
+                        معاونت یا مدیریت مستقیم:
+                        <b>@UserContract.DirectManagerSignedBy</b>
+                    </div>
+                    <div class="title-bold flex">
+                        <div>امضا</div>
+
+                        @if (UserContract.DirectManagerSignatureImageDataURL.IsNotNullOrEmpty())
+                        {
+                            <img src="@UserContract.DirectManagerSignatureImageDataURL" class="signature-img" />
+                        }
+                    </div>
+                </div>
+                <div class="col-3 column-style sign-cell" style="border-right:.5px solid rgb(209,207,207) ; margin-top: -25px">
+                    <div class="sm-font-size title-bold">
+                        معاونت منابع انسانی:
+                        <b>@UserContract.HRSignedBy</b>
+                    </div>
+                    <div class="title-bold flex">
+                        <div>امضا</div>
+
+                        @if (UserContract.WorkflowCurrentStateTag == ContractStateTag.SignContractByEmployee.ToString())
+                        {
+
+                        }
+                        else if (UserContract.WorkflowCurrentStateTag == ContractStateTag.ConfirmSignedContractByHR.ToString())
+                        {
+                            if (IsCurrentUserActor && HasCurrentUserActiveSignature && false)
+                            {
+                                <img src="@(AppConstants.SignatureURL(ToDoPersonnelCode?.ToString()))" class="signature-img" />
+                            }
+                        }
+                        else
+                        {
+                            <img src="@UserContract.HRSignatureImageDataURL" class="signature-img" />
+                        }
+                    </div>
+                </div>
+                <div class="col-3  column-style sign-cell" style="border-right:.5px solid rgb(209,207,207) ; margin-top: -25px">
+                    <div class=" title-bold flex">
+                        مدیرعامل:
+                        <b>@UserContract.CEOSignedBy</b>
+                    </div>
+                    <div class="title-bold">
+                        <div>امضا</div>
+
+                        @if (UserContract.WorkflowCurrentStateTag == ContractStateTag.SignContractByEmployee.ToString()
+                       || UserContract.WorkflowCurrentStateTag == ContractStateTag.ConfirmSignedContractByHR.ToString())
+                        {
+
+                        }
+                        else if (UserContract.WorkflowCurrentStateTag == ContractStateTag.ConfirmContractByCEO.ToString())
+                        {
+                            if (IsCurrentUserActor && HasCurrentUserActiveSignature && false)
+                            {
+                                <img src="@(AppConstants.SignatureURL(ToDoPersonnelCode?.ToString()))" class="signature-img" />
+                            }
+                        }
+                        else
+                        {
+                            <img src="@UserContract.CEOSignatureImageDataURL" class="signature-img" />
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
