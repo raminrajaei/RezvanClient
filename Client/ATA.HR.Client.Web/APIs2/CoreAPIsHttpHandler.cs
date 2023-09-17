@@ -11,7 +11,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using ATA.Core.Modules.Model.Error;
 
 namespace ATA.HR.Client.Web.APIs;
 
@@ -51,43 +50,6 @@ public class CoreAPIsHttpHandler : DelegatingHandler
         #endregion
 
         var response = await base.SendAsync(request, cancellationToken);
-
-        if (response.IsSuccessStatusCode is false)
-        {
-            var exceptionResultString = await response.Content.ReadAsStringAsync(cancellationToken);
-
-            Console.WriteLine(exceptionResultString);
-
-            var exceptionResult = exceptionResultString.DeserializeToModel<ErrorModel>();
-
-            var message = $"{exceptionResult.Message}";
-
-            switch (response.StatusCode)
-            {
-                case HttpStatusCode.NotFound:
-                    await _notificationService.AlertAsync(NotificationType.Error, string.IsNullOrWhiteSpace(message) ? "Not found" : message);
-                    break;
-
-                case HttpStatusCode.Forbidden:
-                    await _notificationService.AlertAsync(NotificationType.Error, string.IsNullOrWhiteSpace(message) ? "You don't have permission" : message);
-                    break;
-                
-                case HttpStatusCode.UnprocessableEntity:
-                    await _notificationService.AlertAsync(NotificationType.Error, string.IsNullOrWhiteSpace(message) ? "عملیات با خطا همراه شد" : message);
-                    break;
-
-                case HttpStatusCode.Unauthorized:
-                    await _notificationService.AlertAsync(NotificationType.Error, string.IsNullOrWhiteSpace(message) ? "You should login" : message);
-                    await Task.Delay(2000, cancellationToken);
-                    _navigationManager.NavigateTo(_ssoClient.GetSSOLoginPageUrl(_clientAppSettings.UrlSettings!.AppURL!));
-                    break;
-
-                default:
-                    await _notificationService.AlertAsync(NotificationType.Error, string.IsNullOrWhiteSpace(message) ? "Some error happened" : message);
-                    break;
-            }
-        }
-
         return response;
     }
 }

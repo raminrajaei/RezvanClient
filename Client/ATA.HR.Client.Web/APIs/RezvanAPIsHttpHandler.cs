@@ -11,7 +11,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using ATA.Core.Modules.Model.Error;
 using ATA.HR.Client.Web.APIs.Models.Response;
 using BootstrapBlazor.Components;
 using Console = System.Console;
