@@ -4,6 +4,32 @@ namespace ATA.HR.Client.Web.Pages;
 
 public static class PageTitles
 {
+    // Rezvan
+    public static class ChildStudentsPage
+    {
+        public static readonly string Title = "لیست کودکان";
+    }
+
+    public static class ChildPrintPage
+    {
+        public static readonly string Title = "جزییات کودک";
+    }
+
+    public static class AddChildStudentFormPage
+    {
+        public static readonly string Title = "ثبت کودک جدید";
+    }
+
+    public static class EditChildStudentFormPage
+    {
+        public static readonly string Title = "ویرایش کودک";
+    }
+
+
+
+
+
+    // ATA: To Remove Soon
     public static class HomePage
     {
         public static readonly string Title = AppMetadata.PersianFullName;
@@ -210,18 +236,5 @@ public static class PageTitles
         public static readonly string Title = "لیست همه بیمه شدگان";
     }
     
-    public static class ChildStudentsPage
-    {
-        public static readonly string Title = "لیست کودکان";
-    }
-    
-    public static class AddChildStudentFormPage
-    {
-        public static readonly string Title = "ثبت کودک جدید";
-    }
-    
-    public static class EditChildStudentFormPage
-    {
-        public static readonly string Title = "ویرایش کودک";
-    }
+   
 }

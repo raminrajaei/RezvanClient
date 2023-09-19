@@ -15,7 +15,7 @@ using ATA.HR.Client.Web.Models.AppSettings;
 using ATABit.Helper.Extensions;
 using Telerik.Blazor;
 
-namespace ATA.HR.Client.Web.Pages.Student;
+namespace ATA.HR.Client.Web.Pages.ChildStudent;
 
 [Authorize]
 public partial class ChildStudentFormPage
@@ -286,7 +286,7 @@ public partial class ChildStudentFormPage
 
     private void OpenChildStudentsPage()
     {
-        NavigationManager.NavigateTo(PageUrls.ChildStudentsPage);
+        NavigationManager.NavigateTo(PageUrls.ChildrenPage);
     }
 
     private async Task CreateHandler(GridCommandEventArgs args)

@@ -24,4 +24,7 @@ public interface IRezvanAPIs
     
     [Post("/api/Child/{childId}/remove")]
     Task<ApiResult> DeleteChild(long childId);
+
+    [Get("/api/Child/{childId}/print")]
+    Task<ApiResult<ChildDetailDto>> GetChildDetail(long childId);
 }

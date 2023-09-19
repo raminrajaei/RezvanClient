@@ -21,7 +21,7 @@ using ATA.HR.Client.Web.APIs.Models.Request;
 using ExcelWizard.Models;
 using ExcelWizard.Models.EWExcel;
 
-namespace ATA.HR.Client.Web.Pages.Student;
+namespace ATA.HR.Client.Web.Pages.ChildStudent;
 
 [Authorize]
 public partial class ChildStudentsPage : IDisposable
@@ -273,7 +273,7 @@ public partial class ChildStudentsPage : IDisposable
 
     private void OpenAddNewChildPage()
     {
-        NavigationManager.NavigateTo(PageUrls.AddChildStudentFormPage());
+        NavigationManager.NavigateTo(PageUrls.AddChildFormPage());
     }
 
     private async Task<DownloadFileResult> ExportCostsDataToExcel()
@@ -326,7 +326,7 @@ public partial class ChildStudentsPage : IDisposable
 
     private void OpenEditChildPage(int childId)
     {
-        NavigationManager.NavigateTo(PageUrls.EditChildStudentFormPage(childId));
+        NavigationManager.NavigateTo(PageUrls.EditChildFormPage(childId));
     }
 
     private void RemoveAttachment1()
@@ -340,9 +340,9 @@ public partial class ChildStudentsPage : IDisposable
 
     
 
-    private void OpenChildStudentPage(long childId)
+    private void OpenChildPrintPage(long childId)
     {
-        //NavigationManager.NavigateTo(PageUrls.InsuranceCostFlowFormsPage(costId));
+        NavigationManager.NavigateTo(PageUrls.ChildPrintPage((int)childId));
     }
 
     private async Task PrintFilteredStudents()

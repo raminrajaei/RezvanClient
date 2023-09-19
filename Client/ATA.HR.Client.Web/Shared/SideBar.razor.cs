@@ -17,27 +17,38 @@ public partial class SideBar
     // Props
     public List<MenuItem> MenuItems { get; set; } = new()
     {
-        // Rezvan: Student Menu
+        // Rezvan: Child Menu
         new()
         {
-            Title = "داوطلب",
-            URL = PageUrls.StudentRootPath,
+            Title = "کودک",
+            URL = PageUrls.ChildRootPath,
             ActiveIconUrl = IconUrls.WorkHours2,
             InactiveIconUrl = IconUrls.WorkHours2,
             SubMenuItems = new()
             {
-                new("", "کودک", true),
-                new(PageUrls.ChildStudentsPage, "لیست داوطلبان کودک"),
-                new(PageUrls.AddChildStudentFormPage(), "ثبت نام کودک جدید"),
-                new("", "بزرگسال", true),
-                new(PageUrls.AdultStudentsPage, "لیست داوطلبان بزرگسال"),
-                new(PageUrls.AddAdultStudentFormPage(), "ثبت نام بزرگسال جدید")
-            }        },
+                new(PageUrls.ChildrenPage, "لیست داوطلبان کودک"),
+                new(PageUrls.AddChildFormPage(), "ثبت نام کودک جدید")
+            }
+        },
+        
+        // Rezvan: Student Menu
+        new()
+        {
+            Title = "بزرگسال",
+            URL = PageUrls.AdultRootPath,
+            ActiveIconUrl = IconUrls.WorkHours2,
+            InactiveIconUrl = IconUrls.WorkHours2,
+            SubMenuItems = new()
+            {
+                new(PageUrls.AdultsPage, "لیست داوطلبان بزرگسال"),
+                new(PageUrls.AdultsPage, "ثبت نام بزرگسال جدید")
+            }
+        },
         
         // Rezvan: Teacher Menu
         new()
         {
-            Title = "معلم",
+            Title = "مدرس",
             URL = PageUrls.TeachersPage,
             ActiveIconUrl = IconUrls.WorkHours2,
             InactiveIconUrl = IconUrls.WorkHours2

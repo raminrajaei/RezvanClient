@@ -3,14 +3,16 @@
 public static class PageUrls
 {
     // Student
-    public const string StudentRootPath = "/student";
-    public const string ChildStudentsPage = $"{StudentRootPath}/children";
-    public static string AddChildStudentFormPage() => $"{StudentRootPath}/child";
-    public static string EditChildStudentFormPage(int childId) => $"{StudentRootPath}/child/{childId}";
+    public const string ChildRootPath = "/child";
+    public const string ChildrenPage = $"{ChildRootPath}/all";
+    public static string ChildPrintPage(int childId) => $"{ChildRootPath}/{childId}";
+    public static string AddChildFormPage() => $"{ChildRootPath}/add";
+    public static string EditChildFormPage(int childId) => $"{ChildRootPath}/edit/{childId}";
 
-    public const string AdultStudentsPage = $"{StudentRootPath}/adults";
-    public static string AddAdultStudentFormPage() => $"{StudentRootPath}/adult";
-    public static string EditAdultStudentFormPage(int adultId) => $"{StudentRootPath}/adult/{adultId}";
+    public const string AdultRootPath = "/adult";
+    public const string AdultsPage = $"{AdultRootPath}/all";
+    //public static string AddAdultStudentFormPage() => $"{StudentRootPath}/adult";
+    //public static string EditAdultStudentFormPage(int adultId) => $"{StudentRootPath}/adult/{adultId}";
 
     // Teacher
     public const string TeacherRootPath = "/teacher";

@@ -1,5 +1,5 @@
-﻿@page "/student/child"
-@page "/student/child/{ChildId:int}"
+﻿@page "/child/add"
+@page "/child/edit/{ChildId:int}"
 
 @using Microsoft.AspNetCore.Components
 @using Calendar = Blazor.PersianDatePicker.Calendar
@@ -95,7 +95,7 @@
                                     <label for="bd"> تاریخ تولد * </label>
                                     <div class="form-input-wrapper">
                                         <InputPersianDatePicker Id="bd"
-                                        @bind-Value="Child.BirthDateJalali"
+                                                                @bind-Value="Child.BirthDateJalali"
                                                                 Name="bd"
                                                                 CssClass="cost-date-picker"
                                                                 Visible="true"
@@ -221,7 +221,7 @@
                                     <label for="fabd"> تاریخ تولد </label>
                                     <div class="form-input-wrapper">
                                         <InputPersianDatePicker Id="bd"
-                                        @bind-Value="Child.FatherBirthDateJalali"
+                                                                @bind-Value="Child.FatherBirthDateJalali"
                                                                 Name="bd"
                                                                 CssClass="cost-date-picker"
                                                                 Visible="true"
@@ -237,7 +237,7 @@
                                                                 Placeholder="تاریخ تولد"
                                                                 Theme="PickerTheme.RedBlack" />
                                     </div>
-                                    <ValidationMessage For="() => Child.FatherBirthDate" />
+                                    <ValidationMessage For="() => Child.FatherBirthDateJalali" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="fabp"> محل تولد </label>
@@ -378,7 +378,7 @@
                                                                 Placeholder="تاریخ تولد"
                                                                 Theme="PickerTheme.RedBlack" />
                                     </div>
-                                    <ValidationMessage For="() => Child.MotherBirthDate" />
+                                    <ValidationMessage For="() => Child.MotherBirthDateJalali" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="mabp"> محل تولد </label>

@@ -1,5 +1,5 @@
-﻿@page "/student/children"
-@page "/student/children/{FromAddNewChildPage:int}"
+﻿@page "/child/all"
+@page "/child/all/{FromAddNewChildPage:int}"
 
 @using ATA.HR.Client.Web.APIs.Insurance.Models.Responses
 @using Microsoft.AspNetCore.Components
@@ -140,7 +140,7 @@
                                         </button>
 
                                         <button style="margin-left: 3px;margin-right: 3px;" class="grid-action-button view"
-                                                title="مشاهده" @onclick="@(() => OpenChildStudentPage(child.Id))">
+                                                title="مشاهده" @onclick="@(() => OpenChildPrintPage(child.Id))">
                                             <img class="btn-img" src="@IconUrls.EyeGreen" />
                                             <img class="btn-img-hovered" src="@IconUrls.EyeWhite" />
                                         </button>
