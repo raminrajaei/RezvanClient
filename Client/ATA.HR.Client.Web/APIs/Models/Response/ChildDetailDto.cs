@@ -5,6 +5,7 @@ public class ChildDetailDto
     public long Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string FullName => $"{FirstName} {LastName}";
     public DateTime BirthDate { get; set; }
     public string BirthPlace { get; set; }
     public string IssuePlace { get; set; }

@@ -13,21 +13,18 @@
 
 <TelerikLoaderContainer Text="در حال بارگزاری اطلاعات کودک" Visible="@IsLoading" />
 
-<div class="personnel-page workhours-page contract-component printbase">
+<div class="personnel-page workhours-page contract-component printbase" style="padding: 1.875rem">
 
     <!-- Page Heading Title -->
     <section class="page-header-section">
         <div class="page-header-wrapper">
             @if (PageOperationType == OperationType.Filter)
             {
-                <TopBar PageName="اطلاعات کودک" PageDescription="شما می‌توانید از این صفحه اطلاعات کامل کودک را مشاهده و پرینت نمایید" />
+                <TopBar PageName="@($"اطلاعات کودک {Child.FullName}")" PageDescription="شما می‌توانید از این صفحه اطلاعات کامل کودک را مشاهده و پرینت نمایید" />
             }
             <div class="flex">
                 <button class="default-button" style="margin-left: 20px" @onclick="OpenChildrenPage">بازگشت</button>
-                @if (AppData?.CostsToPrint?.Count > 0)
-                {
-                    <RadzenButton class="primary-button" Text="پرینت" Click="PrintDoc" />
-                }
+                <RadzenButton class="primary-button" Text="پرینت" Click="PrintDoc" />
             </div>
         </div>
     </section>

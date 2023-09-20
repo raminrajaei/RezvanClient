@@ -8,7 +8,7 @@ namespace ATA.HR.Shared
 
         public static readonly string SSOAppName = "employmentcontract";
 
-        public static readonly string PersianFullName = "سامانه‌ی جامع منابع انسانی";
+        public static readonly string PersianFullName = "سامانه مدیریت موسسه رضوان الرسول";
 
         public static readonly string EnglishFullName = "ATA Employment Contract";
 

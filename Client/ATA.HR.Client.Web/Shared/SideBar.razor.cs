@@ -22,11 +22,11 @@ public partial class SideBar
         {
             Title = "کودک",
             URL = PageUrls.ChildRootPath,
-            ActiveIconUrl = IconUrls.WorkHours2,
-            InactiveIconUrl = IconUrls.WorkHours2,
+            ActiveIconUrl = IconUrls.Child,
+            InactiveIconUrl = IconUrls.Child,
             SubMenuItems = new()
             {
-                new(PageUrls.ChildrenPage, "لیست داوطلبان کودک"),
+                new(PageUrls.ChildrenPage, "لیست کودکان"),
                 new(PageUrls.AddChildFormPage(), "ثبت نام کودک جدید")
             }
         },
@@ -36,11 +36,11 @@ public partial class SideBar
         {
             Title = "بزرگسال",
             URL = PageUrls.AdultRootPath,
-            ActiveIconUrl = IconUrls.WorkHours2,
-            InactiveIconUrl = IconUrls.WorkHours2,
+            ActiveIconUrl = IconUrls.Adult,
+            InactiveIconUrl = IconUrls.Adult,
             SubMenuItems = new()
             {
-                new(PageUrls.AdultsPage, "لیست داوطلبان بزرگسال"),
+                new(PageUrls.AdultsPage, "لیست بزرگسالان"),
                 new(PageUrls.AdultsPage, "ثبت نام بزرگسال جدید")
             }
         },
@@ -50,8 +50,17 @@ public partial class SideBar
         {
             Title = "مدرس",
             URL = PageUrls.TeachersPage,
-            ActiveIconUrl = IconUrls.WorkHours2,
-            InactiveIconUrl = IconUrls.WorkHours2
+            ActiveIconUrl = IconUrls.Teacher,
+            InactiveIconUrl = IconUrls.Teacher
+        },
+        
+        // Rezvan: Class Menu
+        new()
+        {
+            Title = "کلاس",
+            URL = PageUrls.TeachersPage,
+            ActiveIconUrl = IconUrls.Class,
+            InactiveIconUrl = IconUrls.Class
         },
 
         // Settings

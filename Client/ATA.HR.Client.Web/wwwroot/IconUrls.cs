@@ -45,6 +45,11 @@ public static class IconUrls
     public const string EyeWhite = "/icons/eye-white.svg";
     public const string MoneyDollarSign = "/icons/money-dollar.svg";
 
+    public const string Child = "/icons/child.png";
+    public const string Adult = "/icons/adult.png";
+    public const string Teacher = "/icons/teacher.png";
+    public const string Class = "/icons/class.png";
+
     //NotifIcons
     public const string SuccessToast = "/icons/toast/success-notif-icon.svg";
     public const string ErrorToast = "/icons/toast/error-notif-icon.svg";
