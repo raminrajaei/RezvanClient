@@ -283,6 +283,7 @@
         border: 1px solid;
         border-collapse: collapse;
         text-align: center;
+        border-color: lightgray;
     }
 
     .ceo-report-table {
@@ -292,7 +293,7 @@
     .ceo-report-table th {
         font-size: 13px;
         letter-spacing: -1px;
-        height: 60px;
+        height: auto; //60px;
         padding: 5px;
     }
 

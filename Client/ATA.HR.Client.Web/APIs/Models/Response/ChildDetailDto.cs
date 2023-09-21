@@ -50,5 +50,5 @@ public class ChildDetailDto
     public string HomePostalCode { get; set; }
 
     public ChildMoreInfoDto ChildMoreInfo { get; set; }
-    public List<ChildDeliverDto> ChildDelivers { get; set; }
+    public List<ChildDeliverDto> ChildDelivers { get; set; } = new();
 }
