@@ -24,6 +24,30 @@
     }
     /*#region Normal Contract */
     .normal-contract {
+
+        .child-more-info {
+            div {
+                display: flex;
+                align-items: center !important;
+                margin: 0;
+                height: 71px;
+                padding-bottom: 17px;
+            }
+
+            .title-bold {
+                font-size: 14px;
+            }
+        }
+
+        .child-rules {
+            div {
+                display: flex;
+                align-items: center !important;
+                line-height: 35px;
+                min-height: 80px;
+            }
+        }
+
         .header {
             display: flex;
             justify-content: space-between;

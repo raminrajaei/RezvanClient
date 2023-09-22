@@ -1,4 +1,5 @@
 ﻿using ATA.HR.Client.Web.APIs.Enums;
+using ATABit.Helper.Extensions;
 
 namespace ATA.HR.Client.Web.APIs.Models.Response;
 
@@ -10,6 +11,8 @@ public class ChildMoreInfoDto
     /// محل آسیب دیدگی 
     /// </summary>
     public string PlaceOfInjury { get; set; }
+
+    public string HasHadAnyAccidentSoFar => PlaceOfInjury.IsNotNullOrEmpty() ? "بلی" : "خیر";
 
     /// <summary>
     /// بیماری خاص 
@@ -26,10 +29,16 @@ public class ChildMoreInfoDto
     /// </summary>
     public bool AreParentsAlive { get; set; }
 
+    public string AreParentsAliveDisplay => AreParentsAlive ? "بلی" : "خیر";
+
     /// <summary>
     /// کودک با چه کسی زندگی میکند ؟
     /// </summary>
     public ChildLiveWithEnum? ChildLiveWith { get; set; }
+
+    public string ChildLiveWithDisplay => ChildLiveWith.HasValue
+        ? ChildLiveWith.Value.ToDisplayName()
+        : "";
 
     /// <summary>
     /// عادات ویژه 
@@ -71,6 +80,10 @@ public class ChildMoreInfoDto
     /// </summary>
     public PhysicalConditionEnum? PhysicalCondition { get; set; }
 
+    public string? PhysicalConditionDisplay => PhysicalCondition.HasValue
+        ? PhysicalCondition.Value.ToDisplayName()
+        : "";
+
     /// <summary>
     /// دست غالب
     /// </summary>
@@ -95,4 +108,5 @@ public class ChildMoreInfoDto
     /// طریقه آشنایی شما با موسسه
     /// </summary>
     public string FamiliarityInstitution { get; set; }
+
 }
