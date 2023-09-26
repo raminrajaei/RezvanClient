@@ -231,11 +231,11 @@
                                 <div class="col-3 form-item-wrapper">
                                     <label for="PlaceOfInjury"> در چه سالي؟ </label>
                                     <div class="form-input-wrapper">
-                                        <RadzenTextBox id="ParticipateYear"
+                                        @*<RadzenTextBox id="ParticipateYear"
                                                        Disabled="@(Adult.AdultMoreInfo.ParticipateInQuran is false)"
                                                        Style="width: 100%"
                                                        @bind-Value="Adult.AdultMoreInfo.ParticipateYear"
-                                                       Placeholder="در چه سالي" />
+                                                       Placeholder="در چه سالي" />*@
                                     </div>
                                     <ValidationMessage For="() => Adult.AdultMoreInfo.ParticipateYear" />
                                 </div>
@@ -304,7 +304,7 @@
                                 </div>
 
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="AreParentsAlive"> کودک با چه کسی زندگی می‌کند؟ </label>
+                                    <label for="AreParentsAlive"> ميزان آشنايي شما با زبان عربي و علوم قرآني تا چه سطحي مي‌باشد؟ </label>
                                     <div class="form-input-wrapper">
                                         <RadzenDropDown AllowClear="true"
                                                         TValue="string"
