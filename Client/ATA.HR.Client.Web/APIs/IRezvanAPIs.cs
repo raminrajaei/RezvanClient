@@ -27,4 +27,13 @@ public interface IRezvanAPIs
 
     [Get("/api/Child/{childId}/print")]
     Task<ApiResult<ChildDetailDto>> GetChildDetail(long childId);
+
+    [Get("/api/Adult/get-adults")]
+    Task<ApiResult<PagedList<AdultOutputDto>>> GetAdultStudents([Query] AdultInputDto query);
+
+    [Post("/api/Adult/{adultId}/remove")]
+    Task<ApiResult> DeleteAdult(long adultId);
+
+    [Get("/api/Adult/{adultId}/GetAdultByIdForForm")]
+    Task<ApiResult<AdultUpsertDto>> GetAdultByIdForForm(long adultId);
 }

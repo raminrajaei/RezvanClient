@@ -25,9 +25,25 @@ public static class PageTitles
         public static readonly string Title = "ویرایش کودک";
     }
 
+    public static class AdultStudentsPage
+    {
+        public static readonly string Title = "لیست بزرگسالان";
+    }
 
+    public static class AdultPrintPage
+    {
+        public static readonly string Title = "جزییات بزرگسال";
+    }
 
+    public static class AddAdultStudentFormPage
+    {
+        public static readonly string Title = "ثبت بزرگسال جدید";
+    }
 
+    public static class EditAdultStudentFormPage
+    {
+        public static readonly string Title = "ویرایش بزرگسال";
+    }
 
     // ATA: To Remove Soon
     public static class HomePage

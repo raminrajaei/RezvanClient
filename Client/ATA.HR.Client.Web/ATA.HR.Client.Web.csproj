@@ -105,8 +105,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="APIs\Enums\" />
-	  <Folder Include="Pages\AdultStudent\" />
 	  <Folder Include="Pages\Teacher\" />
 	  <Folder Include="Pages\WorkHours\Models\" />
 	</ItemGroup>

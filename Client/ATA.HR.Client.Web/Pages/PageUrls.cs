@@ -11,8 +11,9 @@ public static class PageUrls
 
     public const string AdultRootPath = "/adult";
     public const string AdultsPage = $"{AdultRootPath}/all";
-    //public static string AddAdultStudentFormPage() => $"{StudentRootPath}/adult";
-    //public static string EditAdultStudentFormPage(int adultId) => $"{StudentRootPath}/adult/{adultId}";
+    public static string AdultPrintPage(int adultId) => $"{AdultRootPath}/{adultId}";
+    public static string AddAdultFormPage() => $"{AdultRootPath}/add";
+    public static string EditAdultFormPage(int adultId) => $"{AdultRootPath}/edit/{adultId}";
 
     // Teacher
     public const string TeacherRootPath = "/teacher";
