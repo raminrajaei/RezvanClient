@@ -36,4 +36,10 @@ public interface IRezvanAPIs
 
     [Get("/api/Adult/{adultId}/GetAdultByIdForForm")]
     Task<ApiResult<AdultUpsertDto>> GetAdultByIdForForm(long adultId);
+
+    [Post("/api/Adult/create")]
+    Task<ApiResult> CreateAdultStudent([Body] AdultUpsertDto child);
+
+    [Put("/api/Adult")]
+    Task<ApiResult> UpdateAdultStudent([Body] AdultUpsertDto child);
 }

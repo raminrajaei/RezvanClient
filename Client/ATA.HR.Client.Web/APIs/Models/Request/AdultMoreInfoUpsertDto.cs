@@ -39,7 +39,7 @@ public class AdultMoreInfoUpsertDto
     /// <summary>
     /// درچه زماني ؟
     /// </summary>
-    public DateTime? ParticipateInQuranAsTeacherDate { get; set; }
+    public string ParticipateInQuranAsTeacherDate { get; set; }
 
     /// <summary>
     /// آيا هم‌اكنون در جلسه آموزش قرائت، مفاهيم يا حفظ  قرآن كريم تدريس داريد
@@ -54,7 +54,8 @@ public class AdultMoreInfoUpsertDto
     /// <summary>
     /// ميزان آشنايي شما با زبان عربي و علوم قرآني تا چه سطحي مي‌باشد؟ 
     /// </summary>
-    public FamiliarWithArabicAndQuranEnum FamiliarWithArabicAndQuran { get; set; }
+    public FamiliarWithArabicAndQuranEnum? FamiliarWithArabicAndQuran { get; set; }
+    public string? FamiliarWithArabicAndQuranSelectedValue { get; set; }
 
     /// <summary>
     /// چه كتابهايي در اين زمينه ‌خوانده‌ايد؟

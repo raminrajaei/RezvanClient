@@ -14,7 +14,11 @@ public class AdultUpsertDto
 
     [Required(ErrorMessage = "شماره شناسنامه را وارد نمایید")]
     public string IdNo { get; set; }
+
+    [Required(ErrorMessage = "تاریخ تولد را مشخص نمایید")] 
+    public string? BirthDateJalali { get; set; }
     public DateTime BirthDate { get; set; }
+
     public string BirthPlace { get; set; }
     public string IssuePlace { get; set; }
 
