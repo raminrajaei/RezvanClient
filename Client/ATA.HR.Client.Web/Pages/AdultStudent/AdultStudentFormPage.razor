@@ -3,19 +3,16 @@
 
 @using Microsoft.AspNetCore.Components
 @using Calendar = Blazor.PersianDatePicker.Calendar
-@using ATABit.Helper.Utils
-@using ATA.HR.Client.Web.APIs.Enums
-@using ATA.HR.Client.Web.APIs.Models.Request
 @inherits BitPageBase
 
 <PageTitle>
     @if (PageOperationType == OperationType.Add)
     {
-        @PageTitles.AddChildStudentFormPage.Title
+        @PageTitles.AddAdultStudentFormPage.Title
     }
     else
     {
-        @PageTitles.EditChildStudentFormPage.Title
+        @PageTitles.EditAdultStudentFormPage.Title
     }
 </PageTitle>
 
@@ -31,8 +28,8 @@
             @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
             {
                 <HeaderAddOrEdit>
-                    <button class="default-button" @onclick="OpenChildStudentsPage">انصراف</button>
-                    <button type="submit" form="childStudentForm" class="primary-button">ذخیره</button>
+                    <button class="default-button" @onclick="OpenAdultStudentsPage">انصراف</button>
+                    <button type="submit" form="adultStudentForm" class="primary-button">ذخیره</button>
                 </HeaderAddOrEdit>
             }
         </section>
@@ -43,11 +40,11 @@
                 <div class="flex align-items-center">
                     @if (PageOperationType == OperationType.Add)
                     {
-                        <TopBar PageName="@("ثبت کودک جدید")" PageDescription="ثبت نام داوطلب کودک جدید در موسسه‌ی‌ رضوان الرسول" />
+                        <TopBar PageName="@("ثبت بزرگسال جدید")" PageDescription="ثبت نام داوطلب بزرگسال جدید در موسسه‌ی‌ رضوان الرسول" />
                     }
                     else if (PageOperationType == OperationType.Edit)
                     {
-                        <TopBar PageName="@("ویرایش کودک")" PageDescription="ویرایش داوطلب کودک در موسسه‌ی‌ رضوان الرسول" />
+                        <TopBar PageName="@("ویرایش بزرگسال")" PageDescription="ویرایش داوطلب بزرگسال در موسسه‌ی‌ رضوان الرسول" />
                     }
                     else
                     {
@@ -57,17 +54,17 @@
             </div>
         </section>
 
-        <!-- Child Student EditForm -->
+        <!-- Adult Student EditForm -->
         <section class="documentEditFormSection">
             <div class="form-custom-wrapper">
 
-                <EditForm id="childStudentForm" class="row" Model="@Child" OnValidSubmit="OnChildStudentSubmit">
+                <EditForm id="adultStudentForm" class="row" Model="@Adult" OnValidSubmit="OnAdultStudentSubmit">
 
                     <DataAnnotationsValidator />
 
-                    <!-- Form Section: Child Info -->
+                    <!-- Form Section: Adult Info -->
                     <div class="row form-section">
-                        <div class="col-2 form-section-title">مشخصات نوآموز</div>
+                        <div class="col-2 form-section-title">مشخصات بزرگسال</div>
                         <div class="col-10">
                             <div class="row">
 
@@ -76,26 +73,26 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="fn"
                                                        Style="width: 100%"
-                                        @bind-Value="Child.FirstName"
-                                                       Placeholder="نام کودک" />
+                                        @bind-Value="Adult.FirstName"
+                                                       Placeholder="نام" />
                                     </div>
-                                    <ValidationMessage For="() => Child.FirstName" />
+                                    <ValidationMessage For="() => Adult.FirstName" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="ln">نام خانوادگی * </label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="ln"
                                                        Style="width: 100%"
-                                        @bind-Value="Child.LastName"
-                                                       Placeholder="نام خانوادگی کودک" />
+                                        @bind-Value="Adult.LastName"
+                                                       Placeholder="نام خانوادگی" />
                                     </div>
-                                    <ValidationMessage For="() => Child.LastName" />
+                                    <ValidationMessage For="() => Adult.LastName" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="bd"> تاریخ تولد * </label>
                                     <div class="form-input-wrapper">
                                         <InputPersianDatePicker Id="bd"
-                                                                @bind-Value="Child.BirthDateJalali"
+                                                                @bind-Value="Adult.BirthDateJalali"
                                                                 Name="bd"
                                                                 CssClass="cost-date-picker"
                                                                 Visible="true"
@@ -111,52 +108,43 @@
                                                                 Placeholder="تاریخ تولد"
                                                                 Theme="PickerTheme.RedBlack" />
                                     </div>
-                                    <ValidationMessage For="() => Child.BirthDateJalali" />
+                                    <ValidationMessage For="() => Adult.BirthDateJalali" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="bp">محل تولد </label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="bp"
                                                        Style="width: 100%"
-                                        @bind-Value="Child.BirthPlace"
-                                                       Placeholder="محل تولد کودک" />
+                                        @bind-Value="Adult.BirthPlace"
+                                                       Placeholder="محل تولد" />
                                     </div>
-                                    <ValidationMessage For="() => Child.BirthPlace" />
+                                    <ValidationMessage For="() => Adult.BirthPlace" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="ip">محل صدور</label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="ip"
                                                        Style="width: 100%"
-                                        @bind-Value="Child.IssuePlace"
+                                        @bind-Value="Adult.IssuePlace"
                                                        Placeholder="محل صدور" />
                                     </div>
-                                    <ValidationMessage For="() => Child.IssuePlace" />
+                                    <ValidationMessage For="() => Adult.IssuePlace" />
                                 </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="sn">سریال شناسنامه</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="sn"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.SerialNo"
-                                                       Placeholder="سریال شناسنامه" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.SerialNo" />
-                                </div>
+                                
                                 <div class="col-3 form-item-wrapper">
                                     <label for="in">شماره شناسنامه</label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="in"
                                                        Style="width: 100%"
-                                        @bind-Value="Child.IdNo"
+                                        @bind-Value="Adult.IdNo"
                                                        Placeholder="شماره شناسنامه" />
                                     </div>
-                                    <ValidationMessage For="() => Child.IdNo" />
+                                    <ValidationMessage For="() => Adult.IdNo" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <div class="flex justify-content-between">
                                         <label>
-                                            @if (Child.PhotoPath.IsNotNullOrEmpty())
+                                            @if (Adult.PhotoPath.IsNotNullOrEmpty())
                                             {
                                                 <span>&nbsp;</span>
                                             }
@@ -165,20 +153,20 @@
                                                 <span>بارگزاری عکس </span>
                                             }
                                         </label>
-                                        @if (Child.PhotoPath.IsNotNullOrEmpty())
+                                        @if (Adult.PhotoPath.IsNotNullOrEmpty())
                                         {
-                                            <span @onclick="RemoveChildImage" class="remove-attachment-button">
+                                            <span @onclick="RemoveAdultImage" class="remove-attachment-button">
                                                 حذف تصویر
                                             </span>
                                         }
                                     </div>
                                     <div class="form-input-wrapper">
 
-                                        @if (Child.PhotoPath.IsNotNullOrEmpty())
+                                        @if (Adult.PhotoPath.IsNotNullOrEmpty())
                                         {
                                             <div class="attachment-view-box">
-                                                <a href="@ToDocFullURL(Child.PhotoPath)" target="_blank">
-                                                    مشاهده تصویر کودک
+                                                <a href="@ToDocFullURL(Adult.PhotoPath)" target="_blank">
+                                                    مشاهده تصویر
                                                 </a>
                                             </div>
                                         }
@@ -186,7 +174,7 @@
                                         {
                                             <TelerikUpload SaveUrl="@SaveUrl"
                                                            SaveField="file"
-                                                           Enabled="@string.IsNullOrWhiteSpace(Child.PhotoPath)"
+                                                           Enabled="@string.IsNullOrWhiteSpace(Adult.PhotoPath)"
                                                            OnUpload="OnUploadHandler"
                                                            MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
                                                            MinFileSize="1024"
@@ -196,654 +184,7 @@
                                             <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
                                         }
                                     </div>
-                                    <ValidationMessage For="() => Child.PhotoPath" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Section: Father Info-->
-                    <div class="row form-section">
-                        <div class="col-2 form-section-title">مشخصات پدر نوآموز</div>
-                        <div class="col-10">
-                            <div class="row">
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="fan"> نام پدر * </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="fan"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherName"
-                                                       Placeholder="نام پدر نوآموز" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherName" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="fatherBirth"> تاریخ تولد </label>
-                                    <div class="form-input-wrapper">
-                                        <InputPersianDatePicker Id="fatherBirth"
-                                                                @bind-Value="Child.FatherBirthDateJalali"
-                                                                Name="fatherBirth"
-                                                                CssClass="cost-date-picker"
-                                                                Visible="true"
-                                                                Style="margin-left: -20px"
-                                                                ReadOnly="true"
-                                                                Disabled="false"
-                                                                PickerAlign="Align.Right"
-                                                                InitialValue="false"
-                                                                CalendarType="Calendar.SingleModeJalali"
-                                                                DigitType="DigitType.BasedOnCalendar"
-                                                                DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
-                                                                MinDateSetOnToday="false"
-                                                                Placeholder="تاریخ تولد"
-                                                                Theme="PickerTheme.RedBlack" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherBirthDateJalali" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="fabp"> محل تولد </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="fabp"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherBirthPlace"
-                                                       Placeholder="محل تولد" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherBirthPlace" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="faip"> محل صدور </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="faip"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherIssuePlace"
-                                                       Placeholder="محل صدور" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherIssuePlace" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="fasn">سریال شناسنامه</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="fasn"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherSerialNo"
-                                                       Placeholder="سریال شناسنامه" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherSerialNo" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="fain">شماره شناسنامه</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="fain"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherIdNo"
-                                                       Placeholder="شماره شناسنامه" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherIdNo" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="fanc">کد ملی</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="fanc"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherNationalCode"
-                                                       Placeholder="کد ملی" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherNationalCode" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="faed">تحصیلات</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="faed"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherEducation"
-                                                       Placeholder="تحصیلات" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherEducation" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="faf">رشته</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="faf"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherField"
-                                                       Placeholder="رشته" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherField" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="faj">شغل </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="faj"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherJob"
-                                                       Placeholder="شغل " />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherJob" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="famo">شماره تلفن همراه  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="famo"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherMobileNo"
-                                                       Placeholder="موبایل" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherMobileNo" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="faA">آدرس محل کار </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="faA"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.FatherWorkAddress"
-                                                       Placeholder="آدرس محل کار" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FatherWorkAddress" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Section: Mother Info-->
-                    <div class="row form-section">
-                        <div class="col-2 form-section-title">مشخصات مادر نوآموز</div>
-                        <div class="col-10">
-                            <div class="row">
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="man"> نام مادر * </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="man"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherName"
-                                                       Placeholder="نام مادر نوآموز" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherName" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="motherBirth"> تاریخ تولد </label>
-                                    <div class="form-input-wrapper">
-                                        <InputPersianDatePicker Id="motherBirth"
-                                                                @bind-Value="Child.MotherBirthDateJalali"
-                                                                Name="motherBirth"
-                                                                CssClass="cost-date-picker"
-                                                                Visible="true"
-                                                                Style="margin-left: -20px"
-                                                                ReadOnly="true"
-                                                                Disabled="false"
-                                                                PickerAlign="Align.Right"
-                                                                InitialValue="false"
-                                                                CalendarType="Calendar.SingleModeJalali"
-                                                                DigitType="DigitType.BasedOnCalendar"
-                                                                DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
-                                                                MinDateSetOnToday="false"
-                                                                Placeholder="تاریخ تولد"
-                                                                Theme="PickerTheme.RedBlack" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherBirthDateJalali" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="mabp"> محل تولد </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="mabp"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherBirthPlace"
-                                                       Placeholder="محل تولد" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherBirthPlace" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="maip"> محل صدور </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="maip"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherIssuePlace"
-                                                       Placeholder="محل صدور" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherIssuePlace" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="masn">سریال شناسنامه</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="masn"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherSerialNo"
-                                                       Placeholder="سریال شناسنامه" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherSerialNo" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="main">شماره شناسنامه</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="main"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherIdNo"
-                                                       Placeholder="شماره شناسنامه" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherIdNo" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="manc">کد ملی</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="manc"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherNationalCode"
-                                                       Placeholder="کد ملی" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherNationalCode" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="maed">تحصیلات</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="maed"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherEducation"
-                                                       Placeholder="تحصیلات" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherEducation" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="maf">رشته</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="maf"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherField"
-                                                       Placeholder="رشته" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherField" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="maj">شغل </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="maj"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherJob"
-                                                       Placeholder="شغل " />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherJob" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="mamo">شماره تلفن همراه  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="mamo"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherMobileNo"
-                                                       Placeholder="موبایل" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherMobileNo" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="maA">آدرس محل کار </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="maA"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.MotherWorkAddress"
-                                                       Placeholder="آدرس محل کار" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.MotherWorkAddress" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Section: Family Children -->
-                    <div class="row form-section">
-                        <div class="col-2 form-section-title">فرزندان خانواده </div>
-                        <div class="col-10">
-
-                            <div class="row">
-                                <div class="col-3 form-item-wrapper">
-                                    <div class="flex justify-content-between">
-                                        <label for="documentDesc13"> تعداد فرزندان خانواده </label>
-
-                                    </div>
-                                    <div class="form-input-wrapper insurance-cost-amount">
-                                        <RadzenNumeric id="documentDesc4"
-                                                       Style="width: 100%"
-                                                       Format="N0"
-                                        @bind-Value="Child.FamilyChildrenCount"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.FamilyChildrenCount" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <div class="flex justify-content-between">
-                                        <label for="documentDesc132"> فرزند چندم خانواده  </label>
-
-                                    </div>
-                                    <div class="form-input-wrapper insurance-cost-amount">
-                                        <RadzenNumeric id="documentDesc44"
-                                                       Style="width: 100%"
-                                                       Format="N0"
-                                        @bind-Value="Child.NumberOfChildren"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.NumberOfChildren" />
-                                </div>
-
-                            </div>
-
-
-
-                        </div>
-                    </div>
-
-                    <!-- People Who Can Pick him/her Up -->
-                    <div class="row form-section">
-                        <div class="col-2 form-section-title"> تحویل گیرندگان </div>
-                        <div class="col-10">
-
-                            <div class="row">
-
-                                <div class="col-6 form-item-wrapper">
-
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="">
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex justify-content-between">
-                                        <div class="page-grid-wrapper request-samples-grid-wrapper">
-                                            <TelerikGrid TItem="@ChildDeliverAddDto"
-                                            @ref="@ChildPickersGridRef"
-                                                         Height="100%"
-                                                         Pageable="true"
-                                                         PageSize="10"
-                                                         EditMode="@GridEditMode.Inline"
-                                                         Sortable="true"
-                                                         Groupable="false"
-                                                         Resizable="true"
-                                                         Reorderable="true"
-                                                         OnCreate="CreateHandler"
-                                                         OnDelete="@DeleteHandler"
-                                                         Data=@Child.ChildDelivers>
-                                                <GridToolBar>
-                                                    <GridCommandButton Command="Add" Icon="@IconUrls.AddCircle">افزودن تحویل گیرنده</GridCommandButton>
-                                                </GridToolBar>
-                                                <GridColumns>
-                                                    <GridColumn Field="@(nameof(ChildDeliverAddDto.FullName))" Title="نام و نام خانوادگی" Locked="false" Sortable="true" />
-                                                    <GridColumn Field="@(nameof(ChildDeliverAddDto.Relation))" Title="نسبت با کودک" Sortable="true" />
-                                                    <GridColumn Field="@(nameof(ChildDeliverAddDto.Phone))" Title="موبایل" Sortable="true" />
-
-                                                    <GridColumn Field="@(nameof(ChildDeliverAddDto.FullName))" Title="Action" Visible="false" Width="100px" Sortable="false" Locked="false">
-                                                        <Template Context="gridContext">
-                                                            @{
-                                                                //var sample = (SampleReadDto)gridContext;
-
-                                                                //<div class="grid-action-buttons-wrapper">
-
-                                                                //    <button class="grid-action-button delete" type="button" title="Delete" @onclick="@(() => DeleteSampleFromRequest(sample.Id))">
-                                                                //        <img class="btn-img" src="@IconUrls.TrashGray" />
-                                                                //        <img class="btn-img-hovered" src="@IconUrls.TrashWhite" />
-                                                                //    </button>
-
-                                                                //</div>
-                                                            }
-                                                        </Template>
-                                                    </GridColumn>
-                                                    <GridCommandColumn Context="CrudContext">
-                                                        <GridCommandButton Command="Save" Icon="@IconUrls.CheckIcon" ShowInEdit="true">ذخیره</GridCommandButton>
-                                                        <GridCommandButton Command="Delete" Icon="@IconUrls.TrashGray">حذف</GridCommandButton>
-                                                        <GridCommandButton Command="Cancel" Icon="@IconUrls.Back" ShowInEdit="true">انصراف</GridCommandButton>
-                                                    </GridCommandColumn>
-                                                </GridColumns>
-                                            </TelerikGrid>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                    </div>
-
-                    <!-- Form Section: Home Address Info-->
-                    <div class="row form-section">
-                        <div class="col-2 form-section-title">محل سکونت</div>
-                        <div class="col-10">
-                            <div class="row">
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="had"> آدرس محل سکونت </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="had"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.HomeAddress"
-                                                       Placeholder="آدرس محل سکونت" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.HomeAddress" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="hpn"> تلفن منزل</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="hpn"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.HomeTel"
-                                                       Placeholder="تلفن منزل" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.HomeTel" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="hpc"> کد پستی</label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="hpc"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.HomePostalCode"
-                                                       Placeholder="کد پستی" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.HomePostalCode" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Section: Child More Info-->
-                    <div class="row form-section">
-                        <div class="col-2 form-section-title">اطلاعات بیشتر</div>
-                        <div class="col-10">
-                            <div class="row">
-                            <div class="col-12 col-md-6 col-xxl-3 filter-box  flex mt-4">
-                                <div style="margin-left: 10px; margin-top: -1px;">
-                                    <TelerikCheckBox Id="AreParentsAlive"
-                                                     @bind-Value="@Child.ChildMoreInfo.DidChildHaveAccidentInThePast">
-                                    </TelerikCheckBox>
-                                </div>
-                                <label>آیا کودک دچار تصادف یا حادثه‌ای شده است؟</label>
-                            </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="PlaceOfInjury"> محل آسیب دیدگی؟ </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="PlaceOfInjury"
-                                                       Disabled="@(Child.ChildMoreInfo.DidChildHaveAccidentInThePast is false)"
-                                                       Style="width: 100%"
-                                                        @bind-Value="Child.ChildMoreInfo.PlaceOfInjury"
-                                                       Placeholder="محل آسیب دیدگی" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.PlaceOfInjury" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="SpecialDisease"> بیماری خاص یا مصرف دارویی خاص </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="SpecialDisease"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.SpecialDisease"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.SpecialDisease" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="Allergy"> حساسیت دارویی یا غذایی </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="Allergy"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.Allergy"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.Allergy" />
-                                </div>
-
-                                <div class="col-12 col-md-6 col-xxl-3 filter-box  flex mt-4">
-                                    <div style="margin-left: 10px; margin-top: -1px;">
-                                        <TelerikCheckBox Id="AreParentsAlive"
-                                        @bind-Value="@Child.ChildMoreInfo.AreParentsAlive">
-                                        </TelerikCheckBox>
-                                    </div>
-                                    <label>آیا والدین کودک در قید حیات هستند؟</label>
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="AreParentsAlive"> کودک با چه کسی زندگی می‌کند؟ </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenDropDown AllowClear="true"
-                                                        TValue="string"
-                                                        AllowFiltering="true"
-                                                        Placeholder="انتخاب کنید"
-                                                        Data="@(EnumMapping.ToSelectListItems<ChildLiveWithEnum>())"
-                                        @bind-Value="@Child.ChildMoreInfo.ChildLiveWithSelectedValue"
-                                                        TextProperty="Text"
-                                                        ValueProperty="Value" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.ChildLiveWithSelectedValue" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="SpecialHabits"> عادات ویژه </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenCheckBoxList @bind-Value=@_selectedHabits
-                                                            TValue="string"
-                                                            Orientation="Orientation.Horizontal">
-                                            <Items>
-                                                @foreach (var habit in HabitsList)
-                                                {
-                                                    <RadzenCheckBoxListItem Text=@habit Value=@habit Disabled="false" />
-                                                }
-                                            </Items>
-                                        </RadzenCheckBoxList>
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.SpecialHabits" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="SpecialFears"> ترس‌های خاص (از چه می‌ترسد؟)  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="SpecialFears"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.SpecialFears"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.SpecialFears" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="ColorInterests"> علایق کودک به رنگ  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="ColorInterests"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.ColorInterests"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.ColorInterests" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="ToyInterests"> علایق کودک به اسباب بازی  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="ToyInterests"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.ToyInterests"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.ToyInterests" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="SportInterests"> علایق کودک به ورزش  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="SportInterests"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.SportInterests"
-                                                       Placeholder="نوع ورزش" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.SportInterests" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="CharactersInterests"> علایق کودک به شخصیت کارتونی/تلویزیونی  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="CharactersInterests"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.CharactersInterests"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.CharactersInterests" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="EncouragingOrPunishingWay"> شما جهت تشویق و یا تنبیه فرزندتان از چه شیوه‌ای استفاده می‌کنید؟ </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="EncouragingOrPunishingWay"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.EncouragingOrPunishingWay"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.EncouragingOrPunishingWay" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="PhysicalCondition"> وضعیت جسمی، حرکتی کودک در مقایسه با کودکان دیگر خانواده  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenDropDown AllowClear="true"
-                                                        TValue="string"
-                                                        AllowFiltering="true"
-                                                        Placeholder="انتخاب کنید"
-                                                        Data="@(EnumMapping.ToSelectListItems<PhysicalConditionEnum>())"
-                                        @bind-Value="@Child.ChildMoreInfo.PhysicalConditionSelectedValue"
-                                                        TextProperty="Text"
-                                                        ValueProperty="Value" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.PhysicalConditionSelectedValue" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="WritingHand"> دست غالب  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="WritingHand"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.WritingHand"
-                                                       Placeholder="دست غالب" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.WritingHand" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="Insurance"> بیمه  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="Insurance"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.Insurance"
-                                                       Placeholder="بیمه" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.Insurance" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="AdditionalInfo"> تکمیلی  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="AdditionalInfo"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.AdditionalInfo"
-                                                       Placeholder="تکمیلی" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.AdditionalInfo" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="ParentalRatio"> نسبت پدر و مادر  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="ParentalRatio"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.ParentalRatio"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.ParentalRatio" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <label for="FamiliarityInstitution"> طریقه آشنایی شما با موسسه  </label>
-                                    <div class="form-input-wrapper">
-                                        <RadzenTextBox id="FamiliarityInstitution"
-                                                       Style="width: 100%"
-                                        @bind-Value="Child.ChildMoreInfo.FamiliarityInstitution"
-                                                       Placeholder="" />
-                                    </div>
-                                    <ValidationMessage For="() => Child.ChildMoreInfo.FamiliarityInstitution" />
+                                    <ValidationMessage For="() => Adult.PhotoPath" />
                                 </div>
                             </div>
                         </div>
@@ -853,7 +194,6 @@
 
             </div>
         </section>
-
 
     </div>
 </article>

@@ -54,7 +54,8 @@ public class AdultMoreInfoUpsertDto
     /// <summary>
     /// ميزان آشنايي شما با زبان عربي و علوم قرآني تا چه سطحي مي‌باشد؟ 
     /// </summary>
-    public FamiliarWithArabicAndQuranEnum FamiliarWithArabicAndQuran { get; set; }
+    public FamiliarWithArabicAndQuranEnum? FamiliarWithArabicAndQuran { get; set; }
+    public string? FamiliarWithArabicAndQuranSelectedValue { get; set; }
 
     /// <summary>
     /// چه كتابهايي در اين زمينه ‌خوانده‌ايد؟

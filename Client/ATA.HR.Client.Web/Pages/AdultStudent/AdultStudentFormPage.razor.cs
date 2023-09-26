@@ -76,12 +76,8 @@ public partial class AdultStudentFormPage
 
             if (result.IsSuccess)
             {
-                Child = result.Data;
-                Child.BirthDateJalali = Child.BirthDate.ToJalaliString();
-                Child.FatherBirthDateJalali = Child.FatherBirthDate.ToJalaliString();
-                Child.MotherBirthDateJalali = Child.MotherBirthDate.ToJalaliString();
-
-                Child.ChildMoreInfo.DidChildHaveAccidentInThePast = string.IsNullOrWhiteSpace(Child.ChildMoreInfo.PlaceOfInjury) is false;
+                Adult = result.Data;
+                Adult.BirthDateJalali = Adult.BirthDate.ToJalaliString();
             }
         }
 
@@ -92,18 +88,12 @@ public partial class AdultStudentFormPage
         await base.OnParametersSetAsync();
     }
 
-    private void OnStateInitHandler(GridStateEventArgs<ChildrenOutputDto> obj)
+    private void OnStateInitHandler(GridStateEventArgs<AdultOutputDto> obj)
     {
 
     }
 
     // Methods
-
-    private async Task RebindChildPickersGrid()
-    {
-        // Rebind RequestSamples Grid
-        await ChildPickersGridRef.SetState(ChildPickersGridRef.GetState());
-    }
 
     private string ToAbsoluteUrl(string relativeUrl)
     {
@@ -117,41 +107,36 @@ public partial class AdultStudentFormPage
 
     private void ChangeToFilterMode() => PageOperationType = OperationType.Filter;
 
-    private async Task OnChildStudentSubmit()
+    private async Task OnAdultStudentSubmit()
     {
-        if (ValidateUploadingChildImageOnSubmit() is false) return;
+        if (ValidateUploadingAdultImageOnSubmit() is false) return;
 
         IsLoading = true;
 
         try
         {
-            Child.BirthDate = Child.BirthDateJalali!.ToDateTime();
-            Child.FatherBirthDate = Child.FatherBirthDateJalali!.ToDateTime();
-            Child.MotherBirthDate = Child.MotherBirthDateJalali!.ToDateTime();
-            Child.ChildMoreInfo.ChildLiveWith = Child.ChildMoreInfo.ChildLiveWithSelectedValue.IsNotNullOrEmpty()
-                ? (ChildLiveWithEnum)Child.ChildMoreInfo.ChildLiveWithSelectedValue!.ToInt()
+            Adult.BirthDate = Adult.BirthDateJalali!.ToDateTime();
+
+            Adult.AdultMoreInfo.FamiliarWithArabicAndQuran= Adult.AdultMoreInfo.FamiliarWithArabicAndQuranSelectedValue.IsNotNullOrEmpty()
+                ? (FamiliarWithArabicAndQuranEnum)Adult.AdultMoreInfo.FamiliarWithArabicAndQuranSelectedValue!.ToInt()
                 : null;
-            Child.ChildMoreInfo.PhysicalCondition = Child.ChildMoreInfo.PhysicalConditionSelectedValue.IsNotNullOrEmpty()
-                ? (PhysicalConditionEnum)Child.ChildMoreInfo.PhysicalConditionSelectedValue!.ToInt()
-                : null;
-            Child.ChildMoreInfo.SpecialHabits = string.Join(",", _selectedHabits);
 
             if (PageOperationType is OperationType.Add)
             {
-                var apiResult = await APIs.CreateChildStudent(Child);
+                var apiResult = await APIs.CreateAdultStudent(Adult);
 
                 if (apiResult.IsSuccess)
-                    NotificationService.Toast(NotificationType.Success, "داوطلب کودک با موفقیت ثبت شد");
+                    NotificationService.Toast(NotificationType.Success, "داوطلب بزرگسال با موفقیت ثبت شد");
             }
             else if (PageOperationType is OperationType.Edit)
             {
-                var apiResult = await APIs.UpdateChildStudent(Child);
+                var apiResult = await APIs.UpdateAdultStudent(Adult);
 
                 if (apiResult.IsSuccess)
-                    NotificationService.Toast(NotificationType.Success, "داوطلب کودک با موفقیت ویرایش شد");
+                    NotificationService.Toast(NotificationType.Success, "داوطلب بزرگسال با موفقیت ویرایش شد");
             }
 
-            OpenChildStudentsPage();
+            OpenAdultStudentsPage();
         }
         catch
         {
@@ -165,9 +150,9 @@ public partial class AdultStudentFormPage
         }
     }
 
-    private bool ValidateUploadingChildImageOnSubmit()
+    private bool ValidateUploadingAdultImageOnSubmit()
     {
-        if (false /*ChildAddDto.url.Count == 0*/)
+        if (false /*AdultAddDto.url.Count == 0*/)
         {
             NotificationService.Toast(NotificationType.Error, "تصویر داوطلب بارگزاری نشده است");
 
@@ -181,9 +166,9 @@ public partial class AdultStudentFormPage
 
     private void OnFileSelectToUpload(UploadSelectEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(Child.IdNo))
+        if (string.IsNullOrWhiteSpace(Adult.NationalCode))
         {
-            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس کودک، شماره شناسنامه وی را نمایید");
+            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس بزرگسال، شماره شناسنامه وی را نمایید");
 
             e.IsCancelled = true;
 
@@ -233,7 +218,7 @@ public partial class AdultStudentFormPage
 
         if(uploadResult.IsSuccess)
         {
-            Child.PhotoPath = uploadResult.Data;
+            Adult.PhotoPath = uploadResult.Data;
 
             NotificationService.Toast(NotificationType.Success, "عکس با موفقیت بارگزاری شد");
         }
@@ -244,7 +229,7 @@ public partial class AdultStudentFormPage
 
     private void OnUploadHandler(UploadEventArgs e)
     {
-        e.RequestHeaders.Add("Identifier", Child.IdNo);
+        e.RequestHeaders.Add("Identifier", Adult.NationalCode);
     }
 
     private static string? GetFileTypeFromExtension(string? fileExtension)
@@ -268,35 +253,13 @@ public partial class AdultStudentFormPage
     }
     #endregion
 
-    private void RemoveChildImage()
+    private void RemoveAdultImage()
     {
-        Child.PhotoPath = null;
+        Adult.PhotoPath = null;
     }
 
-    private void OpenChildStudentsPage()
+    private void OpenAdultStudentsPage()
     {
-        NavigationManager.NavigateTo(PageUrls.ChildrenPage);
-    }
-
-    private async Task CreateHandler(GridCommandEventArgs args)
-    {
-        ChildDeliverAddDto picker = (ChildDeliverAddDto)args.Item;
-
-        Child.ChildDelivers.Add(picker);
-
-        NotificationService.Toast(NotificationType.Success, "تحویل گیرنده اضافه شد");
-
-        await RebindChildPickersGrid();
-    }
-
-    private async Task DeleteHandler(GridCommandEventArgs args)
-    {
-        ChildDeliverAddDto picker = (ChildDeliverAddDto)args.Item;
-
-        Child.ChildDelivers.Remove(picker);
-
-        NotificationService.Toast(NotificationType.Success, "تحویل گیرنده حذف شد");
-
-        await RebindChildPickersGrid();
+        NavigationManager.NavigateTo(PageUrls.AdultsPage);
     }
 }
