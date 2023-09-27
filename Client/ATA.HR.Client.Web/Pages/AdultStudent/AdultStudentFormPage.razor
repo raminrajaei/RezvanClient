@@ -123,9 +123,9 @@
                                     <ValidationMessage For="() => Adult.BirthPlace" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="ip">محل صدور</label>
+                                    <label for="IssuePlace">محل صدور</label>
                                     <div class="form-input-wrapper">
-                                        <RadzenTextBox id="ip"
+                                        <RadzenTextBox id="IssuePlace"
                                                        Style="width: 100%"
                                                        @bind-Value="Adult.IssuePlace"
                                                        Placeholder="محل صدور" />
@@ -134,9 +134,9 @@
                                 </div>
 
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="in">شماره شناسنامه</label>
+                                    <label for="IdNo">شماره شناسنامه</label>
                                     <div class="form-input-wrapper">
-                                        <RadzenTextBox id="idNo"
+                                        <RadzenTextBox id="IdNo"
                                                        Style="width: 100%"
                                                        @bind-Value="Adult.IdNo"
                                                        Placeholder="شماره شناسنامه" />
@@ -145,9 +145,9 @@
                                 </div>
 
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="in">کد ملی</label>
+                                    <label for="NationalCode">کد ملی</label>
                                     <div class="form-input-wrapper">
-                                        <RadzenTextBox id="nationalCode"
+                                        <RadzenTextBox id="NationalCode"
                                                        Style="width: 100%"
                                                        @bind-Value="Adult.NationalCode"
                                                        Placeholder="کد ملی" />
@@ -187,18 +187,77 @@
                                         else
                                         {
                                             <TelerikUpload SaveUrl="@SaveUrl"
-                                                       SaveField="file"
-                                                       Enabled="@string.IsNullOrWhiteSpace(Adult.PhotoPath)"
-                                                       OnUpload="OnUploadHandler"
-                                                       MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
-                                                       MinFileSize="1024"
-                                                       OnSelect="OnFileSelectToUpload"
-                                                       OnSuccess="OnFileSuccessUpload">
+                                                           SaveField="file"
+                                                           Enabled="@string.IsNullOrWhiteSpace(Adult.PhotoPath)"
+                                                           OnUpload="OnUploadHandler"
+                                                           MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
+                                                           MinFileSize="1024"
+                                                           OnSelect="OnFileSelectToUpload"
+                                                           OnSuccess="OnFileSuccessUpload">
                                             </TelerikUpload>
                                             <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
                                         }
                                     </div>
                                     <ValidationMessage For="() => Adult.PhotoPath" />
+                                </div>
+                                
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="Field">رشته تحصیلی</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="Field"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Adult.Field"
+                                                       Placeholder="رشته تحصیلی" />
+                                    </div>
+                                    <ValidationMessage For="() => Adult.Field" />
+                                </div>
+                                
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="EducationLevel">ميزان تحصيلات</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="EducationLevel"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Adult.EducationLevel"
+                                                       Placeholder="ميزان تحصيلات" />
+                                    </div>
+                                    <ValidationMessage For="() => Adult.EducationLevel" />
+                                </div>
+                                
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="Job">شغل</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="Job"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Adult.Job"
+                                                       Placeholder="شغل" />
+                                    </div>
+                                    <ValidationMessage For="() => Adult.Job" />
+                                </div>
+
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="MaritalStatusEnum"> وضعیت تاهل </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenDropDown AllowClear="true"
+                                                        TValue="string"
+                                                        AllowFiltering="true"
+                                                        Placeholder="انتخاب کنید"
+                                                        Data="@(EnumMapping.ToSelectListItems<MaritalStatusEnum>())"
+                                                        @bind-Value="@Adult.MaritalStatusSelectedValue"
+                                                        TextProperty="Text"
+                                                        ValueProperty="Value" />
+                                    </div>
+                                    <ValidationMessage For="() => Adult.MaritalStatusSelectedValue" />
+                                </div>
+                                
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="HomeAddress">نشانی منزل</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="HomeAddress"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Adult.HomeAddress"
+                                                       Placeholder="نشانی منزل" />
+                                    </div>
+                                    <ValidationMessage For="() => Adult.HomeAddress" />
                                 </div>
                             </div>
                         </div>

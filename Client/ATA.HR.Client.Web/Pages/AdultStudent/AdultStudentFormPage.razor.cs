@@ -120,6 +120,10 @@ public partial class AdultStudentFormPage
                 ? (FamiliarWithArabicAndQuranEnum)Adult.AdultMoreInfo.FamiliarWithArabicAndQuranSelectedValue!.ToInt()
                 : null;
 
+            Adult.MaritalStatus = Adult.MaritalStatusSelectedValue.IsNotNullOrEmpty()
+                ? (MaritalStatusEnum)Adult.MaritalStatusSelectedValue!.ToInt()
+                : null;
+
             if (PageOperationType is OperationType.Add)
             {
                 var apiResult = await APIs.CreateAdultStudent(Adult);
