@@ -187,13 +187,13 @@
                                         else
                                         {
                                             <TelerikUpload SaveUrl="@SaveUrl"
-                                                       SaveField="file"
-                                                       Enabled="@string.IsNullOrWhiteSpace(Adult.PhotoPath)"
-                                                       OnUpload="OnUploadHandler"
-                                                       MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
-                                                       MinFileSize="1024"
-                                                       OnSelect="OnFileSelectToUpload"
-                                                       OnSuccess="OnFileSuccessUpload">
+                                                           SaveField="file"
+                                                           Enabled="@string.IsNullOrWhiteSpace(Adult.PhotoPath)"
+                                                           OnUpload="OnUploadHandler"
+                                                           MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
+                                                           MinFileSize="1024"
+                                                           OnSelect="OnFileSelectToUpload"
+                                                           OnSuccess="OnFileSuccessUpload">
                                             </TelerikUpload>
                                             <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
                                         }
