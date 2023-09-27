@@ -231,11 +231,11 @@
                                 <div class="col-3 form-item-wrapper">
                                     <label for="PlaceOfInjury"> در چه سالي؟ </label>
                                     <div class="form-input-wrapper">
-                                        @*<RadzenTextBox id="ParticipateYear"
+                                        <RadzenNumeric id="ParticipateYear"
                                                        Disabled="@(Adult.AdultMoreInfo.ParticipateInQuran is false)"
                                                        Style="width: 100%"
                                                        @bind-Value="Adult.AdultMoreInfo.ParticipateYear"
-                                                       Placeholder="در چه سالي" />*@
+                                                       Placeholder="در چه سالي" />
                                     </div>
                                     <ValidationMessage For="() => Adult.AdultMoreInfo.ParticipateYear" />
                                 </div>
