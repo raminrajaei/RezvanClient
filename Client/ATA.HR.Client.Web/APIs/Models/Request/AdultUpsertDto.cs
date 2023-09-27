@@ -44,5 +44,5 @@ public class AdultUpsertDto
     public string FamiliarityInstitution { get; set; }
 
     // Nav
-    public AdultMoreInfoUpsertDto AdultMoreInfo { get; set; }
+    public AdultMoreInfoUpsertDto AdultMoreInfo { get; set; } = new();
 }
