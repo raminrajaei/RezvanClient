@@ -91,8 +91,10 @@ public partial class ChildStudentFormPage
                 Child.BirthDateJalali = Child.BirthDate.ToJalaliString();
                 Child.FatherBirthDateJalali = Child.FatherBirthDate.ToJalaliString();
                 Child.MotherBirthDateJalali = Child.MotherBirthDate.ToJalaliString();
-
+                Child.ChildMoreInfo.ChildLiveWithSelectedValue = Child.ChildMoreInfo.ChildLiveWith?.ToString("D");
+                Child.ChildMoreInfo.PhysicalConditionSelectedValue = Child.ChildMoreInfo.PhysicalCondition?.ToString("D");
                 Child.ChildMoreInfo.DidChildHaveAccidentInThePast = string.IsNullOrWhiteSpace(Child.ChildMoreInfo.PlaceOfInjury) is false;
+                _selectedHabits = Child.ChildMoreInfo.SpecialHabits.Split(",");
             }
         }
 
