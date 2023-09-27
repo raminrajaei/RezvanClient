@@ -302,7 +302,7 @@ public partial class AdultStudentsPage : IDisposable
                 var reportData = apiResult.Data.Data;
 
                 IExcelBuilder excelBuilder = ExcelBuilder
-                    .SetGeneratedFileName($"لیست کودکان")
+                    .SetGeneratedFileName($"لیست بزرگسالان")
                     .CreateGridLayoutExcel()
                     .WithOneSheetUsingModelBinding(reportData)
                     .Build();
@@ -391,7 +391,7 @@ public partial class AdultStudentsPage : IDisposable
         {
             await APIs.DeleteAdult(deletingAdultId);
 
-            NotificationService.Toast(NotificationType.Success, "حذف کودک با موفقیت انجام شد");
+            NotificationService.Toast(NotificationType.Success, "حذف بزرگسال با موفقیت انجام شد");
         }
         catch
         {
