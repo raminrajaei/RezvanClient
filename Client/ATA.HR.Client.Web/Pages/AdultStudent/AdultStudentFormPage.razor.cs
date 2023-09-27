@@ -25,7 +25,7 @@ public partial class AdultStudentFormPage
     private OperationType PageOperationType { get; set; } = OperationType.Add;
 
     private AdultUpsertDto Adult { get; set; } = new();
-    
+
 
     // Upload Props
     private bool IsUploading { get; set; }
@@ -36,7 +36,7 @@ public partial class AdultStudentFormPage
 
     // One way to define relative paths is to put the desired URL here.
     // This can be a full URL such as https://mydomain/myendpoint/save
-    private string SaveUrl => ToAbsoluteUrl("/api/FileManager/adult-photo"); 
+    private string SaveUrl => ToAbsoluteUrl("/api/FileManager/adult-photo");
 
     // Inject
     [Inject] public AppData AppData { get; set; }
@@ -55,7 +55,7 @@ public partial class AdultStudentFormPage
 
         try
         {
-            
+
         }
         finally
         {
@@ -77,6 +77,8 @@ public partial class AdultStudentFormPage
             {
                 Adult = result.Data;
                 Adult.BirthDateJalali = Adult.BirthDate.ToJalaliString();
+                Adult.MaritalStatusSelectedValue = Adult.MaritalStatus?.ToString("D");
+                Adult.AdultMoreInfo.FamiliarWithArabicAndQuranSelectedValue = Adult.AdultMoreInfo.FamiliarWithArabicAndQuran?.ToString("D");
             }
         }
 
@@ -116,7 +118,7 @@ public partial class AdultStudentFormPage
         {
             Adult.BirthDate = Adult.BirthDateJalali!.ToDateTime();
 
-            Adult.AdultMoreInfo.FamiliarWithArabicAndQuran= Adult.AdultMoreInfo.FamiliarWithArabicAndQuranSelectedValue.IsNotNullOrEmpty()
+            Adult.AdultMoreInfo.FamiliarWithArabicAndQuran = Adult.AdultMoreInfo.FamiliarWithArabicAndQuranSelectedValue.IsNotNullOrEmpty()
                 ? (FamiliarWithArabicAndQuranEnum)Adult.AdultMoreInfo.FamiliarWithArabicAndQuranSelectedValue!.ToInt()
                 : null;
 
@@ -219,7 +221,7 @@ public partial class AdultStudentFormPage
 
         var uploadResult = e.Request.ResponseText.DeserializeToModel<ApiResult<string>>();
 
-        if(uploadResult.IsSuccess)
+        if (uploadResult.IsSuccess)
         {
             Adult.PhotoPath = uploadResult.Data;
 
