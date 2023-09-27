@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ATA.HR.Client.Web.APIs.Enums;
 
 namespace ATA.HR.Client.Web.APIs.Models.Request;
 
@@ -28,7 +29,10 @@ public class AdultUpsertDto
     public string Field { get; set; }
     public string EducationLevel { get; set; }
     public string Job { get; set; }
-    public bool IsSingle { get; set; }
+
+    public MaritalStatusEnum? MaritalStatus { get; set; }
+    public string? MaritalStatusSelectedValue { get; set; }
+
     public string PhoneNumber { get; set; }
     public string HomeAddress { get; set; }
     public string HomePhone { get; set; }
