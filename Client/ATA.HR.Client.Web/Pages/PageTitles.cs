@@ -71,6 +71,13 @@ public static class PageTitles
     }
     #endregion
 
+    #region Class
+    public static class ClassPage
+    {
+        public static readonly string Title = "لیست کلاس ها";
+    }
+    #endregion
+
     // ATA: To Remove Soon
     public static class HomePage
     {

@@ -63,4 +63,12 @@ public interface IRezvanAPIs
     [Put("/api/Teacher")]
     Task<ApiResult> UpdateTeacher([Body] TeacherUpsertDto teacher);
     #endregion
+
+    #region ChildClass
+    [Get("/api/ChildClass/get-children-classes")]
+    Task<ApiResult<PagedList<ChildClassOutputDto>>> GetChildrenClasses([Query] ChildClassInputDto query);
+
+    [Post("/api/ChildClass/{id}/remove")]
+    Task<ApiResult> DeleteChildClass(long id);
+    #endregion
 }

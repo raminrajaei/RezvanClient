@@ -27,7 +27,8 @@ public partial class SideBar
             SubMenuItems = new()
             {
                 new(PageUrls.ChildrenPage, "لیست کودکان"),
-                new(PageUrls.AddChildFormPage(), "ثبت نام کودک جدید")
+                new(PageUrls.AddChildFormPage(), "ثبت نام کودک جدید"),
+                new(PageUrls.ChildClassPage, "کلاس های کودکان")
             }
         },
         
@@ -63,7 +64,7 @@ public partial class SideBar
         new()
         {
             Title = "کلاس",
-            URL = PageUrls.TeachersPage,
+            URL = PageUrls.ClassPage,
             ActiveIconUrl = IconUrls.Class,
             InactiveIconUrl = IconUrls.Class
         },
