@@ -312,6 +312,34 @@
                                     <ValidationMessage For="() => Teacher.SocialNetworkNumber" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
+                                    <label for="SpecialHabits"> ممتحن </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenCheckBox @bind-Value=@Teacher.IsMomtahen />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.IsMomtahen" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="SpecialHabits"> مدرس </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenCheckBox @bind-Value=@Teacher.IsModares />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.IsModares" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="SpecialHabits"> معلم </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenCheckBox @bind-Value=@Teacher.IsMoalem />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.IsMoalem" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="SpecialHabits"> مربی </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenCheckBox @bind-Value=@Teacher.IsMorabi />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.IsMorabi" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
                                     <div class="flex justify-content-between">
                                         <label>
                                             @if (Teacher.PhotoPath.IsNotNullOrEmpty())
