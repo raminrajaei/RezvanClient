@@ -1,0 +1,369 @@
+﻿@page "/teacher/add"
+@page "/teacher/edit/{TeacherId:int}"
+
+@using Microsoft.AspNetCore.Components
+@using Calendar = Blazor.PersianDatePicker.Calendar
+@using ATABit.Helper.Utils
+@using ATA.HR.Client.Web.APIs.Enums
+@using ATA.HR.Client.Web.APIs.Models.Request
+@inherits BitPageBase
+
+<PageTitle>
+    @if (PageOperationType == OperationType.Add)
+    {
+        @PageTitles.AddTeacherFormPage.Title
+    }
+    else
+    {
+        @PageTitles.EditTeacherFormPage.Title
+    }
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+<TelerikLoaderContainer Text="Uploading The Document" Visible="@IsUploading" LoaderType="LoaderType.ConvergingSpinner" />
+
+<article>
+
+    <div class="personnel-page">
+
+        <!-- AddOrEdit Header -->
+        <section>
+            @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
+            {
+                <HeaderAddOrEdit>
+                    <button class="default-button" @onclick="OpenTeachersPage">انصراف</button>
+                    <button type="submit" form="teacherStudentForm" class="primary-button">ذخیره</button>
+                </HeaderAddOrEdit>
+            }
+        </section>
+
+        <!-- Page Heading Title -->
+        <section class="page-header-section">
+            <div class="page-header-wrapper">
+                <div class="flex align-items-center">
+                    @if (PageOperationType == OperationType.Add)
+                    {
+                        <TopBar PageName="@("ثبت مدرس جدید")" PageDescription="ثبت نام داوطلب مدرس جدید در موسسه‌ی‌ رضوان الرسول" />
+                    }
+                    else if (PageOperationType == OperationType.Edit)
+                    {
+                        <TopBar PageName="@("ویرایش مدرس")" PageDescription="ویرایش داوطلب مدرس در موسسه‌ی‌ رضوان الرسول" />
+                    }
+                    else
+                    {
+                    }
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Teacher Student EditForm -->
+        <section class="documentEditFormSection">
+            <div class="form-custom-wrapper">
+
+                <EditForm id="teacherStudentForm" class="row" Model="@Teacher" OnValidSubmit="OnTeacherSubmit">
+
+                    <DataAnnotationsValidator />
+
+                    <!-- Form Section: Teacher Info -->
+                    <div class="row form-section">
+                        <div class="col-2 form-section-title">مشخصات عمومی</div>
+                        <div class="col-10">
+                            <div class="row">
+
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="fn">نام * </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="fn"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.FirstName"
+                                                       Placeholder="نام" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.FirstName" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="ln">نام خانوادگی * </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="ln"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.LastName"
+                                                       Placeholder="نام خانوادگی" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.LastName" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="fan"> نام پدر * </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="fan"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.FatherName"
+                                                       Placeholder="نام پدر" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.FatherName" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="IdNo">شماره شناسنامه</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="IdNo"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.IdNo"
+                                                       Placeholder="شماره شناسنامه" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.IdNo" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="NationalCode">کد ملی</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="NationalCode"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.NationalCode"
+                                                       Placeholder="کد ملی" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.NationalCode" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="PhoneNumber">شماره همراه</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="PhoneNumber"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.PhoneNumber"
+                                                       Placeholder="شماره همراه" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.PhoneNumber" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="bd"> تاریخ تولد * </label>
+                                    <div class="form-input-wrapper">
+                                        <InputPersianDatePicker Id="bd"
+                                        @bind-Value="Teacher.BirthDateJalali"
+                                                                Name="bd"
+                                                                CssClass="cost-date-picker"
+                                                                Visible="true"
+                                                                Style="margin-left: -20px"
+                                                                ReadOnly="true"
+                                                                Disabled="false"
+                                                                PickerAlign="Align.Right"
+                                                                InitialValue="false"
+                                                                CalendarType="Calendar.SingleModeJalali"
+                                                                DigitType="DigitType.BasedOnCalendar"
+                                                                DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                                MinDateSetOnToday="false"
+                                                                Placeholder="تاریخ تولد"
+                                                                Theme="PickerTheme.RedBlack" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.BirthDateJalali" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="bp">محل تولد </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="bp"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.BirthPlace"
+                                                       Placeholder="محل تولد" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.BirthPlace" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="ip">محل صدور</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="ip"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.IssuePlace"
+                                                       Placeholder="محل صدور" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.IssuePlace" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="AreParentsAlive"> جنسیت </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenDropDown AllowClear="true"
+                                                        TValue="string"
+                                                        AllowFiltering="true"
+                                                        Placeholder="انتخاب کنید"
+                                                        Data="@(EnumMapping.ToSelectListItems<GenderEnum>())"
+                                        @bind-Value="@Teacher.GenderSelectedValue"
+                                                        TextProperty="Text"
+                                                        ValueProperty="Value" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.GenderSelectedValue" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="AreParentsAlive"> وضعیت تاهل </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenDropDown AllowClear="true"
+                                                        TValue="string"
+                                                        AllowFiltering="true"
+                                                        Placeholder="انتخاب کنید"
+                                                        Data="@(EnumMapping.ToSelectListItems<MaritalStatusEnum>())"
+                                        @bind-Value="@Teacher.MaritalStatusSelectedValue"
+                                                        TextProperty="Text"
+                                                        ValueProperty="Value" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.MaritalStatusSelectedValue" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="ReligionNationality">مذهب و ملیت</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="ReligionNationality"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.ReligionNationality"
+                                                       Placeholder="مذهب و ملیت" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.ReligionNationality" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="Education">تحصیلات</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="Education"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.Education"
+                                                       Placeholder="تحصیلات" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.Education" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="Field">رشته تحصیلی</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="Field"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.Field"
+                                                       Placeholder="رشته تحصیلی" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.Field" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="EducationPlace">محل تحصیل</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="EducationPlace"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.EducationPlace"
+                                                       Placeholder="محل تحصیل" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.EducationPlace" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="Expertise">تخصص</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="Expertise"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.Expertise"
+                                                       Placeholder="تخصص" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.Expertise" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="physicalCondition">وضعیت جسمی</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="physicalCondition"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.physicalCondition"
+                                                       Placeholder="وضعیت جسمی" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.physicalCondition" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="WorkAddress">نشانی محل کار</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="WorkAddress"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.WorkAddress"
+                                                       Placeholder="نشانی محل کار" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.WorkAddress" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="WorkPhone">تلفن محل کار</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="WorkPhone"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.WorkPhone"
+                                                       Placeholder="تلفن محل کار" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.WorkPhone" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="HomeAddress">نشانی منزل</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="HomeAddress"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.HomeAddress"
+                                                       Placeholder="نشانی منزل" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.HomeAddress" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="HomePhone">تلفن منزل</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="HomePhone"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.HomePhone"
+                                                       Placeholder="تلفن منزل" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.HomePhone" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="SocialNetworkNumber">شماره شبکه اجتماعی</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="SocialNetworkNumber"
+                                                       Style="width: 100%"
+                                        @bind-Value="Teacher.SocialNetworkNumber"
+                                                       Placeholder="شماره شبکه اجتماعی" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.SocialNetworkNumber" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <div class="flex justify-content-between">
+                                        <label>
+                                            @if (Teacher.PhotoPath.IsNotNullOrEmpty())
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
+                                            else
+                                            {
+                                                <span>بارگزاری عکس </span>
+                                            }
+                                        </label>
+                                        @if (Teacher.PhotoPath.IsNotNullOrEmpty())
+                                        {
+                                            <span @onclick="RemoveTeacherImage" class="remove-attachment-button">
+                                                حذف تصویر
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="form-input-wrapper">
+
+                                        @if (Teacher.PhotoPath.IsNotNullOrEmpty())
+                                        {
+                                            <div class="attachment-view-box">
+                                                <a href="@ToDocFullURL(Teacher.PhotoPath)" target="_blank">
+                                                    مشاهده تصویر
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <TelerikUpload SaveUrl="@SaveUrl"
+                                                           SaveField="file"
+                                                           Enabled="@string.IsNullOrWhiteSpace(Teacher.PhotoPath)"
+                                                           OnUpload="OnUploadHandler"
+                                                           MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
+                                                           MinFileSize="1024"
+                                                           OnSelect="OnFileSelectToUpload"
+                                                           OnSuccess="OnFileSuccessUpload">
+                                            </TelerikUpload>
+                                            <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
+                                        }
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.PhotoPath" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </EditForm>
+
+            </div>
+        </section>
+
+    </div>
+</article>

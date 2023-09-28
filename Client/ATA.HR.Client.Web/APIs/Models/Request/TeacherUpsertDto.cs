@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ATA.HR.Client.Web.APIs.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace ATA.HR.Client.Web.APIs.Models.Request;
 
@@ -18,10 +19,14 @@ public class TeacherUpsertDto
     [Required(ErrorMessage = "کد ملی مدرس را وارد کنید")]
     public string NationalCode { get; set; }
 
+    public string? BirthDateJalali { get; set; }
     public DateTime? BirthDate { get; set; }
+    public string BirthPlace { get; set; }
     public string IssuePlace { get; set; }
-    public bool IsMan { get; set; }
-    public bool IsMarried { get; set; }
+    public GenderEnum? Gender { get; set; }
+    public string? GenderSelectedValue { get; set; }
+    public MaritalStatusEnum? MaritalStatus { get; set; }
+    public string? MaritalStatusSelectedValue { get; set; }
     public string ReligionNationality { get; set; }
     public string Education { get; set; }
     public string Field { get; set; }

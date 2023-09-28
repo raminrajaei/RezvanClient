@@ -53,5 +53,14 @@ public interface IRezvanAPIs
 
     [Post("/api/Teacher/{teacherId}/remove")]
     Task<ApiResult> DeleteTeacher(long teacherId);
+
+    [Get("/api/Teacher/{teacherId}/GetTeacherByIdForForm")]
+    Task<ApiResult<TeacherUpsertDto>> GetTeacherByIdForForm(long teacherId);
+
+    [Post("/api/Teacher/create")]
+    Task<ApiResult> CreateTeacher([Body] TeacherUpsertDto teacher);
+
+    [Put("/api/Teacher")]
+    Task<ApiResult> UpdateTeacher([Body] TeacherUpsertDto teacher);
     #endregion
 }
