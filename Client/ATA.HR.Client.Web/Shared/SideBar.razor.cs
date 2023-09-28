@@ -63,7 +63,7 @@ public partial class SideBar
         new()
         {
             Title = "کلاس",
-            URL = PageUrls.TeachersPage,
+            URL = PageUrls.ClassPage,
             ActiveIconUrl = IconUrls.Class,
             InactiveIconUrl = IconUrls.Class
         },

@@ -23,6 +23,10 @@ public static class PageUrls
     public static string EditTeacherFormPage(int teacherId) => $"{TeacherRootPath}/edit/{teacherId}";
     public static string TeacherPrintPage(int teacherId) => $"{TeacherRootPath}/{teacherId}";
 
+    // Class
+    public const string ClassRootPath = "/class";
+    public const string ClassPage = $"{ClassRootPath}/all";
+
     // HR
     public const string Dashboard = "/";
 
