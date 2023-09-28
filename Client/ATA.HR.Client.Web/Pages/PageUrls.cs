@@ -9,6 +9,7 @@ public static class PageUrls
     public static string AddChildFormPage() => $"{ChildRootPath}/add";
     public static string EditChildFormPage(int childId) => $"{ChildRootPath}/edit/{childId}";
 
+    // Adult
     public const string AdultRootPath = "/adult";
     public const string AdultsPage = $"{AdultRootPath}/all";
     public static string AdultPrintPage(int adultId) => $"{AdultRootPath}/{adultId}";
@@ -17,9 +18,10 @@ public static class PageUrls
 
     // Teacher
     public const string TeacherRootPath = "/teacher";
-    public const string TeachersPage = "/teachers";
-    public static string AddTeacherFormPage() => $"{TeacherRootPath}/teacher";
-    public static string EditTeacherFormPage(int teacherId) => $"{TeacherRootPath}/teacher/{teacherId}";
+    public const string TeachersPage = $"{TeacherRootPath}/all";
+    public static string AddTeacherFormPage() => $"{TeacherRootPath}/add";
+    public static string EditTeacherFormPage(int teacherId) => $"{TeacherRootPath}/edit/{teacherId}";
+    public static string TeacherPrintPage(int teacherId) => $"{TeacherRootPath}/{teacherId}";
 
     // HR
     public const string Dashboard = "/";

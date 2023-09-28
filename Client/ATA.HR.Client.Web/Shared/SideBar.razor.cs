@@ -49,9 +49,14 @@ public partial class SideBar
         new()
         {
             Title = "مدرس",
-            URL = PageUrls.TeachersPage,
+            URL = PageUrls.TeacherRootPath,
             ActiveIconUrl = IconUrls.Teacher,
-            InactiveIconUrl = IconUrls.Teacher
+            InactiveIconUrl = IconUrls.Teacher,
+            SubMenuItems = new()
+            {
+                new(PageUrls.TeachersPage, "لیست مدرسان"),
+                new(PageUrls.AddTeacherFormPage(), "ثبت نام مدرس جدید")
+            }
         },
         
         // Rezvan: Class Menu

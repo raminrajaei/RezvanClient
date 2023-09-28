@@ -5,6 +5,7 @@ namespace ATA.HR.Client.Web.Pages;
 public static class PageTitles
 {
     // Rezvan
+    #region Child
     public static class ChildStudentsPage
     {
         public static readonly string Title = "لیست کودکان";
@@ -24,7 +25,9 @@ public static class PageTitles
     {
         public static readonly string Title = "ویرایش کودک";
     }
+    #endregion
 
+    #region Adult
     public static class AdultStudentsPage
     {
         public static readonly string Title = "لیست بزرگسالان";
@@ -44,6 +47,29 @@ public static class PageTitles
     {
         public static readonly string Title = "ویرایش بزرگسال";
     }
+    #endregion
+
+    #region Teacher
+    public static class TeacherPage
+    {
+        public static readonly string Title = "لیست مدرسان";
+    }
+
+    public static class TeacherPrintPage
+    {
+        public static readonly string Title = "جزییات مدرس";
+    }
+
+    public static class AddTeacherFormPage
+    {
+        public static readonly string Title = "ثبت مدرس جدید";
+    }
+
+    public static class EditTeacherFormPage
+    {
+        public static readonly string Title = "ویرایش مدرس";
+    }
+    #endregion
 
     // ATA: To Remove Soon
     public static class HomePage
