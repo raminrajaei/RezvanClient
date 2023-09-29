@@ -2,6 +2,7 @@
 using System.Net.Http;
 using ATA.HR.Client.Web.APIs.Models.Request;
 using ATA.HR.Client.Web.APIs.Models.Response;
+using ATABit.Shared;
 
 namespace ATA.HR.Client.Web.APIs;
 
@@ -28,6 +29,9 @@ public interface IRezvanAPIs
 
     [Get("/api/Child/{childId}/print")]
     Task<ApiResult<ChildDetailDto>> GetChildDetail(long childId);
+
+    [Get("/api/Child/children-items")]
+    Task<ApiResult<List<SelectListItemDto>>> GetChildrenItems();
     #endregion
 
     #region Adult
@@ -86,5 +90,19 @@ public interface IRezvanAPIs
 
     [Post("/api/ChildClass/{id}/remove")]
     Task<ApiResult> DeleteChildClass(long id);
+
+    [Get("/api/ChildClass/{id}/GetChildClassByIdForForm")]
+    Task<ApiResult<ChildClassUpsertDto>> GetChildClassByIdForForm(long id);
+
+    [Post("/api/ChildClass/create")]
+    Task<ApiResult> CreateChildClass([Body] ChildClassUpsertDto child);
+
+    [Put("/api/ChildClass")]
+    Task<ApiResult> UpdateChildClass([Body] ChildClassUpsertDto child);
+    #endregion
+
+    #region ClassRoom
+    [Get("/api/ClassRoom/classes-items")]
+    Task<ApiResult<List<SelectListItemDto>>> GetClassRoomItems([Query] bool childClass);
     #endregion
 }

@@ -1,0 +1,180 @@
+﻿@page "/childclass/add"
+@page "/childclass/edit/{ChildClassId:int}"
+
+@using Microsoft.AspNetCore.Components
+@using Calendar = Blazor.PersianDatePicker.Calendar
+@using ATABit.Helper.Utils
+@using ATA.HR.Client.Web.APIs.Enums
+@using ATA.HR.Client.Web.APIs.Models.Request
+@inherits BitPageBase
+
+<PageTitle>
+    @if (PageOperationType == OperationType.Add)
+    {
+        @PageTitles.AddChildClassFormPage.Title
+    }
+    else
+    {
+        @PageTitles.EditChildClassFormPage.Title
+    }
+</PageTitle>
+
+<TelerikLoaderContainer Text="" Visible="@IsLoading" />
+
+<article>
+
+    <div class="personnel-page">
+
+        <!-- AddOrEdit Header -->
+        <section>
+            @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
+            {
+                <HeaderAddOrEdit>
+                    <button class="default-button" @onclick="OpenChildStudentsPage">انصراف</button>
+                    <button type="submit" form="childClassForm" class="primary-button">ذخیره</button>
+                </HeaderAddOrEdit>
+            }
+        </section>
+
+        <!-- Page Heading Title -->
+        <section class="page-header-section">
+            <div class="page-header-wrapper">
+                <div class="flex align-items-center">
+                    @if (PageOperationType == OperationType.Add)
+                    {
+                        <TopBar PageName="@("ثبت کلاس جدید")" PageDescription="ثبت نام کلاس جدید برای کودک در موسسه‌ی‌ رضوان الرسول" />
+                    }
+                    else if (PageOperationType == OperationType.Edit)
+                    {
+                        <TopBar PageName="@("ویرایش کلاس")" PageDescription="ویرایش کلاس جدید برای کودک در موسسه‌ی‌ رضوان الرسول" />
+                    }
+                    else
+                    {
+                    }
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Child Student EditForm -->
+        <section class="documentEditFormSection">
+            <div class="form-custom-wrapper">
+
+                <EditForm id="childClassForm" class="row" Model="@Child" OnValidSubmit="OnChildClassSubmit">
+
+                    <DataAnnotationsValidator />
+
+                    <!-- Form Section: Child Info -->
+                    <div class="row form-section">
+                        <div class="col-2 form-section-title">اطلاعات ثبت نامی</div>
+                        <div class="col-10">
+                            <div class="row">
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="MaritalStatusEnum"> نام کودک </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenDropDown AllowClear="true"
+                                                        Disabled="PageOperationType is OperationType.Edit"
+                                                        TValue="string"
+                                                        AllowFiltering="true"
+                                                        Placeholder="انتخاب کنید"
+                                                        Data="@ChildrenSource"
+                                        @bind-Value="@Child.ChildIdSelectedValue"
+                                                        TextProperty="Text"
+                                                        ValueProperty="Value" />
+                                    </div>
+                                    <ValidationMessage For="() => Child.ChildIdSelectedValue" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="MaritalStatusEnum"> نام کلاس </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenDropDown AllowClear="true"
+                                                        Disabled="PageOperationType is OperationType.Edit"
+                                                        TValue="string"
+                                                        AllowFiltering="true"
+                                                        Placeholder="انتخاب کنید"
+                                                        Data="@ClassesSource"
+                                        @bind-Value="@Child.ClassRoomIdSelectedValue"
+                                                        TextProperty="Text"
+                                                        ValueProperty="Value" />
+                                    </div>
+                                    <ValidationMessage For="() => Child.ClassRoomIdSelectedValue" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="MaritalStatusEnum"> نام مربی </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenDropDown AllowClear="true"
+                                                        Disabled="PageOperationType is OperationType.Edit"
+                                                        TValue="string"
+                                                        AllowFiltering="true"
+                                                        Placeholder="انتخاب کنید"
+                                                        Data="@TeachersSource"
+                                        @bind-Value="@Child.TeacherIdSelectedValue"
+                                                        TextProperty="Text"
+                                                        ValueProperty="Value" />
+                                    </div>
+                                    <ValidationMessage For="() => Child.TeacherIdSelectedValue" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="bd"> شهریه * </label>
+                                    <div class="form-input-wrapper insurance-cost-amount">
+                                        <RadzenNumeric id="ParticipateYear"
+                                                       Style="width: 100%"
+                                                       Format="N0"
+                                        @bind-Value="Child.Tuition"
+                                                       Placeholder="شهریه" />
+                                    </div>
+                                    <ValidationMessage For="() => Child.Tuition" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="bd"> از تاریخ * </label>
+                                    <div class="form-input-wrapper">
+                                        <InputPersianDatePicker Id="bd"
+                                        @bind-Value="Child.FromDateJalali"
+                                                                Name="bd"
+                                                                CssClass="cost-date-picker"
+                                                                Visible="true"
+                                                                Style="margin-left: -20px"
+                                                                ReadOnly="true"
+                                                                Disabled="false"
+                                                                PickerAlign="Align.Right"
+                                                                InitialValue="false"
+                                                                CalendarType="Calendar.SingleModeJalali"
+                                                                DigitType="DigitType.BasedOnCalendar"
+                                                                DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                                MinDateSetOnToday="false"
+                                                                Placeholder="از تاریخ"
+                                                                Theme="PickerTheme.RedBlack" />
+                                    </div>
+                                    <ValidationMessage For="() => Child.FromDateJalali" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="bd"> تا تاریخ * </label>
+                                    <div class="form-input-wrapper">
+                                        <InputPersianDatePicker Id="bd"
+                                        @bind-Value="Child.ToDateJalali"
+                                                                Name="bd"
+                                                                CssClass="cost-date-picker"
+                                                                Visible="true"
+                                                                Style="margin-left: -20px"
+                                                                ReadOnly="true"
+                                                                Disabled="false"
+                                                                PickerAlign="Align.Right"
+                                                                InitialValue="false"
+                                                                CalendarType="Calendar.SingleModeJalali"
+                                                                DigitType="DigitType.BasedOnCalendar"
+                                                                DateFormat="DateFormat.yyyy_slash_MM_slash_dd"
+                                                                MinDateSetOnToday="false"
+                                                                Placeholder="تا تاریخ"
+                                                                Theme="PickerTheme.RedBlack" />
+                                    </div>
+                                    <ValidationMessage For="() => Child.ToDateJalali" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </EditForm>
+            </div>
+        </section>
+    </div>
+</article>
