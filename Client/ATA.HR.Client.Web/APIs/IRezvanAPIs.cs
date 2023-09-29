@@ -84,4 +84,9 @@ public interface IRezvanAPIs
     [Put("/api/ChildClass")]
     Task<ApiResult> UpdateChildClass([Body] ChildClassUpsertDto child);
     #endregion
+
+    #region ClassRoom
+    [Get("/api/ClassRoom/classes-items")]
+    Task<ApiResult<List<SelectListItemDto>>> GetClassRoomItems([Query] bool childClass);
+    #endregion
 }

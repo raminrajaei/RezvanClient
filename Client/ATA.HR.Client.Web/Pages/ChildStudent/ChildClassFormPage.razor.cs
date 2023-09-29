@@ -61,6 +61,16 @@ public partial class ChildClassFormPage
                     Value = child.Value.ToString()
                 });
             }
+
+            var classes = await APIs.GetClassRoomItems(true);
+            foreach (var item in classes.Data)
+            {
+                ClassesSource.Add(new SelectListItem
+                {
+                    Text = item.Text,
+                    Value = item.Value.ToString()
+                });
+            }
         }
         finally
         {
