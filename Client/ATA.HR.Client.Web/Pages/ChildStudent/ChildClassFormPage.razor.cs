@@ -71,6 +71,16 @@ public partial class ChildClassFormPage
                     Value = item.Value.ToString()
                 });
             }
+
+            var teachers = await APIs.GetTeachersItems();
+            foreach (var teacher in teachers.Data)
+            {
+                TeachersSource.Add(new SelectListItem
+                {
+                    Text = teacher.Text,
+                    Value = teacher.Value.ToString()
+                });
+            }
         }
         finally
         {
@@ -137,9 +147,9 @@ public partial class ChildClassFormPage
         {
             Child.From = Child.FromDateJalali!.ToDateTime();
             Child.To = Child.ToDateJalali!.ToDateTime();
-            //Child.ChildMoreInfo.PhysicalCondition = Child.ChildMoreInfo.PhysicalConditionSelectedValue.IsNotNullOrEmpty()
-            //    ? (PhysicalConditionEnum)Child.ChildMoreInfo.PhysicalConditionSelectedValue!.ToInt()
-            //    : null;
+            Child.ChildId = Child.ChildIdSelectedValue.ToLong();
+            Child.TeacherId = Child.TeacherIdSelectedValue.ToLong();
+            Child.ClassRoomId = Child.ClassRoomIdSelectedValue.ToLong();
 
             if (PageOperationType is OperationType.Add)
             {

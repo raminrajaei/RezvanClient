@@ -66,6 +66,9 @@ public interface IRezvanAPIs
 
     [Put("/api/Teacher")]
     Task<ApiResult> UpdateTeacher([Body] TeacherUpsertDto teacher);
+
+    [Get("/api/Teacher/teachers-items")]
+    Task<ApiResult<List<SelectListItemDto>>> GetTeachersItems();
     #endregion
 
     #region ChildClass
