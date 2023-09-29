@@ -1,104 +1,179 @@
 ﻿@page "/class/all"
-
-@using ATA.HR.Client.Web.APIs.Insurance.Models.Responses
 @using Microsoft.AspNetCore.Components
 @using ATA.HR.Client.Web.APIs.Models.Response
+@using ATABit.Helper.Utils
+@using ATA.HR.Client.Web.APIs.Enums
 @inherits BitPageBase
 
 <PageTitle>
     @PageTitles.ClassPage.Title
 </PageTitle>
 
-<TelerikLoaderContainer Text="" Visible="@IsLoading" />
-<TelerikLoaderContainer Text="Uploading The Document" Visible="@IsUploading" LoaderType="LoaderType.ConvergingSpinner" />
+<TelerikLoaderContainer Visible="@IsLoading" Text="" />
 
 <article>
 
-    <div class="personnel-page">
-
-        <!-- Page Heading Title -->
-        <section class="page-header-section">
+    <div class="classes-page">
+        <!-- personnel-page Page Heading Title -->
+        <section>
             <div class="page-header-wrapper">
-                <div class="flex align-items-center">
-                    <TopBar PageName="@PageTitles.ChildStudentsPage.Title" PageDescription="مشاهده‌ی همه‌ی کلاس هایی که ثبت کرده‌اید" />
+                <TopBar PageName="@PageTitles.ClassPage.Title" PageDescription="برای اضافه کردن، ویرایش و مشاهده‌ی کلاس‌های موسسه از این قسمت استفاده نمایید" />
+                <div>
+                        <RadzenSelectBar Data="@ClassTypesSource"
+                                         TValue="int?"
+                                         @bind-Value=@ClassTypeFilter
+                                         Change="@(ApplyFilters)"
+                                         TextProperty="Text"
+                                         ValueProperty="ValueInt" />
                 </div>
-
-                @if (PageOperationType == OperationType.Filter)
-                {
-                    <div class="flex">
-                        @*<button class="default-button" style="margin-left: 20px" @onclick="BackButtonHandler">بازگشت</button>*@
-                        <RadzenButton class="primary-button" Text="افزودن کلاس" Click="OpenAddNewChildPage" />
-                    </div>
-                }
+                <RadzenButton Disabled="PageOperationType == OperationType.Custom1" class="primary-button add-root-class-button" Text="ایجاد کلاس اصلی" Click="AddRootClass" />
             </div>
         </section>
 
-        <!-- Filter -->
-        <section class="filter-section">
-            @if (PageOperationType == OperationType.Filter)
-            {
-                <div class="page-box-wrapper">
-                    <div class="row">
-                        <div class="col-12 col-md-6 col-xl-6 col-xxl-3">
-                            <label class="input-label">
-                                کودک
-                            </label>
-                            <div class="searchbar-custom-wrapper">
-                                <img src="@IconUrls.Search" />
-                                <TelerikTextBox class="full-width"
-                                                PlaceHolder="جستجو با نام کلاس"
-                                                ValueChanged="SearchTermChanged">
-                                </TelerikTextBox>
-                            </div>
+        <!-- TreeView Section -->
+        <section class="class-section">
+
+            <TelerikSplitter Class="telerik-custom-split-wrapper">
+                <SplitterPanes>
+                    <SplitterPane Size="60%" Collapsible="true" Min="500px" Max="70%">
+
+                        <!-- classes TreeView -->
+                        <div class="treeview-custom-wrapper">
+                            <TelerikTreeView Data="@Classes"
+                                             SelectionMode="@TreeViewSelectionMode.Single"
+                            @bind-ExpandedItems="@ExpandedItems"
+                            @bind-SelectedItems="@SelectedItems">
+                                <TreeViewBindings>
+                                    <TreeViewBinding TextField="@(nameof(ClassRoomDto.Title))" ParentIdField="@(nameof(ClassRoomDto.ParentId))">
+                                        <ItemTemplate>
+                                            @{
+                                                var classRoom = (ClassRoomDto)context;
+
+                                                <div class=@($"class-box {(classRoom.IsSelected ? "selected" : "")}") @onclick="@(() => OnSelectClass(classRoom))">
+
+                                                    <div class="folder-name-box">
+
+                                                        <div class="item-icon"></div>
+
+                                                        <span class="class-name">@(classRoom.Title)</span>
+
+                                                        @if (classRoom.HasChildren)
+                                                        {
+                                                            <span class=@($"child-count {(classRoom.IsSelected ? "selected" : "")}")>@(classRoom.ChildCount)</span>
+                                                        }
+                                                    </div>
+
+                                                </div>
+
+                                                @if (classRoom.IsSelected)
+                                                {
+                                                    <div class="item-actions">
+                                                        <img src="@IconUrls.AddCircle" class="add" @onclick="@(() => OnAddClass(classRoom))" />
+
+                                                        @if (classRoom.HasChildren is false)
+                                                        {
+                                                            <img src="@IconUrls.TrashGray" class="remove" @onclick="@(() => OnDeleteClass(classRoom))" />
+                                                        }
+                                                    </div>
+                                                }
+                                            }
+                                        </ItemTemplate>
+                                    </TreeViewBinding>
+                                </TreeViewBindings>
+                            </TelerikTreeView>
                         </div>
-                    </div>
-                </div>
-            }
-        </section>
+                    </SplitterPane>
 
-        <!-- TreeView -->
-        <RadzenCard class="my-5 mx-auto" style="max-width: 400px;">
+                    <SplitterPane Collapsible="true" Min="50px">
 
-            <RadzenTree Expand=@OnExpand Collapse=@OnCollapse Change=@OnChange Style="width: 100%; height: 300px">
-                <RadzenTreeItem Text="BMW">
-                    <ChildContent>
-                        <RadzenTreeItem Text="M3" />
-                        <RadzenTreeItem Text="M5" />
-                    </ChildContent>
-                    <Template>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" style="width: 20px; margin-right: 8px;" />
-                        <b>@context.Text</b>
-                    </Template>
-                </RadzenTreeItem>
-                <RadzenTreeItem Text="Audi">
-                    <ChildContent>
-                        <RadzenTreeItem Text="RS4" />
-                        <RadzenTreeItem Text="RS6" />
-                    </ChildContent>
-                    <Template>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" style="width: 20px; margin-right: 8px;" />
-                        <b>@context.Text</b>
-                    </Template>
-                </RadzenTreeItem>
-                <RadzenTreeItem Text="Mercedes">
-                    <Template>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Logo.svg" style="width: 20px; margin-right: 8px;" />
-                        <b>@context.Text</b>
-                    </Template>
-                    <ChildContent>
-                        <RadzenTreeItem Text="C63 AMG" />
-                        <RadzenTreeItem Text="S63 AMG" />
-                    </ChildContent>
-                </RadzenTreeItem>
-            </RadzenTree>
-        </RadzenCard>
+                        @if (PageOperationType == OperationType.Nothing)
+                        {
+                            <div class="flex-column classes-emptystate">
+                                <img src="@ImageUrls.Pages.ClassEmptyState">
+                                <div class="class-emptystate-title">
+                                    کلاس‌های موسسه را سازماندهی نمایید
+                                </div>
+                                <div class="class-emptystate-subtitle">
+                                    کلاس‌ها را برای ویرایش، افزودن و حذف از لیست انتخاب نمایید
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-custom-wrapper class-edit-form">
 
-        <!-- Popup Windows => Confirm Document Deletion -->
-        <section>
-            <ConfirmDialog @bind-IsVisible="IsVisibleDeleteChildConfirmDialog"
-                           Title="تایید حذف کلاس"
-                           Text="این کلاس به طور کامل از لیست موسسه حذف خواهد شد. آیا از حذف آن اطمینان دارید؟"
-                           OnConfirm="() => DeleteChild(DeletingChildId)" />
+                                <div class="edit-form-title">
+                                    @if (PageOperationType == OperationType.Custom1)
+                                    {
+                                        <span>ایجاد کردن کلاس اصلی</span>
+                                    }
+                                    else if (PageOperationType == OperationType.Add)
+                                    {
+                                        <div>ایجاد کلاس جدید</div>
+
+                                        <div class="parent-class">کلاس پدر: <b>@(Classes.First(c => c.IsSelected).Title)</b></div>
+                                    }
+                                    else if (PageOperationType == OperationType.Edit)
+                                    {
+                                        <span>ویرایش کلاس انتخاب شده</span>
+                                    }
+                                </div>
+
+                                <EditForm Model="Class" OnValidSubmit="OnClassSubmit">
+                                    <DataAnnotationsValidator />
+
+                                    <div class="form-section class-form">
+
+                                        <div class="form-section-title">مشخصات کلاس</div>
+
+                                        <!-- class Name Input -->
+                                        <div class="form-item-wrapper">
+                                            <label for="className">نام کلاس *</label>
+                                            <div class="form-input-wrapper">
+                                                <TelerikTextBox Id="className" @ref="_focusableClassNameRef" @bind-Value="@Class.Title" PlaceHolder="نام کلاس" />
+                                            </div>
+                                            <ValidationMessage For="() => Class.Title" />
+                                        </div>
+                                        @if (PageOperationType != OperationType.Edit)
+                                        {
+                                            <div class="form-item-wrapper class-type-item">
+                                                <label for="className">نوع کلاس *</label>
+                                                <div class="form-input-wrapper">
+                                                    <RadzenDropDown AllowClear="false"
+                                                                    TValue="int"
+                                                                    Disabled="@(PageOperationType is OperationType.Add or OperationType.Edit)"
+                                                                    AllowFiltering="true"
+                                                                    Placeholder="انتخاب کنید"
+                                                                    Data="@(EnumMapping.ToSelectListItems<ClassType>())"
+                                                                    @bind-Value="@Class.ClassType"
+                                                                    TextProperty="Text"
+                                                                    ValueProperty="ValueInt" />
+                                                </div>
+                                                <ValidationMessage For="() => Class.ClassType" />
+                                            </div>
+                                        }
+
+                                        <div class="submit-button">
+                                            @if (IsSaving)
+                                            {
+                                                <button type="button" disable class="primary-button">در حال ذخیره</button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="primary-button">ذخیره</button>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </EditForm>
+                            </div>
+                        }
+
+                    </SplitterPane>
+
+                </SplitterPanes>
+            </TelerikSplitter>
+
         </section>
     </div>
 </article>

@@ -74,7 +74,7 @@ public static class PageTitles
     #region Class
     public static class ClassPage
     {
-        public static readonly string Title = "لیست کلاس ها";
+        public static readonly string Title = "لیست کلاس‌ها";
     }
     #endregion
 
