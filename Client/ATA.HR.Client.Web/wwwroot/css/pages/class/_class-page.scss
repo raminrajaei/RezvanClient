@@ -1,0 +1,124 @@
+﻿@import '../../utils/_base.scss';
+
+.classes-page {
+
+    .treeview-custom-wrapper {
+        padding: 1.25rem 3.125rem 0.9375rem 1.5625rem;
+        margin-left: -20px;
+
+        .k-treeview-leaf {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .k-treeview-leaf.k-selected {
+            color: black;
+            background-color: #f6f0ef;
+            font-weight: bold;
+        }
+
+        .folder-name-box {
+            display: flex;
+            margin-right: 8px;
+            margin-bottom: 2px;
+
+            .class-name {
+                margin-right: 5px;
+                margin-left: 10px;
+            }
+
+            .child-count {
+                background-color: #bfadad;
+                color: white;
+                padding: 0px 8px;
+                text-align: center;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .k-treeview-item {
+        padding: 0 16px 0 0;
+    }
+
+    .rz-selectbutton .rz-button {
+        width: auto !important;
+    }
+
+    .add-root-class-button {
+        width: 180px !important;
+    }
+
+    .class-section {
+        padding-bottom: 33px;
+        margin: 0px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .classes-emptystate {
+        justify-content: center;
+        align-items: center;
+        color: $bluey-grey;
+        font-size: 12px;
+        height: 650px;
+
+        .class-emptystate-title {
+            color: $dark;
+            font-size: 22px;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+
+        .class-emptystate-subtitle {
+            font-size: 14px;
+            color: $bluey-grey;
+            margin-top: 14px;
+            margin-bottom: 22px;
+        }
+
+        i {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+    }
+
+    .class-edit-form {
+        padding: rem(50px);
+        border: none;
+
+        .edit-form-title {
+            font-size: rem(23px);
+            margin-right: rem(25px);
+
+            .parent-class {
+                font-size: rem(18px);
+                margin-top: rem(17px);
+                letter-spacing: 1px;
+                word-spacing: -1px;
+                color: $dim-gray;
+                font-style: italic;
+            }
+        }
+
+        .class-form {
+            border: none;
+
+            .form-section-title {
+                color: $bluey-grey;
+                font-size: rem(18px);
+                font-family: $fontPrimary;
+                width: 50%;
+            }
+
+            .form-item-wrapper {
+                margin-top: rem(25px);
+                padding: 0;
+            }
+
+            .submit-button {
+                margin-top: rem(100px);
+            }
+        }
+    }
+}

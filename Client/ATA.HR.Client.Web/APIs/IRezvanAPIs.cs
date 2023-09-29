@@ -71,6 +71,22 @@ public interface IRezvanAPIs
     Task<ApiResult<List<SelectListItemDto>>> GetTeachersItems();
     #endregion
 
+    #region ClassRoom
+
+    [Get("/api/ClassRoom/get-classes")]
+    Task<ApiResult<List<ClassRoomDto>>> GetClasses();
+
+    [Get("/api/ClassRoom/get-classes")]
+    Task<ApiResult<List<ClassRoomDto>>> GetClasses([Query] int classType);
+
+    [Post("/api/ClassRoom/upsert-class")]
+    Task<ApiResult> UpsertClass([Body] ClassRoomUpsertDto classRoom);
+
+    [Post("/api/ClassRoom/{classId}/remove")]
+    Task<ApiResult> DeleteClass(long classId);
+
+    #endregion
+
     #region ChildClass
     [Get("/api/ChildClass/get-children-classes")]
     Task<ApiResult<PagedList<ChildClassOutputDto>>> GetChildrenClasses([Query] ChildClassInputDto query);

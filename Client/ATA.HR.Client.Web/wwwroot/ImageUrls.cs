@@ -26,5 +26,6 @@ public static class ImageUrls
         public const string SelectFoodBannerMobile = "/images/pages/food/mobile-banner.png";
         public const string SelectFoodSpoonAndFork = "/images/pages/food/spoon-fork.png";
         public const string ATAContractLogo = "/images/components/contract/ata-logo.png";
+        public const string ClassEmptyState = "/images/pages/class/empty-state.svg";
     }
 }
