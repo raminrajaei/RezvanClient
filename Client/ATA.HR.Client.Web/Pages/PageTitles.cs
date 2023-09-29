@@ -78,6 +78,17 @@ public static class PageTitles
     }
     #endregion
 
+    #region Child Class
+    public static class AddChildClassFormPage
+    {
+        public static readonly string Title = "ثبت کلاس کودک";
+    }
+    public static class EditChildClassFormPage
+    {
+        public static readonly string Title = "ویرایش کلاس کودک";
+    }
+    #endregion
+
     // ATA: To Remove Soon
     public static class HomePage
     {
