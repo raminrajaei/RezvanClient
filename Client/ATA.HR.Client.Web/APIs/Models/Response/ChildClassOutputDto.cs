@@ -43,7 +43,7 @@ public class ChildClassOutputDto
     [ExcelSheetColumn(Ignore = true)]
     public DateTime To { get; set; }
 
-    [ExcelSheetColumn(HeaderName = "از تاریخ", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    [ExcelSheetColumn(HeaderName = "تا تاریخ", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string? ToDateJalali => To.ToJalaliString();
 }
 

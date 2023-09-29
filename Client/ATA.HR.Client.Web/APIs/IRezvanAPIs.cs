@@ -100,7 +100,7 @@ public interface IRezvanAPIs
     [Post("/api/ChildClass/create")]
     Task<ApiResult> CreateChildClass([Body] ChildClassUpsertDto child);
 
-    [Put("/api/ChildClass")]
+    [Put("/api/ChildClass/update")]
     Task<ApiResult> UpdateChildClass([Body] ChildClassUpsertDto child);
     #endregion
 

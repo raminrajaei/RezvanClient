@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Threading;
-using ATA.HR.Client.Web.APIs.Enums;
 using ATA.HR.Client.Web.APIs.Models.Response;
 using Telerik.Blazor.Components;
 using ATA.HR.Client.Web.APIs.Models.Request;
@@ -103,7 +102,9 @@ public partial class ChildClassFormPage
                 Child = result.Data;
                 Child.FromDateJalali = Child.From.ToJalaliString();
                 Child.ToDateJalali = Child.To.ToJalaliString();
-                //Child.ChildMoreInfo.ChildLiveWithSelectedValue = Child.ChildMoreInfo.ChildLiveWith?.ToString("D");
+                Child.ChildIdSelectedValue = Child.ChildId.ToString();
+                Child.TeacherIdSelectedValue = Child.TeacherId.ToString();
+                Child.ClassRoomIdSelectedValue = Child.ClassRoomId.ToString();
             }
         }
 
@@ -166,7 +167,7 @@ public partial class ChildClassFormPage
                     NotificationService.Toast(NotificationType.Success, "کلاس کودک با موفقیت ویرایش شد");
             }
 
-            OpenChildStudentsPage();
+            OpenChildClassPage();
         }
         catch
         {
@@ -180,7 +181,7 @@ public partial class ChildClassFormPage
         }
     }
 
-    private void OpenChildStudentsPage()
+    private void OpenChildClassPage()
     {
         NavigationManager.NavigateTo(PageUrls.ChildClassPage);
     }

@@ -30,7 +30,7 @@
             @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
             {
                 <HeaderAddOrEdit>
-                    <button class="default-button" @onclick="OpenChildStudentsPage">انصراف</button>
+                    <button class="default-button" @onclick="OpenChildClassPage">انصراف</button>
                     <button type="submit" form="childClassForm" class="primary-button">ذخیره</button>
                 </HeaderAddOrEdit>
             }
@@ -88,7 +88,6 @@
                                     <label for="MaritalStatusEnum"> نام کلاس </label>
                                     <div class="form-input-wrapper">
                                         <RadzenDropDown AllowClear="true"
-                                                        Disabled="PageOperationType is OperationType.Edit"
                                                         TValue="string"
                                                         AllowFiltering="true"
                                                         Placeholder="انتخاب کنید"
@@ -103,7 +102,6 @@
                                     <label for="MaritalStatusEnum"> نام مربی </label>
                                     <div class="form-input-wrapper">
                                         <RadzenDropDown AllowClear="true"
-                                                        Disabled="PageOperationType is OperationType.Edit"
                                                         TValue="string"
                                                         AllowFiltering="true"
                                                         Placeholder="انتخاب کنید"
