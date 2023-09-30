@@ -108,4 +108,21 @@ public interface IRezvanAPIs
     [Get("/api/ClassRoom/classes-items")]
     Task<ApiResult<List<SelectListItemDto>>> GetClassRoomItems([Query] bool childClass);
     #endregion
+
+    #region AdultClass
+    [Get("/api/AdultClass/get-adults-classes")]
+    Task<ApiResult<PagedList<AdultClassOutputDto>>> GetAdultsClasses([Query] AdultClassInputDto query);
+
+    [Post("/api/AdultClass/{id}/remove")]
+    Task<ApiResult> DeleteAdultClass(long id);
+
+    [Get("/api/AdultClass/{id}/GetAdultClassByIdForForm")]
+    Task<ApiResult<AdultClassUpsertDto>> GetAdultClassByIdForForm(long id);
+
+    [Post("/api/AdultClass/create")]
+    Task<ApiResult> CreateAdultClass([Body] AdultClassUpsertDto adult);
+
+    [Put("/api/AdultClass/update")]
+    Task<ApiResult> UpdateAdultClass([Body] AdultClassUpsertDto adult);
+    #endregion
 }

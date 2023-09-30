@@ -79,6 +79,10 @@ public static class PageTitles
     #endregion
 
     #region Child Class
+    public static class ChildrenPage
+    {
+        public static readonly string Title = "لیست کلاس های کودکان";
+    }
     public static class AddChildClassFormPage
     {
         public static readonly string Title = "ثبت کلاس کودک";
@@ -86,6 +90,21 @@ public static class PageTitles
     public static class EditChildClassFormPage
     {
         public static readonly string Title = "ویرایش کلاس کودک";
+    }
+    #endregion
+
+    #region Adult Class
+    public static class AdultsPage
+    {
+        public static readonly string Title = "لیست کلاس های بزرگسالان";
+    }
+    public static class AddAdultClassFormPage
+    {
+        public static readonly string Title = "ثبت کلاس بزرگسال";
+    }
+    public static class EditAdultClassFormPage
+    {
+        public static readonly string Title = "ویرایش کلاس بزرگسال";
     }
     #endregion
 

@@ -33,6 +33,12 @@ public static class PageUrls
     public static string EditChildClassFormPage(int id) => $"{ChildClassRootPath}/edit/{id}";
     public static string AddChildClassFormPage() => $"{ChildClassRootPath}/add";
 
+    // Adult Class
+    public const string AdultClassRootPath = "/adultclass";
+    public const string AdultClassPage = $"{AdultClassRootPath}/all";
+    public static string EditAdultClassFormPage(int id) => $"{AdultClassRootPath}/edit/{id}";
+    public static string AddAdultClassFormPage() => $"{AdultClassRootPath}/add";
+
     // HR
     public const string Dashboard = "/";
 

@@ -1,5 +1,5 @@
-﻿@page "/childclass/all"
-@page "/childclass/all/{FromAddNewChildToClassPage:int}"
+﻿@page "/adultclass/all"
+@page "/adultclass/all/{FromAddNewAdultToClassPage:int}"
 
 @using ATA.HR.Client.Web.APIs.Insurance.Models.Responses
 @using Microsoft.AspNetCore.Components
@@ -7,7 +7,7 @@
 @inherits BitPageBase
 
 <PageTitle>
-    @PageTitles.ChildrenPage.Title
+    @PageTitles.AdultsPage.Title
 </PageTitle>
 
 <TelerikLoaderContainer Text="" Visible="@IsLoading" />
@@ -22,7 +22,7 @@
             @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
             {
                 <HeaderAddOrEdit>
-                    @if (IsNavigatedFromAddNewChildToClassPage is false)
+                    @if (IsNavigatedFromAddNewAdultToClassPage is false)
                     {
                         <button class="default-button" @onclick="ChangeToFilterMode">انصراف</button>
                     }
@@ -35,14 +35,14 @@
         <section class="page-header-section">
             <div class="page-header-wrapper">
                 <div class="flex align-items-center">
-                    <TopBar PageName="@PageTitles.ChildrenPage.Title" PageDescription="مشاهده‌ی کلاس های کودکان" />
+                    <TopBar PageName="@PageTitles.AdultsPage.Title" PageDescription="مشاهده‌ی کلاس های بزرگسالان" />
                 </div>
 
                 @if (PageOperationType == OperationType.Filter)
                 {
                     <div class="flex">
                         @*<button class="default-button" style="margin-left: 20px" @onclick="BackButtonHandler">بازگشت</button>*@
-                        <RadzenButton class="primary-button" Text="افزودن کلاس برای کودک" Click="OpenAddNewChildClassPage" />
+                        <RadzenButton class="primary-button" Text="افزودن کلاس برای کودک" Click="OpenAddNewAdultClassPage" />
                     </div>
                 }
             </div>
@@ -61,8 +61,8 @@
                             <div class="searchbar-custom-wrapper">
                                 <img src="@IconUrls.Search" />
                                 <TelerikTextBox class="full-width"
-                                                PlaceHolder="جستجو با نام یا نام خانوادگی یا شماره شناسنامه یا کلاس"
-                                                ValueChanged="SearchTermChanged">
+                                            PlaceHolder="جستجو با نام یا نام خانوادگی یا شماره شناسنامه یا کلاس"
+                                            ValueChanged="SearchTermChanged">
                                 </TelerikTextBox>
                             </div>
                         </div>
@@ -90,15 +90,15 @@
                 }
 
 
-                <TelerikGrid TItem="@ChildClassOutputDto"
-                @ref="@ChildrenGridRef"
+                <TelerikGrid TItem="@AdultClassOutputDto"
+                             @ref="@AdultsGridRef"
                              Height="100%"
                              Pageable="true"
                              PageSize="PageSize"
                              Sortable="true"
                              Groupable="false"
                              SelectionMode="Telerik.Blazor.GridSelectionMode.Multiple"
-                @bind-SelectedItems="SelectedItems"
+                             @bind-SelectedItems="SelectedItems"
                              Resizable="true"
                              Reorderable="true"
                              OnStateInit="@OnStateInitHandler"
@@ -106,28 +106,27 @@
                              OnRead=@OnReadHandler>
                     <GridColumns>
                         <GridCheckboxColumn Visible="@(IsVisibleMultipleActionButton && IsMultiActionOnCustomSelection)" CheckBoxOnlySelection="true" SelectAllMode="GridSelectAllMode.Current"></GridCheckboxColumn>
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.Id))" Title="شناسه" Width="100px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.ChildFullName))" Title="نام و نام خانوادگی" Width="150px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.ChildIdNo))" Title="شماره‌ی شناسنامه" Width="150px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.ChildFatherName))" Title="نام پدر" Width="100px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.ClassRoomTitle))" Title="نام کلاس" Width="100px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.TeacherFullName))" Title="نام مربی" Width="100px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.RialTuition))" Title="شهریه" Width="100px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.FromDateJalali))" Title="از تاریخ" Width="100px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildClassOutputDto.ToDateJalali))" Title="تا تاریخ" Width="100px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.Id))" Title="شناسه" Width="100px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.AdultFullName))" Title="نام و نام خانوادگی" Width="150px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.AdultNationalCode))" Title="کد ملی" Width="150px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.ClassRoomTitle))" Title="نام کلاس" Width="100px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.TeacherFullName))" Title="نام مربی" Width="100px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.RialTuition))" Title="شهریه" Width="100px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.FromDateJalali))" Title="از تاریخ" Width="100px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(AdultClassOutputDto.ToDateJalali))" Title="تا تاریخ" Width="100px" Locked="false" Sortable="false" />
                         <GridColumn Field="@(nameof(CostDto.Id))" Title="عملیات" Width="130px" Locked="true" Sortable="false">
                             <Template Context="gridContext">
                                 @{
-                                    var child = (ChildClassOutputDto)gridContext;
+                                    var adultClassDto = (AdultClassOutputDto)gridContext;
 
                                     <div class="grid-action-buttons-wrapper justify-content-center">
 
-                                        <button class="grid-action-button edit" style="margin-right: 0" title="ویرایش" @onclick="@(() => OpenEditChildClassPage((int)child.Id))">
+                                        <button class="grid-action-button edit" style="margin-right: 0" title="ویرایش" @onclick="@(() => OpenEditAdultClassPage((int)adultClassDto.Id))">
                                             <img class="btn-img" src="@IconUrls.PenOrange" />
                                             <img class="btn-img-hovered" src="@IconUrls.PenWhite" />
                                         </button>
 
-                                        <button style="margin-right: 3px;" class="grid-action-button delete" title="حذف" @onclick="@(() => ShowDeleteChildClassConfirmDialog(child.Id))">
+                                        <button style="margin-right: 3px;" class="grid-action-button delete" title="حذف" @onclick="@(() => ShowDeleteAdultClassConfirmDialog(adultClassDto.Id))">
                                             <img class="btn-img" src="@IconUrls.TrashRed" />
                                             <img class="btn-img-hovered" src="@IconUrls.TrashWhite" />
                                         </button>
@@ -143,10 +142,10 @@
 
         <!-- Popup Windows => Confirm Document Deletion -->
         <section>
-            <ConfirmDialog @bind-IsVisible="IsVisibleDeleteChildConfirmDialog"
-                           Title="تایید حذف کلاس کودک"
-                           Text="این کلاس برای کودک به طور کامل از لیست موسسه حذف خواهد شد. آیا از حذف آن اطمینان دارید؟"
-                           OnConfirm="() => DeleteChildClass(DeletingChildClassId)" />
+            <ConfirmDialog @bind-IsVisible="IsVisibleDeleteAdultConfirmDialog"
+                           Title="تایید حذف کلاس بزرگسال"
+                           Text="این کلاس برای بزرگسال به طور کامل از لیست موسسه حذف خواهد شد. آیا از حذف آن اطمینان دارید؟"
+                           OnConfirm="() => DeleteAdultClass(DeletingAdultClassId)" />
         </section>
     </div>
 </article>
