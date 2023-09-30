@@ -56,7 +56,7 @@ public partial class AdultClassFormPage
                 });
             }
 
-            var classes = await APIs.GetClassRoomItems(true);
+            var classes = await APIs.GetClassRoomItems(false);
             foreach (var item in classes.Data)
             {
                 ClassesSource.Add(new SelectListItem

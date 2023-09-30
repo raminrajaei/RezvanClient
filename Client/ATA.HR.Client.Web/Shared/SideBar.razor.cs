@@ -42,7 +42,8 @@ public partial class SideBar
             SubMenuItems = new()
             {
                 new(PageUrls.AdultsPage, "لیست بزرگسالان"),
-                new(PageUrls.AddAdultFormPage(), "ثبت نام بزرگسال جدید")
+                new(PageUrls.AddAdultFormPage(), "ثبت نام بزرگسال جدید"),
+                new(PageUrls.AdultClassPage, "کلاس های بزرگسالان")
             }
         },
         
