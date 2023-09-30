@@ -1,5 +1,5 @@
-﻿@page "/childclass/add"
-@page "/childclass/edit/{ChildClassId:int}"
+﻿@page "/adultclass/add"
+@page "/adultclass/edit/{AdultClassId:int}"
 
 @using Microsoft.AspNetCore.Components
 @using Calendar = Blazor.PersianDatePicker.Calendar
@@ -8,11 +8,11 @@
 <PageTitle>
     @if (PageOperationType == OperationType.Add)
     {
-        @PageTitles.AddChildClassFormPage.Title
+        @PageTitles.AddAdultClassFormPage.Title
     }
     else
     {
-        @PageTitles.EditChildClassFormPage.Title
+        @PageTitles.EditAdultClassFormPage.Title
     }
 </PageTitle>
 
@@ -27,8 +27,8 @@
             @if (PageOperationType is OperationType.Add or OperationType.Edit or OperationType.Custom1)
             {
                 <HeaderAddOrEdit>
-                    <button class="default-button" @onclick="OpenChildClassPage">انصراف</button>
-                    <button type="submit" form="childClassForm" class="primary-button">ذخیره</button>
+                    <button class="default-button" @onclick="OpenAdultClassPage">انصراف</button>
+                    <button type="submit" form="adultClassForm" class="primary-button">ذخیره</button>
                 </HeaderAddOrEdit>
             }
         </section>
@@ -39,11 +39,11 @@
                 <div class="flex align-items-center">
                     @if (PageOperationType == OperationType.Add)
                     {
-                        <TopBar PageName="@("ثبت کلاس جدید")" PageDescription="ثبت نام کلاس جدید برای کودک در موسسه‌ی‌ رضوان الرسول" />
+                        <TopBar PageName="@("ثبت کلاس جدید")" PageDescription="ثبت نام کلاس جدید برای بزرگسال در موسسه‌ی‌ رضوان الرسول" />
                     }
                     else if (PageOperationType == OperationType.Edit)
                     {
-                        <TopBar PageName="@("ویرایش کلاس")" PageDescription="ویرایش کلاس جدید برای کودک در موسسه‌ی‌ رضوان الرسول" />
+                        <TopBar PageName="@("ویرایش کلاس")" PageDescription="ویرایش کلاس جدید برای بزرگسال در موسسه‌ی‌ رضوان الرسول" />
                     }
                     else
                     {
@@ -53,61 +53,64 @@
             </div>
         </section>
 
-        <!-- Child Student EditForm -->
+        <!-- Adult Student EditForm -->
         <section class="documentEditFormSection">
             <div class="form-custom-wrapper">
 
-                <EditForm id="childClassForm" class="row" Model="@Child" OnValidSubmit="OnChildClassSubmit">
+                <EditForm id="adultClassForm" class="row" Model="@Adult" OnValidSubmit="OnAdultClassSubmit">
 
                     <DataAnnotationsValidator />
 
-                    <!-- Form Section: Child Info -->
+                    <!-- Form Section: Adult Info -->
                     <div class="row form-section">
                         <div class="col-2 form-section-title">اطلاعات ثبت نامی</div>
                         <div class="col-10">
                             <div class="row">
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="MaritalStatusEnum"> نام کودک </label>
+                                    <label for="adultIdSelectedValue"> نام بزرگسال </label>
                                     <div class="form-input-wrapper">
                                         <RadzenDropDown AllowClear="true"
+                                                        Name="adultIdSelectedValue"
                                                         Disabled="PageOperationType is OperationType.Edit"
                                                         TValue="string"
                                                         AllowFiltering="true"
                                                         Placeholder="انتخاب کنید"
-                                                        Data="@ChildrenSource"
-                                        @bind-Value="@Child.ChildIdSelectedValue"
+                                                        Data="@AdultsSource"
+                                                        @bind-Value="@Adult.AdultIdSelectedValue"
                                                         TextProperty="Text"
                                                         ValueProperty="Value" />
                                     </div>
-                                    <ValidationMessage For="() => Child.ChildIdSelectedValue" />
+                                    <ValidationMessage For="() => Adult.AdultIdSelectedValue" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="MaritalStatusEnum"> نام کلاس </label>
+                                    <label for="classRoomIdSelectedValue"> نام کلاس </label>
                                     <div class="form-input-wrapper">
                                         <RadzenDropDown AllowClear="true"
+                                                        Name="classRoomIdSelectedValue"
                                                         TValue="string"
                                                         AllowFiltering="true"
                                                         Placeholder="انتخاب کنید"
                                                         Data="@ClassesSource"
-                                        @bind-Value="@Child.ClassRoomIdSelectedValue"
+                                                        @bind-Value="@Adult.ClassRoomIdSelectedValue"
                                                         TextProperty="Text"
                                                         ValueProperty="Value" />
                                     </div>
-                                    <ValidationMessage For="() => Child.ClassRoomIdSelectedValue" />
+                                    <ValidationMessage For="() => Adult.ClassRoomIdSelectedValue" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="MaritalStatusEnum"> نام مربی </label>
+                                    <label for="teacherIdSelectedValue"> نام مربی </label>
                                     <div class="form-input-wrapper">
                                         <RadzenDropDown AllowClear="true"
+                                                        Name="teacherIdSelectedValue"
                                                         TValue="string"
                                                         AllowFiltering="true"
                                                         Placeholder="انتخاب کنید"
                                                         Data="@TeachersSource"
-                                        @bind-Value="@Child.TeacherIdSelectedValue"
+                                                        @bind-Value="@Adult.TeacherIdSelectedValue"
                                                         TextProperty="Text"
                                                         ValueProperty="Value" />
                                     </div>
-                                    <ValidationMessage For="() => Child.TeacherIdSelectedValue" />
+                                    <ValidationMessage For="() => Adult.TeacherIdSelectedValue" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="bd"> شهریه * </label>
@@ -115,16 +118,16 @@
                                         <RadzenNumeric id="ParticipateYear"
                                                        Style="width: 100%"
                                                        Format="N0"
-                                        @bind-Value="Child.Tuition"
+                                                       @bind-Value="Adult.Tuition"
                                                        Placeholder="شهریه" />
                                     </div>
-                                    <ValidationMessage For="() => Child.Tuition" />
+                                    <ValidationMessage For="() => Adult.Tuition" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="FromDateJalali"> از تاریخ * </label>
                                     <div class="form-input-wrapper">
                                         <InputPersianDatePicker Id="FromDateJalali"
-                                        @bind-Value="Child.FromDateJalali"
+                                                                @bind-Value="Adult.FromDateJalali"
                                                                 Name="FromDateJalali"
                                                                 CssClass="cost-date-picker"
                                                                 Visible="true"
@@ -140,13 +143,13 @@
                                                                 Placeholder="از تاریخ"
                                                                 Theme="PickerTheme.RedBlack" />
                                     </div>
-                                    <ValidationMessage For="() => Child.FromDateJalali" />
+                                    <ValidationMessage For="() => Adult.FromDateJalali" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="ToDateJalali"> تا تاریخ * </label>
                                     <div class="form-input-wrapper">
                                         <InputPersianDatePicker Id="ToDateJalali"
-                                        @bind-Value="Child.ToDateJalali"
+                                                                @bind-Value="Adult.ToDateJalali"
                                                                 Name="ToDateJalali"
                                                                 CssClass="cost-date-picker"
                                                                 Visible="true"
@@ -162,7 +165,7 @@
                                                                 Placeholder="تا تاریخ"
                                                                 Theme="PickerTheme.RedBlack" />
                                     </div>
-                                    <ValidationMessage For="() => Child.ToDateJalali" />
+                                    <ValidationMessage For="() => Adult.ToDateJalali" />
                                 </div>
                             </div>
                         </div>

@@ -49,6 +49,9 @@ public interface IRezvanAPIs
 
     [Put("/api/Adult")]
     Task<ApiResult> UpdateAdultStudent([Body] AdultUpsertDto child);
+
+    [Get("/api/Adult/adults-items")]
+    Task<ApiResult<List<SelectListItemDto>>> GetAdultsItems();
     #endregion
 
     #region Teacher

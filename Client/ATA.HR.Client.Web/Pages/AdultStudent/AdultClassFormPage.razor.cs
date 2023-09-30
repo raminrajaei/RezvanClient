@@ -1,33 +1,33 @@
-﻿using ATA.HR.Client.Web.APIs;
+﻿using System.Threading;
+using ATA.HR.Client.Web.APIs;
+using ATA.HR.Client.Web.APIs.Models.Request;
 using ATA.HR.Client.Web.Contracts;
 using ATA.HR.Client.Web.Enums;
 using ATA.HR.Client.Web.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.Threading;
-using ATA.HR.Client.Web.APIs.Models.Request;
 using ATA.HR.Client.Web.Models.AppSettings;
 using ATABit.Helper.Extensions;
 using ATABit.Shared;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ATA.HR.Client.Web.Pages.ChildStudent;
+namespace ATA.HR.Client.Web.Pages.AdultStudent;
 
 [Authorize]
-public partial class ChildClassFormPage
+public partial class AdultClassFormPage
 {
     // Props
     private bool IsLoading { get; set; } = true;
     private OperationType PageOperationType { get; set; } = OperationType.Add;
 
-    private ChildClassUpsertDto Child { get; set; } = new();
-
-    public List<SelectListItem> ChildrenSource { get; set; } = new();
+    private AdultClassUpsertDto Adult { get; set; } = new();
+    
+    public List<SelectListItem> AdultsSource { get; set; } = new();
     public List<SelectListItem> ClassesSource { get; set; } = new();
     public List<SelectListItem> TeachersSource { get; set; } = new();
 
     // Parameter
-    [Parameter] public int? ChildClassId { get; set; }
+    [Parameter] public int? AdultClassId { get; set; }
 
     // Inject
     [Inject] public AppData AppData { get; set; }
@@ -46,13 +46,13 @@ public partial class ChildClassFormPage
 
         try
         {
-            var children = await APIs.GetChildrenItems();
-            foreach (var child in children.Data)
+            var adultsItems = await APIs.GetAdultsItems();
+            foreach (var adult in adultsItems.Data)
             {
-                ChildrenSource.Add(new SelectListItem
+                AdultsSource.Add(new SelectListItem
                 {
-                    Text = child.Text,
-                    Value = child.Value.ToString()
+                    Text = adult.Text,
+                    Value = adult.Value.ToString()
                 });
             }
 
@@ -86,20 +86,20 @@ public partial class ChildClassFormPage
 
     protected override async Task OnParametersSetAsync()
     {
-        if (ChildClassId.HasValue)
+        if (AdultClassId.HasValue)
         {
             PageOperationType = OperationType.Edit;
 
-            var result = await APIs.GetChildClassByIdForForm(ChildClassId.Value!);
+            var result = await APIs.GetAdultClassByIdForForm(AdultClassId.Value!);
 
             if (result.IsSuccess)
             {
-                Child = result.Data;
-                Child.FromDateJalali = Child.From.ToJalaliString();
-                Child.ToDateJalali = Child.To.ToJalaliString();
-                Child.ChildIdSelectedValue = Child.ChildId.ToString();
-                Child.TeacherIdSelectedValue = Child.TeacherId.ToString();
-                Child.ClassRoomIdSelectedValue = Child.ClassRoomId.ToString();
+                Adult = result.Data;
+                Adult.FromDateJalali = Adult.From.ToJalaliString();
+                Adult.ToDateJalali = Adult.To.ToJalaliString();
+                Adult.AdultIdSelectedValue = Adult.AdultId.ToString();
+                Adult.TeacherIdSelectedValue = Adult.TeacherId.ToString();
+                Adult.ClassRoomIdSelectedValue = Adult.ClassRoomId.ToString();
             }
         }
 
@@ -109,39 +109,39 @@ public partial class ChildClassFormPage
 
         await base.OnParametersSetAsync();
     }
-
+    
     // Methods
     
     private void ChangeToFilterMode() => PageOperationType = OperationType.Filter;
 
-    private async Task OnChildClassSubmit()
+    private async Task OnAdultClassSubmit()
     {
         IsLoading = true;
 
         try
         {
-            Child.From = Child.FromDateJalali!.ToDateTime();
-            Child.To = Child.ToDateJalali!.ToDateTime();
-            Child.ChildId = Child.ChildIdSelectedValue.ToLong();
-            Child.TeacherId = Child.TeacherIdSelectedValue.ToLong();
-            Child.ClassRoomId = Child.ClassRoomIdSelectedValue.ToLong();
+            Adult.From = Adult.FromDateJalali!.ToDateTime();
+            Adult.To = Adult.ToDateJalali!.ToDateTime();
+            Adult.AdultId = Adult.AdultIdSelectedValue.ToLong();
+            Adult.TeacherId = Adult.TeacherIdSelectedValue!.ToLong();
+            Adult.ClassRoomId = Adult.ClassRoomIdSelectedValue!.ToLong();
 
             if (PageOperationType is OperationType.Add)
             {
-                var apiResult = await APIs.CreateChildClass(Child);
+                var apiResult = await APIs.CreateAdultClass(Adult);
 
                 if (apiResult.IsSuccess)
-                    NotificationService.Toast(NotificationType.Success, "کلاس جدید برای کودک با موفقیت ثبت شد");
+                    NotificationService.Toast(NotificationType.Success, "کلاس جدید برای بزرگسال با موفقیت ثبت شد");
             }
             else if (PageOperationType is OperationType.Edit)
             {
-                var apiResult = await APIs.UpdateChildClass(Child);
+                var apiResult = await APIs.UpdateAdultClass(Adult);
 
                 if (apiResult.IsSuccess)
-                    NotificationService.Toast(NotificationType.Success, "کلاس کودک با موفقیت ویرایش شد");
+                    NotificationService.Toast(NotificationType.Success, "کلاس بزرگسال با موفقیت ویرایش شد");
             }
 
-            OpenChildClassPage();
+            OpenAdultClassPage();
         }
         catch
         {
@@ -155,8 +155,8 @@ public partial class ChildClassFormPage
         }
     }
 
-    private void OpenChildClassPage()
+    private void OpenAdultClassPage()
     {
-        NavigationManager.NavigateTo(PageUrls.ChildClassPage);
+        NavigationManager.NavigateTo(PageUrls.AdultClassPage);
     }
 }
