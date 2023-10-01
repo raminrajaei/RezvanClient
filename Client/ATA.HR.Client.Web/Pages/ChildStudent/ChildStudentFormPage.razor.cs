@@ -89,8 +89,8 @@ public partial class ChildStudentFormPage
             {
                 Child = result.Data;
                 Child.BirthDateJalali = Child.BirthDate.ToJalaliString();
-                Child.FatherBirthDateJalali = Child.FatherBirthDate.ToJalaliString();
-                Child.MotherBirthDateJalali = Child.MotherBirthDate.ToJalaliString();
+                Child.FatherBirthDateJalali = Child.FatherBirthDate?.ToJalaliString();
+                Child.MotherBirthDateJalali = Child.MotherBirthDate?.ToJalaliString();
                 Child.ChildMoreInfo.ChildLiveWithSelectedValue = Child.ChildMoreInfo.ChildLiveWith?.ToString("D");
                 Child.ChildMoreInfo.PhysicalConditionSelectedValue = Child.ChildMoreInfo.PhysicalCondition?.ToString("D");
                 Child.ChildMoreInfo.DidChildHaveAccidentInThePast = string.IsNullOrWhiteSpace(Child.ChildMoreInfo.PlaceOfInjury) is false;
@@ -139,8 +139,8 @@ public partial class ChildStudentFormPage
         try
         {
             Child.BirthDate = Child.BirthDateJalali!.ToDateTime();
-            Child.FatherBirthDate = Child.FatherBirthDateJalali!.ToDateTime();
-            Child.MotherBirthDate = Child.MotherBirthDateJalali!.ToDateTime();
+            Child.FatherBirthDate = Child.FatherBirthDateJalali?.ToDateTime();
+            Child.MotherBirthDate = Child.MotherBirthDateJalali?.ToDateTime();
             Child.ChildMoreInfo.ChildLiveWith = Child.ChildMoreInfo.ChildLiveWithSelectedValue.IsNotNullOrEmpty()
                 ? (ChildLiveWithEnum)Child.ChildMoreInfo.ChildLiveWithSelectedValue!.ToInt()
                 : null;

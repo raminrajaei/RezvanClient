@@ -61,9 +61,18 @@
                             <div class="searchbar-custom-wrapper">
                                 <img src="@IconUrls.Search" />
                                 <TelerikTextBox class="full-width"
-                                                PlaceHolder="جستجو با نام یا نام خانوادگی یا شماره شناسنامه یا کلاس"
-                                                ValueChanged="SearchTermChanged">
+                                            PlaceHolder="جستجو با نام یا نام خانوادگی یا شماره شناسنامه یا کلاس"
+                                            ValueChanged="SearchTermChanged">
                                 </TelerikTextBox>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xxl-3 filter-box">
+                            <label>سال ثبت نام</label>
+                            <div>
+                                <TelerikTextBox class="full-width"
+                                            PlaceHolder="سال"
+                                            ValueChanged="SearchYearChanged" />
                             </div>
                         </div>
                     </div>
@@ -91,14 +100,14 @@
 
 
                 <TelerikGrid TItem="@ChildClassOutputDto"
-                @ref="@ChildrenGridRef"
+                             @ref="@ChildrenGridRef"
                              Height="100%"
                              Pageable="true"
                              PageSize="PageSize"
                              Sortable="true"
                              Groupable="false"
                              SelectionMode="Telerik.Blazor.GridSelectionMode.Multiple"
-                @bind-SelectedItems="SelectedItems"
+                             @bind-SelectedItems="SelectedItems"
                              Resizable="true"
                              Reorderable="true"
                              OnStateInit="@OnStateInitHandler"

@@ -220,7 +220,7 @@ public partial class ChildClassPage : IDisposable
     {
         SearchSubject
             .Throttle(TimeSpan.FromMilliseconds(500))
-            .Where(t => t.IsNotNullOrEmpty() && (t!.Length > 2 || t.IsInt()) || string.IsNullOrEmpty(t))
+            .Where(t => t.IsNotNullOrEmpty() && (t!.Length > 3 || t.IsInt()) || string.IsNullOrEmpty(t))
             .Subscribe(async _ =>
             {
                 try
@@ -256,6 +256,18 @@ public partial class ChildClassPage : IDisposable
             return;
 
         SearchSubject.OnNext(ChildrenFilter.SearchTerm);
+    }
+
+    private void SearchYearChanged(object? searchObject)
+    {
+        var searchTerm = searchObject?.ToString();
+
+        if (ChildrenFilter.Year != searchTerm)
+            ChildrenFilter.Year = searchTerm;
+        else
+            return;
+
+        SearchSubject.OnNext(ChildrenFilter.Year);
     }
 
     public void Dispose()
