@@ -9,6 +9,7 @@ using ATA.HR.Client.Web.Enums;
 using ATA.HR.Client.Web.Models;
 using ATA.HR.Shared;
 using ATABit.Helper.Extensions;
+using ATABit.Shared;
 using Bit.Http.Contracts;
 using BlazorDownloadFile;
 using ExcelWizard.Models;
@@ -37,6 +38,7 @@ public partial class AdultClassPage : IDisposable
     private OperationType PageOperationType { get; set; } = OperationType.Filter;
     private bool ResetPagination { get; set; }
     private bool IsRebindCalledBySearchSubscriber { get; set; }
+    public List<SelectListItem> YearsSource { get; set; } = new();
 
     #region Grid Filter Props
 
@@ -349,6 +351,15 @@ public partial class AdultClassPage : IDisposable
             await RebindGrid(false);
 
             StateHasChanged();
+        }
+    }
+
+    async Task OnChange(object? value)
+    {
+        if (!string.IsNullOrEmpty(value?.ToString()))
+        {
+            AdultsFilter.Year = value.ToString();
+            await RebindGrid(true, true);
         }
     }
 }
