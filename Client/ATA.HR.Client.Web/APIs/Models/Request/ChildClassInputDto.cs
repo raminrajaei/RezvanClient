@@ -6,7 +6,6 @@ public class ChildClassInputDto
 {
     public string SearchTerm { get; set; }
 
-    [Range(1300, 1600, ErrorMessage = "سال ورودی نامعتبر است")]
     public string? Year { get; set; }
 
     public int Page { get; set; } = 1;

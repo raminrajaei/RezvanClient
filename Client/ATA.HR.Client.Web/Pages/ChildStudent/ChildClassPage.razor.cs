@@ -18,6 +18,8 @@ using Telerik.Blazor.Components;
 using Telerik.Blazor.Extensions;
 using GridSelectionMode = ATA.HR.Client.Web.Enums.GridSelectionMode;
 using ATA.HR.Client.Web.APIs.Models.Request;
+using ATABit.Shared;
+using DNTPersianUtils.Core;
 using ExcelWizard.Models;
 using ExcelWizard.Models.EWExcel;
 
@@ -43,6 +45,7 @@ public partial class ChildClassPage : IDisposable
     private CancellationTokenSource _searchCancellationTokenSource = new();
     private ChildClassInputDto ChildrenFilter { get; set; } = new();
     private Subject<string> SearchSubject { get; } = new();
+    public List<SelectListItem> YearsSource { get; set; } = new();
 
     #endregion
 
@@ -93,10 +96,24 @@ public partial class ChildClassPage : IDisposable
         {
             var childStudents = await APIs.GetChildrenClasses(ChildrenFilter);
 
+            var endDate = DateTime.Now.AddYears(2);
+            var startDate = new DateTime(2021, 01, 01);
+
+            for (var dt = startDate; dt <= endDate; dt = dt.AddYears(1))
+            {
+                var year = dt.GetPersianYear();
+
+                YearsSource.Add(new SelectListItem
+                {
+                    Value = year.ToString(),
+                    Text = year.ToString()
+                });
+            }
+
             if (childStudents.IsSuccess)
             {
                 AllChildren = childStudents.Data.Data;
-            } 
+            }
 
             SearchSubscriber();
         }
@@ -258,18 +275,6 @@ public partial class ChildClassPage : IDisposable
         SearchSubject.OnNext(ChildrenFilter.SearchTerm);
     }
 
-    private void SearchYearChanged(object? searchObject)
-    {
-        var searchTerm = searchObject?.ToString();
-
-        if (ChildrenFilter.Year != searchTerm)
-            ChildrenFilter.Year = searchTerm;
-        else
-            return;
-
-        SearchSubject.OnNext(ChildrenFilter.Year);
-    }
-
     public void Dispose()
     {
         SearchSubject.Dispose();
@@ -365,6 +370,15 @@ public partial class ChildClassPage : IDisposable
             await RebindGrid(false);
 
             StateHasChanged();
+        }
+    }
+
+    async Task OnChange(object? value)
+    {
+        if (!string.IsNullOrEmpty(value?.ToString()))
+        {
+            ChildrenFilter.Year = value.ToString();
+            await RebindGrid(true, true);
         }
     }
 }

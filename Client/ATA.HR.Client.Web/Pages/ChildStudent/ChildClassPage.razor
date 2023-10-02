@@ -70,9 +70,16 @@
                         <div class="col-12 col-md-6 col-xxl-3 filter-box">
                             <label>سال ثبت نام</label>
                             <div>
-                                <TelerikTextBox class="full-width"
-                                            PlaceHolder="سال"
-                                            ValueChanged="SearchYearChanged" />
+                                <RadzenDropDown AllowClear="true"
+                                                Disabled="PageOperationType is OperationType.Edit"
+                                                TValue="string"
+                                                AllowFiltering="true"
+                                                Placeholder="انتخاب کنید"
+                                                Data="@YearsSource"
+                                                @bind-Value="@ChildrenFilter.Year"
+                                                Change="@OnChange"
+                                                TextProperty="Text"
+                                                ValueProperty="Value" />
                             </div>
                         </div>
                     </div>
