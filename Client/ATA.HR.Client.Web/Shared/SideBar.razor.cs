@@ -111,20 +111,6 @@ public partial class SideBar
     // Life-cycles
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateTask;
-
-        if (authState.User.Identity is null)
-            return;
-
-        if (authState.User.Identity.IsAuthenticated)
-        {
-            UserUnit = await AuthenticationStateTask.GetUserUnit();
-
-            Console.WriteLine($"User Unit: {UserUnit}");
-
-            UserClaims = await AuthenticationStateTask.GetUserClaims();
-        }
-
         IsVisibleSubMenuPanel = false;
 
         await base.OnInitializedAsync();

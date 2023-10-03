@@ -1,6 +1,5 @@
 ﻿@page "/child/{ChildId:int}"
 
-@using ATA.HR.Client.Web.Models.AppSettings;
 @using DNTPersianUtils.Core
 @using Calendar = Blazor.PersianDatePicker.Calendar
 @using ATABit.Helper.Utils
@@ -60,7 +59,12 @@
                             <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام و نام خانوادگی نوآموز</div>
                             <div class="col-2 column-style holder-padding sm-font-size"> @Child.FullName </div>
                             <div class="col-2 column-style holder-padding title-bold sm-font-size">تاریخ تولد</div>
-                            <div class="col-2 column-style holder-padding sm-font-size"> @Child.BirthDate.ToJalaliString() </div>
+                            <div class="col-2 column-style holder-padding sm-font-size">
+                                @if (Child.BirthDate != default)
+                                {
+                                    @Child.BirthDate.ToJalaliString()
+                                }
+                            </div>
                             <div class="col-2 column-style holder-padding title-bold sm-font-size">محل تولد</div>
                             <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@Child.BirthPlace</div>
                         </div>

@@ -73,3 +73,7 @@ function setFocus(elementId) {
 function scrollPageToTop() {
     document.documentElement.scrollTop = 0;
 }
+
+function printInvoke() {
+    window.print();
+}
