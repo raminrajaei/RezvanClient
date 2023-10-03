@@ -6,6 +6,7 @@ using ATA.HR.Client.Web.APIs.Models.Request;
 using ATA.HR.Client.Web.APIs.Models.Response;
 using ATA.HR.Client.Web.Contracts;
 using ATA.HR.Client.Web.Enums;
+using ATA.HR.Client.Web.Extensions;
 using ATA.HR.Client.Web.Models;
 using ATA.HR.Shared;
 using ATABit.Helper.Extensions;
@@ -90,6 +91,8 @@ public partial class AdultClassPage : IDisposable
         try
         {
             var adults = await APIs.GetAdultsClasses(AdultsFilter);
+
+            YearsSource.GetYears();
 
             if (adults.IsSuccess)
             {
