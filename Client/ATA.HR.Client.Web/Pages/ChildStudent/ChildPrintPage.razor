@@ -1,5 +1,6 @@
 ﻿@page "/child/{ChildId:int}"
 
+@using ATA.HR.Client.Web.Models.AppSettings;
 @using DNTPersianUtils.Core
 @using Calendar = Blazor.PersianDatePicker.Calendar
 @using ATABit.Helper.Utils
@@ -51,7 +52,7 @@
                         <div class="col-2" style="display: flex;
                                                   justify-content: end;
                                                   padding-left: 25px;">
-                            <img class="logo" src="@Child.PhotoPath" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
+                            <img class="logo" src="@(ClientAppSettings.UrlSettings!.RezvanFileManagerURL+"/"+Child.PhotoPath)" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
                         </div>
                     </div>
                     <div class="column-holder row col-merge column-border ">
@@ -224,7 +225,7 @@
                         <div class="col-2" style="display: flex;
                                               justify-content: end;
                                               padding-left: 25px;">
-                            <img class="logo" src="@Child.PhotoPath" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
+                            <img class="logo" src="@(ClientAppSettings.UrlSettings!.RezvanFileManagerURL+"/"+Child.PhotoPath)" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
                         </div>
                     </div>
                     <div class="column-holder row col-merge column-border child-more-info">
@@ -320,7 +321,7 @@
                         <div class="col-2" style="display: flex;
                                               justify-content: end;
                                               padding-left: 25px;">
-                            <img class="logo" src="@Child.PhotoPath" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
+                            <img class="logo" src="@(ClientAppSettings.UrlSettings!.RezvanFileManagerURL+"/"+Child.PhotoPath)" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
                         </div>
                     </div>
                     <div class="column-holder row col-merge column-border child-rules">

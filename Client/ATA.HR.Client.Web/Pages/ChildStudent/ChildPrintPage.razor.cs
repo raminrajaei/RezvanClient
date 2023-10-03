@@ -5,6 +5,7 @@ using ATA.HR.Client.Web.Contracts;
 using ATA.HR.Client.Web.Enums;
 using ATA.HR.Client.Web.Extensions;
 using ATA.HR.Client.Web.Models;
+using ATA.HR.Client.Web.Models.AppSettings;
 using ExcelWizard.Service;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -28,6 +29,7 @@ public partial class ChildPrintPage
     [Inject] public IJSRuntime JsRuntime { get; set; }
     [Inject] public IRezvanAPIs APIs { get; set; }
     [Inject] public IExcelWizardService ExcelWizardService { get; set; }
+    [Inject] public ClientAppSettings ClientAppSettings { get; set; }
 
     [Parameter] 
     public int ChildId { get; set; }
