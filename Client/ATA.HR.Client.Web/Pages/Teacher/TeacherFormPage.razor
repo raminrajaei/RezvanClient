@@ -154,6 +154,51 @@
                                     <ValidationMessage For="() => Teacher.BirthDateJalali" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
+                                    <div class="flex justify-content-between">
+                                        <label>
+                                            @if (Teacher.PhotoPath.IsNotNullOrEmpty())
+                                            {
+                                                <span>&nbsp;</span>
+                                            }
+                                            else
+                                            {
+                                                <span>بارگزاری عکس </span>
+                                            }
+                                        </label>
+                                        @if (Teacher.PhotoPath.IsNotNullOrEmpty())
+                                        {
+                                            <span @onclick="RemoveTeacherImage" class="remove-attachment-button">
+                                                حذف تصویر
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="form-input-wrapper">
+
+                                        @if (Teacher.PhotoPath.IsNotNullOrEmpty())
+                                        {
+                                            <div class="attachment-view-box">
+                                                <a href="@ToDocFullURL(Teacher.PhotoPath)" target="_blank">
+                                                    مشاهده تصویر
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <TelerikUpload SaveUrl="@SaveUrl"
+                                                           SaveField="file"
+                                                           Enabled="@string.IsNullOrWhiteSpace(Teacher.PhotoPath)"
+                                                           OnUpload="OnUploadHandler"
+                                                           MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
+                                                           MinFileSize="1024"
+                                                           OnSelect="OnFileSelectToUpload"
+                                                           OnSuccess="OnFileSuccessUpload">
+                                            </TelerikUpload>
+                                            <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
+                                        }
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.PhotoPath" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
                                     <label for="bp">محل تولد </label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="bp"
@@ -338,51 +383,6 @@
                                         <RadzenCheckBox @bind-Value=@Teacher.IsMorabi />
                                     </div>
                                     <ValidationMessage For="() => Teacher.IsMorabi" />
-                                </div>
-                                <div class="col-3 form-item-wrapper">
-                                    <div class="flex justify-content-between">
-                                        <label>
-                                            @if (Teacher.PhotoPath.IsNotNullOrEmpty())
-                                            {
-                                                <span>&nbsp;</span>
-                                            }
-                                            else
-                                            {
-                                                <span>بارگزاری عکس </span>
-                                            }
-                                        </label>
-                                        @if (Teacher.PhotoPath.IsNotNullOrEmpty())
-                                        {
-                                            <span @onclick="RemoveTeacherImage" class="remove-attachment-button">
-                                                حذف تصویر
-                                            </span>
-                                        }
-                                    </div>
-                                    <div class="form-input-wrapper">
-
-                                        @if (Teacher.PhotoPath.IsNotNullOrEmpty())
-                                        {
-                                            <div class="attachment-view-box">
-                                                <a href="@ToDocFullURL(Teacher.PhotoPath)" target="_blank">
-                                                    مشاهده تصویر
-                                                </a>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <TelerikUpload SaveUrl="@SaveUrl"
-                                                           SaveField="file"
-                                                           Enabled="@string.IsNullOrWhiteSpace(Teacher.PhotoPath)"
-                                                           OnUpload="OnUploadHandler"
-                                                           MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
-                                                           MinFileSize="1024"
-                                                           OnSelect="OnFileSelectToUpload"
-                                                           OnSuccess="OnFileSuccessUpload">
-                                            </TelerikUpload>
-                                            <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
-                                        }
-                                    </div>
-                                    <ValidationMessage For="() => Teacher.PhotoPath" />
                                 </div>
                             </div>
                         </div>

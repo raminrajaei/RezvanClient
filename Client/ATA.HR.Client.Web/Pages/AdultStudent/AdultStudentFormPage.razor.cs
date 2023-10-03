@@ -103,7 +103,7 @@ public partial class AdultStudentFormPage
 
     private string ToDocFullURL(string filePath)
     {
-        return $"{filePath}";
+        return $"{ClientAppSettings.UrlSettings!.RezvanFileManagerURL}/{filePath}";
     }
 
     private void ChangeToFilterMode() => PageOperationType = OperationType.Filter;
@@ -237,25 +237,6 @@ public partial class AdultStudentFormPage
         e.RequestHeaders.Add("Identifier", Adult.NationalCode);
     }
 
-    private static string? GetFileTypeFromExtension(string? fileExtension)
-    {
-        switch (fileExtension)
-        {
-            case ".jpg":
-            case ".png":
-            case ".jpeg":
-                return "Image";
-
-            case ".pdf":
-                return "PDF";
-
-            case ".xsl":
-            case ".xlsx":
-                return "Excel";
-
-            default: throw new ArgumentException("نوع فایل در هیچکدام از نوع فایل‌های مشخص شده قرار نمی‌گیرد");
-        }
-    }
     #endregion
 
     private void RemoveAdultImage()

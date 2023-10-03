@@ -104,7 +104,7 @@ public partial class TeacherFormPage
 
     private string ToDocFullURL(string filePath)
     {
-        return $"{filePath}";
+        return $"{ClientAppSettings.UrlSettings!.RezvanFileManagerURL}/{filePath}";
     }
 
     private void ChangeToFilterMode() => PageOperationType = OperationType.Filter;
