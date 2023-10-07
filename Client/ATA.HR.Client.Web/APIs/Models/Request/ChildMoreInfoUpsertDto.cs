@@ -101,4 +101,9 @@ public class ChildMoreInfoUpsertDto
     /// </summary>
     public string FamiliarityInstitution { get; set; }
 
+    /// <summary>
+    /// کد ملی معرف
+    /// </summary>
+    public string IdentifierCode { get; set; }
+
 }
