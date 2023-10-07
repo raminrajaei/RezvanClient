@@ -1,10 +1,4 @@
 ﻿@page "/child/{ChildId:int}"
-
-@using DNTPersianUtils.Core
-@using Calendar = Blazor.PersianDatePicker.Calendar
-@using ATABit.Helper.Utils
-@using GridSelectionMode = ATA.HR.Client.Web.Enums.GridSelectionMode
-@using ATA.HR.Client.Web.APIs.Insurance.Models.Responses
 @inherits BitPageBase
 
 <PageTitle>
@@ -304,107 +298,7 @@
                 </div>
 
             </div>
-
-            <div class="printable" style="width: 100%; height: 40px;"></div>
-
-            <div class="page-box-wrapper mt-3 printable" style="height: 1165px;
-                                                            display: flex;
-                                                            flex-direction: column;
-                                                            justify-content: space-between;">
-
-                <div class="normal-contract">
-
-                    <div class="row header cell-border" style="border: 1px solid #d1cfcf; display: flex; justify-content: space-between; box-shadow: 5px 5px #d1cfcf; margin-bottom: 25px; width: 100%; margin-right: 0;">
-                        <div class="col-2">
-                            <img class="logo" src="@ImageUrls.Layout.RezvanLogoMain" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
-                        </div>
-                        <div class="title col-8" style="display: flex; flex-direction: column; justify-content: space-evenly; font-weight: bold; letter-spacing: 1px;">
-                            <div class="top-center-title-print"> @($"موسسه قرآنی رضوان الرسول") </div>
-                            <div class="bottom-center-title-print"> @($"قوانین") <strong></strong> </div>
-                        </div>
-                        <div class="col-2" style="display: flex;
-                                              justify-content: end;
-                                              padding-left: 25px;">
-                            <img class="logo" src="@(ClientAppSettings.UrlSettings!.RezvanFileManagerURL+"/"+Child.PhotoPath)" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
-                        </div>
-                    </div>
-                    <div class="column-holder row col-merge column-border child-rules">
-
-                        <div class="column-holder row bio-size">
-                            <div class="col-12 column-style holder-padding title-bold sm-font-size ">
-                                1.
-                                تاخیر در گرفتن کودک از ساعت 11:30 (ساعت اتمام کلاس‌‌ها) تا 12 (بدون احتساب کلاس فوق برنامه)، بدون
-                                هزینه و از آن پس هر یک ربع 7500 تومان (ساعتی 30 هزار تومان) هزینه بابت
-                                نگهداری کودک دریافت می‌شود.
-                                <br />
-                                (محاسبه ساعت : 12 الی 12:15 و 12:15 الی 12:30  و ...)
-                            </div>
-
-                        </div>
-
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-
-                            <div class="col-12 column-style holder-padding title-bold sm-font-size ">
-                                2.
-                                در دسترس بودن شماره تلفن‌های درج شده در فرم به خصوص شماره والدین، جهت تماس‌های ضروری الزامی
-                                می‌باشد. چنانچه امکان برقراری تماس با والدین وجود نداشته باشد، مسئولیت عواقب احتمالی آن بر عهده‌ی والدین می‌باشد.
-                            </div>
-
-                        </div>
-
-                        <div class="column-holder row bio-size">
-
-                            <div class="col-12 column-style holder-padding title-bold sm-font-size ">
-                                3.
-                                افرادی که می توانند کودک را تحویل بگیرند عالوه بر ذکر نامشان در فرم , الزامی ست به همراه والدین جهت آشنایی
-                                مسئولین مجموعه به خانه قرآن تشریف بیاورند
-                            </div>
-
-                        </div>
-
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-
-                            <div class="col-12 column-style holder-padding title-bold sm-font-size ">
-                                4.
-                                چنانچه فردی غیر از افراد مذکور جهت تحویل کودک مراجعه نماید تنها در صورت اطالع قبلی والدین و یا تماس
-                                تلفنی آنها امکان تحویل وجود دارد .
-                            </div>
-
-                        </div>
-
-                        <div class="column-holder row bio-size">
-
-                            <div class="col-12 column-style holder-padding title-bold sm-font-size ">
-                                5.
-                                چنانچه فردی غیر از افراد مذکور جهت تحویل کودک مراجعه نماید تنها در صورت اطالع قبلی والدین و یا تماس
-                                تلفنی آنها امکان تحویل وجود دارد .
-                            </div>
-
-                        </div>
-
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-
-                            <div class="col-12 column-style holder-padding title-bold sm-font-size ">
-                                6.
-                                حضور در جلسات اولیا مربیان الزامی می باشد و در صورت غیبت پیگیری از موضوعات بیان شده بر عهده ی والدین می
-                                باشد.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-content-between" style="margin-top: 70px;
-                                                                 width: 53%;
-                                                                 margin-right: auto;
-                                                                 margin-left: auto;
-                                                                 font-weight: bold;">
-                        <div></div>
-                        <div>امضا و تاریخ</div>
-                    </div>
-                </div>
-
-            </div>
         </div>
     </section>
-
 </div>
 
