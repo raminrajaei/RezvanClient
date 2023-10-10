@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using ATA.HR.Client.Web.APIs.Enums;
 using ATABit.Helper.Extensions;
 using ExcelWizard.Models;
 using ExcelWizard.Models.EWGridLayout;
@@ -30,4 +31,8 @@ public class ChildrenOutputDto
 
     [ExcelSheetColumn(HeaderName = "نام مادر", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string MotherName { get; set; }
+
+    [ExcelSheetColumn(HeaderName = "سطح فعالیت", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    public ActivityEnum? Activity { get; set; }
+
 }
