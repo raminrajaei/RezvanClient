@@ -66,7 +66,7 @@
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">محل صدور</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Child.IssuePlace</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">سریال شناسنامه</div>
-                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Child.SerialNo</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@(Child.SerialCode +"-"+ Child.SerialNo)</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> شماره ملی</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Child.IdNo</div>
                         </div>

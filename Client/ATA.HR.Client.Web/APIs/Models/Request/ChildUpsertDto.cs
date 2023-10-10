@@ -18,6 +18,7 @@ public class ChildUpsertDto
     public string BirthPlace { get; set; }
     public string IssuePlace { get; set; }
     public string SerialNo { get; set; }
+    public string SerialCode { get; set; }
 
     [Required(ErrorMessage = "شماره ملی کودک را وارد کنید")]
     public string IdNo { get; set; }

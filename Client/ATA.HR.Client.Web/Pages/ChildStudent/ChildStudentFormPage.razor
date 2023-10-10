@@ -144,6 +144,16 @@
                                     <ValidationMessage For="() => Child.SerialNo" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
+                                    <label for="SerialCode">کد سریال شناسنامه</label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="SerialCode"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Child.SerialCode"
+                                                       Placeholder="کد سریال" />
+                                    </div>
+                                    <ValidationMessage For="() => Child.SerialCode" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
                                     <label for="in">شماره ملی</label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="in"
