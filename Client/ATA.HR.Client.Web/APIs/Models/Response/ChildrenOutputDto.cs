@@ -4,6 +4,7 @@ using ATABit.Helper.Extensions;
 using ExcelWizard.Models;
 using ExcelWizard.Models.EWGridLayout;
 using ExcelWizard.Models.EWStyles;
+using EnumExtensions = Bit.Utils.Extensions.EnumExtensions;
 
 namespace ATA.HR.Client.Web.APIs.Models.Response;
 
@@ -32,7 +33,10 @@ public class ChildrenOutputDto
     [ExcelSheetColumn(HeaderName = "نام مادر", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string MotherName { get; set; }
 
-    [ExcelSheetColumn(HeaderName = "سطح فعالیت", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    [ExcelSheetColumn(Ignore = true)]
     public ActivityEnum? Activity { get; set; }
+
+    [ExcelSheetColumn(HeaderName = "سطح فعالیت", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    public string ActivityCaption => Activity?.ToDisplayName();
 
 }
