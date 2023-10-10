@@ -19,7 +19,7 @@ public class ChildUpsertDto
     public string IssuePlace { get; set; }
     public string SerialNo { get; set; }
 
-    [Required(ErrorMessage = "شماره شناسنامه کودک را وارد کنید")]
+    [Required(ErrorMessage = "شماره ملی کودک را وارد کنید")]
     public string IdNo { get; set; }
 
     #region Father Info

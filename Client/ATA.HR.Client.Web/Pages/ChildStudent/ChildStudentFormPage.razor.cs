@@ -196,7 +196,7 @@ public partial class ChildStudentFormPage
     {
         if (string.IsNullOrWhiteSpace(Child.IdNo))
         {
-            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس کودک، شماره شناسنامه وی را نمایید");
+            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس کودک، شماره ملی وی را نمایید");
 
             e.IsCancelled = true;
 

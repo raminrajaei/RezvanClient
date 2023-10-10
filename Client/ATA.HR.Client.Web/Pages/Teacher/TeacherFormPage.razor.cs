@@ -174,7 +174,7 @@ public partial class TeacherFormPage
     {
         if (string.IsNullOrWhiteSpace(Teacher.NationalCode))
         {
-            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس مدرس، شماره شناسنامه وی را نمایید");
+            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس مدرس، شماره ملی وی را نمایید");
 
             e.IsCancelled = true;
 

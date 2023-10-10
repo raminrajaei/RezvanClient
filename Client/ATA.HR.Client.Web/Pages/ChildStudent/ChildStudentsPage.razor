@@ -61,7 +61,7 @@
                             <div class="searchbar-custom-wrapper">
                                 <img src="@IconUrls.Search" />
                                 <TelerikTextBox class="full-width"
-                                                PlaceHolder="جستجو با نام یا نام خانوادگی یا شماره شناسنامه"
+                                                PlaceHolder="جستجو با نام یا نام خانوادگی یا شماره ملی"
                                                 ValueChanged="SearchTermChanged">
                                 </TelerikTextBox>
                             </div>
@@ -108,7 +108,7 @@
                         <GridCheckboxColumn Visible="@(IsVisibleMultipleActionButton && IsMultiActionOnCustomSelection)" CheckBoxOnlySelection="true" SelectAllMode="GridSelectAllMode.Current"></GridCheckboxColumn>
                         <GridColumn Field="@(nameof(ChildrenOutputDto.Id))" Title="شناسه" Width="100px" Locked="false" Sortable="false" />
                         <GridColumn Field="@(nameof(ChildrenOutputDto.FullName))" Title="نام و نام خانوادگی" Width="150px" Locked="false" Sortable="false" />
-                        <GridColumn Field="@(nameof(ChildrenOutputDto.IdNo))" Title="شماره‌ی شناسنامه" Width="150px" Locked="false" Sortable="false" />
+                        <GridColumn Field="@(nameof(ChildrenOutputDto.IdNo))" Title="شماره‌ ملی" Width="150px" Locked="false" Sortable="false" />
                         <GridColumn Field="@(nameof(ChildrenOutputDto.FatherName))" Title="نام پدر" Width="100px" Locked="false" Sortable="false" />
                         <GridColumn Field="@(nameof(ChildrenOutputDto.MotherName))" Title="نام مادر" Width="100px" Locked="false" Sortable="false" />
                         <GridColumn Field="@(nameof(ChildrenOutputDto.BirthDateJalali))" Title="تاریخ تولد" Width="100px" Locked="false" Sortable="false" />

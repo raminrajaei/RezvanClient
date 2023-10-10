@@ -76,7 +76,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="fn"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.FirstName"
+                                                       @bind-Value="Teacher.FirstName"
                                                        Placeholder="نام" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.FirstName" />
@@ -86,7 +86,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="ln"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.LastName"
+                                                       @bind-Value="Teacher.LastName"
                                                        Placeholder="نام خانوادگی" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.LastName" />
@@ -96,18 +96,18 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="fan"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.FatherName"
+                                                       @bind-Value="Teacher.FatherName"
                                                        Placeholder="نام پدر" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.FatherName" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
-                                    <label for="IdNo">شماره شناسنامه * </label>
+                                    <label for="IdNo">شماره ملی * </label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="IdNo"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.IdNo"
-                                                       Placeholder="شماره شناسنامه" />
+                                                       @bind-Value="Teacher.IdNo"
+                                                       Placeholder="شماره ملی" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.IdNo" />
                                 </div>
@@ -116,17 +116,27 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="NationalCode"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.NationalCode"
+                                                       @bind-Value="Teacher.NationalCode"
                                                        Placeholder="کد ملی" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.NationalCode" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="BankCardNo"> شماره کارت بانکی </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="BankCardNo"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Teacher.BankCardNo"
+                                                       Placeholder="شماره کارت" />
+                                    </div>
+                                    <ValidationMessage For="() => Teacher.BankCardNo" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
                                     <label for="PhoneNumber">شماره همراه</label>
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="PhoneNumber"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.PhoneNumber"
+                                                       @bind-Value="Teacher.PhoneNumber"
                                                        Placeholder="شماره همراه" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.PhoneNumber" />
@@ -135,7 +145,7 @@
                                     <label for="bd"> تاریخ تولد </label>
                                     <div class="form-input-wrapper">
                                         <InputPersianDatePicker Id="bd"
-                                        @bind-Value="Teacher.BirthDateJalali"
+                                                                @bind-Value="Teacher.BirthDateJalali"
                                                                 Name="bd"
                                                                 CssClass="cost-date-picker"
                                                                 Visible="true"
@@ -185,13 +195,13 @@
                                         else
                                         {
                                             <TelerikUpload SaveUrl="@SaveUrl"
-                                                           SaveField="file"
-                                                           Enabled="@string.IsNullOrWhiteSpace(Teacher.PhotoPath)"
-                                                           OnUpload="OnUploadHandler"
-                                                           MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
-                                                           MinFileSize="1024"
-                                                           OnSelect="OnFileSelectToUpload"
-                                                           OnSuccess="OnFileSuccessUpload">
+                                                       SaveField="file"
+                                                       Enabled="@string.IsNullOrWhiteSpace(Teacher.PhotoPath)"
+                                                       OnUpload="OnUploadHandler"
+                                                       MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
+                                                       MinFileSize="1024"
+                                                       OnSelect="OnFileSelectToUpload"
+                                                       OnSuccess="OnFileSuccessUpload">
                                             </TelerikUpload>
                                             <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
                                         }
@@ -203,7 +213,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="bp"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.BirthPlace"
+                                                       @bind-Value="Teacher.BirthPlace"
                                                        Placeholder="محل تولد" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.BirthPlace" />
@@ -213,7 +223,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="ip"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.IssuePlace"
+                                                       @bind-Value="Teacher.IssuePlace"
                                                        Placeholder="محل صدور" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.IssuePlace" />
@@ -226,7 +236,7 @@
                                                         AllowFiltering="true"
                                                         Placeholder="انتخاب کنید"
                                                         Data="@(EnumMapping.ToSelectListItems<GenderEnum>())"
-                                        @bind-Value="@Teacher.GenderSelectedValue"
+                                                        @bind-Value="@Teacher.GenderSelectedValue"
                                                         TextProperty="Text"
                                                         ValueProperty="Value" />
                                     </div>
@@ -240,7 +250,7 @@
                                                         AllowFiltering="true"
                                                         Placeholder="انتخاب کنید"
                                                         Data="@(EnumMapping.ToSelectListItems<MaritalStatusEnum>())"
-                                        @bind-Value="@Teacher.MaritalStatusSelectedValue"
+                                                        @bind-Value="@Teacher.MaritalStatusSelectedValue"
                                                         TextProperty="Text"
                                                         ValueProperty="Value" />
                                     </div>
@@ -251,7 +261,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="ReligionNationality"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.ReligionNationality"
+                                                       @bind-Value="Teacher.ReligionNationality"
                                                        Placeholder="مذهب و ملیت" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.ReligionNationality" />
@@ -261,7 +271,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="Education"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.Education"
+                                                       @bind-Value="Teacher.Education"
                                                        Placeholder="تحصیلات" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.Education" />
@@ -271,7 +281,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="Field"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.Field"
+                                                       @bind-Value="Teacher.Field"
                                                        Placeholder="رشته تحصیلی" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.Field" />
@@ -281,7 +291,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="EducationPlace"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.EducationPlace"
+                                                       @bind-Value="Teacher.EducationPlace"
                                                        Placeholder="محل تحصیل" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.EducationPlace" />
@@ -291,7 +301,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="Expertise"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.Expertise"
+                                                       @bind-Value="Teacher.Expertise"
                                                        Placeholder="تخصص" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.Expertise" />
@@ -301,7 +311,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="physicalCondition"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.physicalCondition"
+                                                       @bind-Value="Teacher.physicalCondition"
                                                        Placeholder="وضعیت جسمی" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.physicalCondition" />
@@ -311,7 +321,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="WorkAddress"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.WorkAddress"
+                                                       @bind-Value="Teacher.WorkAddress"
                                                        Placeholder="نشانی محل کار" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.WorkAddress" />
@@ -321,7 +331,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="WorkPhone"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.WorkPhone"
+                                                       @bind-Value="Teacher.WorkPhone"
                                                        Placeholder="تلفن محل کار" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.WorkPhone" />
@@ -331,7 +341,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="HomeAddress"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.HomeAddress"
+                                                       @bind-Value="Teacher.HomeAddress"
                                                        Placeholder="نشانی منزل" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.HomeAddress" />
@@ -341,7 +351,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="HomePhone"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.HomePhone"
+                                                       @bind-Value="Teacher.HomePhone"
                                                        Placeholder="تلفن منزل" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.HomePhone" />
@@ -351,7 +361,7 @@
                                     <div class="form-input-wrapper">
                                         <RadzenTextBox id="SocialNetworkNumber"
                                                        Style="width: 100%"
-                                        @bind-Value="Teacher.SocialNetworkNumber"
+                                                       @bind-Value="Teacher.SocialNetworkNumber"
                                                        Placeholder="شماره شبکه اجتماعی" />
                                     </div>
                                     <ValidationMessage For="() => Teacher.SocialNetworkNumber" />

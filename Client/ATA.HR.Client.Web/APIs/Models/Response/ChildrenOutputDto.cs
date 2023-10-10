@@ -16,7 +16,7 @@ public class ChildrenOutputDto
     [ExcelSheetColumn(HeaderName = "نام", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string FullName { get; set; }
 
-    [ExcelSheetColumn(HeaderName = "شماره شناسنامه", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    [ExcelSheetColumn(HeaderName = "شماره ملی", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string IdNo { get; set; }
 
     [ExcelSheetColumn(HeaderName = "نام پدر", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]

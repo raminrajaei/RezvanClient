@@ -15,12 +15,13 @@ public class TeacherUpsertDto
 
     public string FatherName { get; set; }
 
-    [Required(ErrorMessage = "شماره شناسنامه مدرس را وارد کنید")]
+    [Required(ErrorMessage = "شماره ملی مدرس را وارد کنید")]
     public string IdNo { get; set; }
 
     [Required(ErrorMessage = "کد ملی مدرس را وارد کنید")]
     public string NationalCode { get; set; }
 
+    public string BankCardNo { get; set; }
     public string? BirthDateJalali { get; set; }
     public DateTime? BirthDate { get; set; }
     public string BirthPlace { get; set; }

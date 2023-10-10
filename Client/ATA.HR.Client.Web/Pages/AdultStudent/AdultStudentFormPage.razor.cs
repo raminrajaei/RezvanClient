@@ -173,7 +173,7 @@ public partial class AdultStudentFormPage
     {
         if (string.IsNullOrWhiteSpace(Adult.NationalCode))
         {
-            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس بزرگسال، شماره شناسنامه وی را نمایید");
+            NotificationService.Toast(NotificationType.Error, "قبل از افزودن عکس بزرگسال، شماره ملی وی را نمایید");
 
             e.IsCancelled = true;
 
