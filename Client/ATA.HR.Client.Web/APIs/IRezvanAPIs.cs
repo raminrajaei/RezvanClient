@@ -52,6 +52,9 @@ public interface IRezvanAPIs
 
     [Get("/api/Adult/adults-items")]
     Task<ApiResult<List<SelectListItemDto>>> GetAdultsItems();
+
+    [Get("/api/Adult/{adultId}/print")]
+    Task<ApiResult<AdultDetailDto>> GetAdultDetail(long adultId);
     #endregion
 
     #region Teacher
