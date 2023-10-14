@@ -121,7 +121,7 @@
                         </div>
                         <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
                             <div class="col-5 column-style holder-padding sm-font-size title-bold">4) ميزان آشنايي شما با زبان عربي و علوم قرآني تا چه سطحي مي‌باشد؟ چه كتابهايي در اين زمينه ‌خوانده‌ايد؟</div>
-                            <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.FamiliarWithArabicAndQuranDisplay +"، "+Adult.AdultMoreInfo.WhatBooks)</div>
+                            <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.FamiliarWithArabicAndQuranDisplay == string.Empty ? "": Adult.AdultMoreInfo.FamiliarWithArabicAndQuranDisplay + Adult.AdultMoreInfo.WhatBooks)</div>
                         </div>
                     </div>
                     <div class="flex justify-content-between" style="margin-top: 70px;
