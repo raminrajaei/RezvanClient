@@ -12,6 +12,7 @@ public class AdultUpsertDto
 
     [Required(ErrorMessage = "نام خانوادگی را وارد نمایید")]
     public string LastName { get; set; }
+    public string FatherName { get; set; }
 
     [Required(ErrorMessage = "شماره ملی را وارد نمایید")]
     public string IdNo { get; set; }

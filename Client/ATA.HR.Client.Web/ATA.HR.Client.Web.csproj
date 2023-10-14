@@ -83,7 +83,6 @@
 	  <_ContentIncludedByDefault Remove="Components\WorkHours.razor" />
 	  <_ContentIncludedByDefault Remove="Pages\Contract\MyContractsPage.razor" />
 	  <_ContentIncludedByDefault Remove="Pages\Dashboard\DashboardPage.razor" />
-	  <_ContentIncludedByDefault Remove="Pages\Insurance\InsuranceCoveragePage.razor" />
 	  <_ContentIncludedByDefault Remove="Pages\Setting\User\RolesPage.razor" />
 	  <_ContentIncludedByDefault Remove="Pages\Signature\SignaturesPage.razor" />
 	</ItemGroup>
@@ -118,18 +117,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\Insurance\InsuranceCoveragePage.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\..\Shared\ATA.HR.Shared\ATA.HR.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Update="Pages\Dashboard\InsuranceFlowFormsPage.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
-	  <Content Update="Pages\Insurance\FinancialReportPage.razor">
 	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 	  </Content>
 	</ItemGroup>

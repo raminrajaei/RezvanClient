@@ -91,6 +91,26 @@
                                     <ValidationMessage For="() => Adult.LastName" />
                                 </div>
                                 <div class="col-3 form-item-wrapper">
+                                    <label for="FatherName">نام پدر </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="FatherName"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Adult.FatherName"
+                                                       Placeholder="نام پدر" />
+                                    </div>
+                                    <ValidationMessage For="() => Adult.FatherName" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
+                                    <label for="PhoneNumber">ضشماره همراه </label>
+                                    <div class="form-input-wrapper">
+                                        <RadzenTextBox id="PhoneNumber"
+                                                       Style="width: 100%"
+                                                       @bind-Value="Adult.PhoneNumber"
+                                                       Placeholder="شماره همراه" />
+                                    </div>
+                                    <ValidationMessage For="() => Adult.PhoneNumber" />
+                                </div>
+                                <div class="col-3 form-item-wrapper">
                                     <label for="bd"> تاریخ تولد * </label>
                                     <div class="form-input-wrapper">
                                         <InputPersianDatePicker Id="bd"
@@ -187,13 +207,13 @@
                                         else
                                         {
                                             <TelerikUpload SaveUrl="@SaveUrl"
-                                                           SaveField="file"
-                                                           Enabled="@string.IsNullOrWhiteSpace(Adult.PhotoPath)"
-                                                           OnUpload="OnUploadHandler"
-                                                           MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
-                                                           MinFileSize="1024"
-                                                           OnSelect="OnFileSelectToUpload"
-                                                           OnSuccess="OnFileSuccessUpload">
+                                                       SaveField="file"
+                                                       Enabled="@string.IsNullOrWhiteSpace(Adult.PhotoPath)"
+                                                       OnUpload="OnUploadHandler"
+                                                       MaxFileSize="@(AppConstants.UploadLimits.DocMaxSizeAllowedToUploadInKiloBytes * 1024)"
+                                                       MinFileSize="1024"
+                                                       OnSelect="OnFileSelectToUpload"
+                                                       OnSuccess="OnFileSuccessUpload">
                                             </TelerikUpload>
                                             <div class="form-input-helper"> حداکثر حجم 10 مگ </div>
                                         }

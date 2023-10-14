@@ -39,7 +39,7 @@
                             <img class="logo" src="@ImageUrls.Layout.RezvanLogoMain" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
                         </div>
                         <div class="title col-8" style="display: flex; flex-direction: column; justify-content: space-evenly; font-weight: bold; letter-spacing: 1px;">
-                            <div class="top-center-title-print"> @($"موسسه قرآنی رضوان الرسول") </div>
+                            <div class="top-center-title-print"> @("موسسه قرآنی رضوان الرسول") </div>
                             <div class="bottom-center-title-print"> @($"فرم ثبت نام ") <strong></strong> </div>
                         </div>
                         <div class="col-2" style="display: flex;
@@ -53,7 +53,7 @@
                             <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام و نام خانوادگی</div>
                             <div class="col-2 column-style holder-padding sm-font-size"> @(Adult.FirstName + " " +Adult.LastName) </div>
                             <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام پدر</div>
-                            <div class="col-2 column-style holder-padding sm-font-size"> @(Adult.FamiliarityInstitution) </div>
+                            <div class="col-2 column-style holder-padding sm-font-size"> @(Adult.FatherName) </div>
                             <div class="col-2 column-style holder-padding title-bold sm-font-size">تاریخ تولد</div>
                             <div class="col-2 column-style holder-padding sm-font-size">
                                 @if (Adult.BirthDate != default)
@@ -61,136 +61,67 @@
                                     @Adult.BirthDate.ToJalaliString()
                                 }
                             </div>
-                            <div class="col-2 column-style holder-padding title-bold sm-font-size">محل تولد</div>
-                            <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@Adult.BirthPlace</div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">شماره ملی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@Adult.IdNo</div>
                         </div>
                         <div class="column-holder row bio-size">
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">محل تولد</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Adult.BirthPlace</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">محل صدور</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Adult.IssuePlace</div>
-                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">سریال شناسنامه</div>
-                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@(Adult.SerialCode +"-"+ Adult.SerialNo)</div>
-                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> شماره ملی</div>
-                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Adult.IdNo</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> کد ملی</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Adult.NationalCode</div>
                         </div>
                     </div>
                     <div class="column-holder row col-merge column-border " style="margin-top: 20px;">
                         <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">نام پدر نوآموز:</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.FatherName</div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">تاریخ تولد</div>
-                            <div class="col-2 column-style holder-padding sm-font-size ">@Adult.FatherBirthDate?.ToJalaliString()</div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">محل تولد</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.FatherBirthPlace</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">رشته تحصیلی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.Field</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">میزان تحصیلات</div>
+                            <div class="col-2 column-style holder-padding sm-font-size ">@Adult.EducationLevel</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">شغل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.Job</div>
                         </div>
                         <div class="column-holder row bio-size">
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">محل صدور</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.FatherIssuePlace</div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">سریال شناسنامه</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.FatherSerialNo</div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شماره ملی</div>
-                            <div class="col-2 column-style holder-padding sm-font-size" style="padding-right: 0px;">@Adult.FatherIdNo</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">وضعیت تاهل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.MaritalStatusDisplay</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">نشانی منزل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.HomeAddress</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شماره منزل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size" style="padding-right: 0px;">@Adult.HomePhone</div>
                         </div>
                         <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">کد ملی</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.FatherNationalCode</div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">تحصیلات</div>
-                            <div class="col-2 column-style holder-padding sm-font-size"> @Adult.FatherEducation </div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">رشته</div>
-                            <div class="col-2 column-style holder-padding sm-font-size " style="padding-right: 0px;">@Adult.FatherField</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">کد پستی منزل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.HomePostalCode</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">نشانی محل کار</div>
+                            <div class="col-2 column-style holder-padding sm-font-size"> @Adult.WorkAddress</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شماره محل کار</div>
+                            <div class="col-2 column-style holder-padding sm-font-size " style="padding-right: 0px;">@Adult.WorkPhone</div>
 
                         </div>
                         <div class="column-holder row bio-size">
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شغل</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.FatherJob</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">کد پستی محل کار</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.WorkPostalCode</div>
                             <div class="col-2 sm-font-size  holder-padding  title-bold ">شماره همراه</div>
-                            <div class="col-2 sm-font-size  holder-padding ">@Adult.FatherMobileNo</div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">آدرس محل کار</div>
-                            <div class="col-2 column-style holder-padding sm-font-size" style="padding-right: 0px;">@Adult.FatherWorkAddress</div>
+                            <div class="col-2 sm-font-size  holder-padding ">@Adult.PhoneNumber</div>
                         </div>
                     </div>
                     <div class="column-holder row col-merge column-border " style="margin-top: 20px;">
                         <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">نام مادر نوآموز:</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.MotherName</div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">تاریخ تولد</div>
-                            <div class="col-2 column-style holder-padding sm-font-size ">@Adult.MotherBirthDate?.ToJalaliString()</div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">محل تولد</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.MotherBirthPlace</div>
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">آيا تاكنون در دوره تربیت معلم قرآن‌كريم شركت داشته‌ايد؟ در چه رشته‌اي؟در چه سالي و دركدام استان؟</div>
+                            <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.ParticipateInQuran == false ?"خیر":"بله، " +Adult.AdultMoreInfo.ParticipateField+"، "+Adult.AdultMoreInfo.ParticipateYear+"، "+Adult.AdultMoreInfo.ParticipateProvince)</div>
                         </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">محل صدور</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.MotherIssuePlace</div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">سریال شناسنامه</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.MotherSerialNo</div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شماره ملی</div>
-                            <div class="col-2 column-style holder-padding sm-font-size" style="padding-right: 0px;">@Adult.MotherIdNo</div>
-                        </div>
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">کد ملی</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.MotherNationalCode</div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">تحصیلات</div>
-                            <div class="col-2 column-style holder-padding sm-font-size"> @Adult.MotherEducation </div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">رشته</div>
-                            <div class="col-2 column-style holder-padding sm-font-size " style="padding-right: 0px;">@Adult.MotherField</div>
-
-                        </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شغل</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.MotherJob</div>
-                            <div class="col-2 sm-font-size  holder-padding  title-bold ">شماره همراه</div>
-                            <div class="col-2 sm-font-size  holder-padding ">@Adult.MotherMobileNo</div>
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">آدرس محل کار</div>
-                            <div class="col-2 column-style holder-padding sm-font-size" style="padding-right: 0px;">@Adult.MotherWorkAddress</div>
-                        </div>
-                    </div>
-                    <div class="column-holder row col-merge column-border " style="margin-top: 20px;">
                         <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
-                            <div class="col-2 column-style holder-padding sm-font-size title-bold">تعداد فرزند در خانواده</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">@Adult.FamilyChildrenCount</div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">چندمین نفر</div>
-                            <div class="col-2 column-style holder-padding sm-font-size ">@Adult.NumberOfChildren</div>
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">آيا تا به حال به عنوان مدرّس يا معلّم، جلسه آموزش قرآن داشته‌ايد؟ درچه سطحي؟‌ درچه زماني ؟</div>
+                            <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.ParticipateInQuranAsTeacher == false ?"خیر":"بله، " +Adult.AdultMoreInfo.ParticipateInQuranAsTeacherLevel+"، "+Adult.AdultMoreInfo.ParticipateInQuranAsTeacherDate)</div>
                         </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-4 column-style holder-padding  sm-font-size title-bold"
-                                 style="display: flex; align-items: center; justify-content: center;">
-                                افرادی که می‌توانند بزرگسال را تحویل بگیرند
-                            </div>
-                            <div class="col-8 column-style holder-padding sm-font-size">
-                                <table class="ceo-report-table" style="margin: 15px;width: 70%;">
-                                    <tr>
-                                        <th>ردیف</th>
-                                        <th>نام</th>
-                                        <th>نسبت با بزرگسال</th>
-                                        <th>همراه</th>
-                                    </tr>
-
-                                    @foreach (var c in Adult.ChildDelivers)
-                                    {
-                                        <tr class="data-tr">
-                                            <td> @(Adult.ChildDelivers.IndexOf(c) + 1) </td>
-                                            <td> @c.FullName </td>
-                                            <td> @c.Relation </td>
-                                            <td> @c.Phone</td>
-                                        </tr>
-                                    }
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="column-holder row col-merge column-border " style="margin-top: 20px;">
                         <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
-                            <div class="col-4 column-style holder-padding sm-font-size title-bold">آدرس محل سکونت</div>
-                            <div class="col-8 column-style holder-padding sm-font-size">@Adult.HomeAddress</div>
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">آيا هم‌اكنون در جلسه آموزش قرائت، مفاهيم يا حفظ  قرآن كريم تدريس داريد؟ ‌مشخصات جلسه خود را بنويسيد.</div>
+                            <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.CurrentlyTeachingRecitation == false ?"خیر":"بله، " +Adult.AdultMoreInfo.SessionDetails)</div>
                         </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">تلفن منزل</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">
-                                @Adult.HomeTel
-                            </div>
-                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">کد پستی</div>
-                            <div class="col-2 column-style holder-padding sm-font-size">
-                                @Adult.HomePostalCode
-                            </div>
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">4) ميزان آشنايي شما با زبان عربي و علوم قرآني تا چه سطحي مي‌باشد؟ چه كتابهايي در اين زمينه ‌خوانده‌ايد؟</div>
+                            <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.FamiliarWithArabicAndQuranDisplay +"، "+Adult.AdultMoreInfo.WhatBooks)</div>
                         </div>
                     </div>
                     <div class="flex justify-content-between" style="margin-top: 70px;
@@ -198,7 +129,6 @@
                                                                      margin-right: auto;
                                                                      margin-left: auto;
                                                                      font-weight: bold;">
-                        <div>نام و نام خانوادگی ولی بزرگسال</div>
                         <div>امضا و تاریخ</div>
                     </div>
                 </div>
@@ -207,99 +137,6 @@
 
             <div class="printable" style="width: 100%; height: 40px;"></div>
 
-            <div class="page-box-wrapper mt-3 printable" style="height: 1165px;
-                                                            display: flex;
-                                                            flex-direction: column;
-                                                            justify-content: space-between;">
-
-                <div class="normal-contract">
-
-                    <div class="row header cell-border" style="border: 1px solid #d1cfcf; display: flex; justify-content: space-between; box-shadow: 5px 5px #d1cfcf; margin-bottom: 25px; width: 100%; margin-right: 0;">
-                        <div class="col-2">
-                            <img class="logo" src="@ImageUrls.Layout.RezvanLogoMain" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
-                        </div>
-                        <div class="title col-8" style="display: flex; flex-direction: column; justify-content: space-evenly; font-weight: bold; letter-spacing: 1px;">
-                            <div class="top-center-title-print"> @($"موسسه قرآنی رضوان الرسول") </div>
-                            <div class="bottom-center-title-print"> @($"برخی اطلاعات لازم بزرگسال") <strong></strong> </div>
-                        </div>
-                        <div class="col-2" style="display: flex;
-                                              justify-content: end;
-                                              padding-left: 25px;">
-                            <img class="logo" src="@(ClientAppSettings.UrlSettings!.RezvanFileManagerURL+"/"+Adult.PhotoPath)" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
-                        </div>
-                    </div>
-                    <div class="column-holder row col-merge column-border child-more-info">
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-                            <div class="col-3 column-style holder-padding title-bold sm-font-size ">آیا بزرگسال دچار تصادف یا سانحه‌ای شده است؟</div>
-                            <div class="col-3 column-style holder-padding sm-font-size"> @Adult.ChildMoreInfo.HasHadAnyAccidentSoFar </div>
-                            <div class="col-3 column-style holder-padding title-bold sm-font-size">محل آسیب دیدگی</div>
-                            <div class="col-3 column-style holder-padding sm-font-size"> @Adult.ChildMoreInfo.PlaceOfInjury </div>
-                        </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">بیماری خاص یا مصرف دارویی خاص</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.SpecialDisease</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">حساسیت دارویی یا غذایی</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.Allergy</div>
-                        </div>
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">آیا والدین بزرگسال در قید حیات هستند؟</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.AreParentsAliveDisplay</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">بزرگسال با چه کسی زندگی می‌کند؟</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.ChildLiveWithDisplay</div>
-                        </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">عادات ویژه</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.SpecialHabits</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">ترس‌های خاص (از چه می‌ترسد؟)</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.SpecialFears</div>
-                        </div>
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">علایق رنگ</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.ColorInterests</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">علایق اسباب بازی</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.ToyInterests</div>
-                        </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">نوع ورزش</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.SportInterests</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">شخصیت‌های کارتونی و تلویزیونی</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.CharactersInterests</div>
-                        </div>
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">شما جهت تشویق و یا تنبیه فرزندتان از چه شیوه‌ای استفاده می‌کنید؟</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.EncouragingOrPunishingWay</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">وضعیت جسمی و حرکتی بزرگسال در مقایسه با بزرگسالان دیگر خانواده</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.PhysicalConditionDisplay</div>
-                        </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">دست غالب</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.WritingHand</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">بیمه</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.Insurance</div>
-                        </div>
-                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">تکمیلی</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.AdditionalInfo</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">نسبت پدر و مادر</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.ParentalRatio</div>
-                        </div>
-                        <div class="column-holder row bio-size">
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size title-bold">طریقه آشنایی شما با موسسه</div>
-                            <div class="col-3 sm-font-size holder-padding column-style sm-font-size">@Adult.ChildMoreInfo.FamiliarityInstitution</div>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-content-between" style="margin-top: 70px;
-                                                                 width: 53%;
-                                                                 margin-right: auto;
-                                                                 margin-left: auto;
-                                                                 font-weight: bold;">
-                        <div></div>
-                        <div>امضا و تاریخ</div>
-                    </div>
-                </div>
-
-            </div>
         </div>
     </section>
 </div>
