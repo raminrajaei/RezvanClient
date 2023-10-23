@@ -75,6 +75,9 @@ public interface IRezvanAPIs
 
     [Get("/api/Teacher/teachers-items")]
     Task<ApiResult<List<SelectListItemDto>>> GetTeachersItems();
+
+    [Get("/api/Teacher/{teacherId}/print")]
+    Task<ApiResult<TeacherDetailDto>> GetTeacherDetail(long teacherId);
     #endregion
 
     #region ClassRoom

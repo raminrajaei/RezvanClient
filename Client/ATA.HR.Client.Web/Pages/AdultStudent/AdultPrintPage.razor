@@ -61,7 +61,7 @@
                                     @Adult.BirthDate.ToJalaliString()
                                 }
                             </div>
-                            <div class="col-2 column-style holder-padding title-bold sm-font-size">شماره ملی</div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">شماره شناسنامه</div>
                             <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@Adult.IdNo</div>
                         </div>
                         <div class="column-holder row bio-size">
@@ -69,7 +69,7 @@
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Adult.BirthPlace</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">محل صدور</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Adult.IssuePlace</div>
-                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> کد ملی</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> شماره ملی</div>
                             <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Adult.NationalCode</div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                             <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.CurrentlyTeachingRecitation == false ?"خیر":"بله، " +Adult.AdultMoreInfo.SessionDetails)</div>
                         </div>
                         <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
-                            <div class="col-5 column-style holder-padding sm-font-size title-bold">4) ميزان آشنايي شما با زبان عربي و علوم قرآني تا چه سطحي مي‌باشد؟ چه كتابهايي در اين زمينه ‌خوانده‌ايد؟</div>
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">ميزان آشنايي شما با زبان عربي و علوم قرآني تا چه سطحي مي‌باشد؟ چه كتابهايي در اين زمينه ‌خوانده‌ايد؟</div>
                             <div class="col-7 column-style holder-padding sm-font-size">@(Adult.AdultMoreInfo.FamiliarWithArabicAndQuranDisplay == string.Empty ? "": Adult.AdultMoreInfo.FamiliarWithArabicAndQuranDisplay + Adult.AdultMoreInfo.WhatBooks)</div>
                         </div>
                     </div>

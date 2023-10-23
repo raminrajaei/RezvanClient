@@ -1,0 +1,164 @@
+﻿@page "/teacher/{TeacherId:int}"
+@inherits BitPageBase
+
+<PageTitle>
+    @PageTitles.TeacherPrintPage.Title
+</PageTitle>
+
+<TelerikLoaderContainer Text="در حال بارگزاری اطلاعات" Visible="@IsLoading" />
+
+<div class="personnel-page workhours-page contract-component printbase" style="padding: 1.875rem">
+
+    <!-- Page Heading Title -->
+    <section class="page-header-section">
+        <div class="page-header-wrapper">
+            @if (PageOperationType == OperationType.Filter)
+            {
+                <TopBar PageName="@($"جزئیات {Teacher.FirstName + " "+ Teacher.LastName}")" PageDescription="فرم معرفي‌نامه استادان ومدرسان" />
+            }
+            <div class="flex">
+                <button class="default-button" style="margin-left: 20px" @onclick="OpenTeachersPage">بازگشت</button>
+                @*<RadzenButton class="primary-button" Text="پرینت" Click="PrintDoc" />*@
+            </div>
+        </div>
+    </section>
+
+
+    <section id="toPrint" class="grid-section printbase">
+        <div class="page-grid-wrapper printbase">
+
+            <div class="page-box-wrapper mt-3 printable" style="height: 1165px;
+                                                                            display: flex;
+                                                                            flex-direction: column;
+                                                                            justify-content: space-between;">
+
+                <div class="normal-contract">
+
+                    <div class="row header cell-border" style="border: 1px solid #d1cfcf; display: flex; justify-content: space-between; box-shadow: 5px 5px #d1cfcf; margin-bottom: 25px; width: 100%; margin-right: 0;">
+                        <div class="col-2">
+                            <img class="logo" src="@ImageUrls.Layout.RezvanLogoMain" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
+                        </div>
+                        <div class="title col-8" style="display: flex; flex-direction: column; justify-content: space-evenly; font-weight: bold; letter-spacing: 1px;">
+                            <div class="top-center-title-print"> @("موسسه قرآنی رضوان الرسول") </div>
+                            <div class="bottom-center-title-print"> @($"فرم ثبت نام ") <strong></strong> </div>
+                        </div>
+                        <div class="col-2" style="display: flex;
+                                                  justify-content: end;
+                                                  padding-left: 25px;">
+                            <img class="logo" src="@(ClientAppSettings.UrlSettings!.RezvanFileManagerURL+"/"+Teacher.PhotoPath)" style="width: 50%; height: 82px; padding-top: 12px; padding-bottom: 12px;" />
+                        </div>
+                    </div>
+                    <div class="column-holder row col-merge column-border ">
+                        <div class="column-holder row bio-size " style="background: rgb(250, 243, 243)">
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام و نام خانوادگی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size"> @(Teacher.FirstName + " " +Teacher.LastName) </div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size ">نام پدر</div>
+                            <div class="col-2 column-style holder-padding sm-font-size"> @(Teacher.FatherName) </div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">تاریخ تولد</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">
+                                @if (Teacher.BirthDate != default)
+                                {
+                                    @Teacher.BirthDate.ToJalaliString()
+                                }
+                            </div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold"> کد ملی</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Teacher.NationalCode</div>
+                            <div class="col-2 column-style holder-padding title-bold sm-font-size">شماره شناسنامه</div>
+                            <div class="col-2 column-style holder-padding sm-font-size sm-font-size" style="padding-right: 0px;">@Teacher.IdNo</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">محل تولد</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Teacher.BirthPlace</div>
+                        </div>
+                    </div>
+                    <div class="column-holder row col-merge column-border " style="margin-top: 20px;">
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size title-bold">محل صدور</div>
+                            <div class="col-2 sm-font-size holder-padding column-style sm-font-size">@Teacher.IssuePlace</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">جنسیت</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Teacher.GenderDisplay</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">مذهب و ملیت</div>
+                            <div class="col-2 column-style holder-padding sm-font-size ">@Teacher.ReligionNationality</div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">تحصیلات</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Teacher.Education</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">رشته تحصیلی</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Teacher.Field</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">محل تحصیل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size ">@Teacher.EducationPlace</div>
+                        </div>
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">وضعیت تاهل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Teacher.MaritalStatusDisplay</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">تخصص</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Teacher.Expertise</div>
+                            <div class="col-2 sm-font-size  holder-padding  title-bold ">حوضه فعالیت</div>
+                            <div class="col-2 sm-font-size  holder-padding ">@Teacher.Activities</div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">نشانی منزل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Teacher.HomeAddress</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شماره منزل</div>
+                            <div class="col-2 column-style holder-padding sm-font-size" style="padding-right: 0px;">@Teacher.HomePhone</div>
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">نشانی محل کار</div>
+                            <div class="col-2 column-style holder-padding sm-font-size"> @Teacher.WorkAddress</div>
+                        </div>
+                        <div class="column-holder row bio-size" style="background: rgb(250, 243, 243)">
+                            <div class="col-2 column-style holder-padding sm-font-size title-bold">شماره محل کار</div>
+                            <div class="col-2 column-style holder-padding sm-font-size " style="padding-right: 0px;">@Teacher.WorkPhone</div>
+                            <div class="col-2 column-style holder-padding  sm-font-size title-bold">وضعيت جسمي</div>
+                            <div class="col-2 column-style holder-padding sm-font-size">@Teacher.PhysicalCondition</div>
+                            <div class="col-2 sm-font-size  holder-padding  title-bold ">شماره همراه</div>
+                            <div class="col-2 sm-font-size  holder-padding ">@Teacher.PhoneNumber</div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-2 sm-font-size  holder-padding  title-bold ">شماره شبکه اجتماعی</div>
+                            <div class="col-2 sm-font-size  holder-padding ">@Teacher.SocialNetworkNumber</div>
+                            <div class="col-3 sm-font-size  holder-padding  title-bold ">شماره حساب یا کارت جهت تسویه حساب</div>
+                            <div class="col-2 sm-font-size  holder-padding ">@Teacher.BankCardNo</div>
+                        </div>
+                    </div>
+                    <div class="column-holder row col-merge column-border " style="margin-top: 20px;">
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">درس یا دروس مورد تدریس:</div>
+                            <div class="col-7 column-style holder-padding sm-font-size"></div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">سابقه تدریس:</div>
+                            <div class="col-7 column-style holder-padding sm-font-size"></div>
+                        </div>
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">نوع مدرك تخصصي مرتبط (درصورت موجود بودن ، تصوير آن ضميمه شود):</div>
+                            <div class="col-7 column-style holder-padding sm-font-size"></div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">دوره‌هاي قرآني كه تا کنون تدريس داشته‌ايد:</div>
+                            <div class="col-7 column-style holder-padding sm-font-size"></div>
+                        </div>
+                        <div class="column-holder row bio-size" style="background:rgb(250, 243, 243)">
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">دوره‌هاي قرآني كه تا بحال آموزش ديده‌ايد:</div>
+                            <div class="col-7 column-style holder-padding sm-font-size"></div>
+                        </div>
+                        <div class="column-holder row bio-size">
+                            <div class="col-5 column-style holder-padding sm-font-size title-bold">نام چند نفر از استاداني كه از محضر ايشان به عنوان شاگرد استفاده نموده‌ايد:</div>
+                            <div class="col-7 column-style holder-padding sm-font-size"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-content-between" style="margin-top: 70px;
+                                                                     width: 53%;
+                                                                     margin-right: auto;
+                                                                     margin-left: auto;
+                                                                     font-weight: bold;">
+                        <div>امضا و تاریخ</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="printable" style="width: 100%; height: 40px;"></div>
+
+        </div>
+    </section>
+</div>
+
