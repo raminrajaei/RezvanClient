@@ -79,37 +79,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="Pages\Contract\DismissSmsesPage.razor" />
 	  <_ContentIncludedByDefault Remove="Components\WorkHours.razor" />
-	  <_ContentIncludedByDefault Remove="Pages\Contract\MyContractsPage.razor" />
-	  <_ContentIncludedByDefault Remove="Pages\Dashboard\DashboardPage.razor" />
-	  <_ContentIncludedByDefault Remove="Pages\Setting\User\RolesPage.razor" />
-	  <_ContentIncludedByDefault Remove="Pages\Signature\SignaturesPage.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\Setting\User\RolesPage.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\Dashboard\DashboardPage.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\Contract\MyContractsPage.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\Signature\SignaturesPage.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Pages\WorkHours\Models\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\Contract\DismissSmsesPage.razor" />
-	  <Folder Include="Pages\WorkHours\Models\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -118,12 +88,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Shared\ATA.HR.Shared\ATA.HR.Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="Pages\Dashboard\InsuranceFlowFormsPage.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
 	</ItemGroup>
 
 </Project>
