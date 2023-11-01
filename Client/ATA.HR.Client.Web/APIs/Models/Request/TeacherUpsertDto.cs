@@ -15,7 +15,6 @@ public class TeacherUpsertDto
 
     public string FatherName { get; set; }
 
-    [Required(ErrorMessage = "شماره ملی مدرس را وارد کنید")]
     public string IdNo { get; set; }
 
     [Required(ErrorMessage = "کد ملی مدرس را وارد کنید")]

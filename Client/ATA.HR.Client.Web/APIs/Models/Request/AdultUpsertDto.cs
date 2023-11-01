@@ -14,7 +14,6 @@ public class AdultUpsertDto
     public string LastName { get; set; }
     public string FatherName { get; set; }
 
-    [Required(ErrorMessage = "شماره ملی را وارد نمایید")]
     public string IdNo { get; set; }
 
     [Required(ErrorMessage = "تاریخ تولد را مشخص نمایید")] 
