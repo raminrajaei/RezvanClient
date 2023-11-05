@@ -4,7 +4,6 @@ using ATABit.Helper.Extensions;
 using ExcelWizard.Models;
 using ExcelWizard.Models.EWGridLayout;
 using ExcelWizard.Models.EWStyles;
-using EnumExtensions = Bit.Utils.Extensions.EnumExtensions;
 
 namespace ATA.HR.Client.Web.APIs.Models.Response;
 
@@ -30,14 +29,8 @@ public class ChildrenOutputDto
     [ExcelSheetColumn(HeaderName = "تاریخ تولد", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string? BirthDateJalali => BirthDate.ToJalaliString();
 
-    [ExcelSheetColumn(HeaderName = "نام مادر", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
-    public string MotherName { get; set; }
-
     [ExcelSheetColumn(Ignore = true)]
     public ActivityEnum? Activity { get; set; }
-
-    [ExcelSheetColumn(HeaderName = "سطح فعالیت", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
-    public string ActivityCaption => Activity?.ToDisplayName();
 
     [ExcelSheetColumn(HeaderName = "شماره همراه پدر", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string FatherMobileNo { get; set; }
@@ -47,5 +40,8 @@ public class ChildrenOutputDto
     [ExcelSheetColumn(Ignore = true)]
     public string? SerialCode { get; set; }
 
-    public string Serial => (SerialNo ?? string.Empty) + "-" + (SerialCode ?? string.Empty);
+    public string Serial => (SerialNo ?? string.Empty) + (SerialCode ?? string.Empty);
+
+    [ExcelSheetColumn(HeaderName = "سطح فعالیت", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    public string ActivityCaption => Activity?.ToDisplayName();
 }
