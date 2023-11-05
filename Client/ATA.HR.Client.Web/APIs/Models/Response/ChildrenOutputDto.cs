@@ -39,4 +39,13 @@ public class ChildrenOutputDto
     [ExcelSheetColumn(HeaderName = "سطح فعالیت", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string ActivityCaption => Activity?.ToDisplayName();
 
+    [ExcelSheetColumn(HeaderName = "شماره همراه پدر", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    public string FatherMobileNo { get; set; }
+
+    [ExcelSheetColumn(Ignore = true)]
+    public string? SerialNo { get; set; }
+    [ExcelSheetColumn(Ignore = true)]
+    public string? SerialCode { get; set; }
+
+    public string Serial => (SerialNo ?? string.Empty) + "-" + (SerialCode ?? string.Empty);
 }

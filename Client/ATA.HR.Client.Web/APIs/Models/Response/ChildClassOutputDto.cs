@@ -45,6 +45,15 @@ public class ChildClassOutputDto
 
     [ExcelSheetColumn(HeaderName = "تا تاریخ", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
     public string? ToDateJalali => To.ToJalaliString();
+
+    [ExcelSheetColumn(Ignore = true)]
+    public DateTime BirthDate { get; set; }
+
+    [ExcelSheetColumn(HeaderName = "تاریخ تولد", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    public string? BirthDateJalali => BirthDate.ToJalaliString();
+
+    [ExcelSheetColumn(HeaderName = "شماره همراه پدر", ExcelDataContentType = CellContentType.General, ColumnWidth = 20)]
+    public string FatherMobileNo { get; set; }
 }
 
 public static class ContractExtensions
